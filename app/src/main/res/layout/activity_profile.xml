@@ -27,7 +27,7 @@
         android:layout_marginTop="10px"
         android:layout_height="80px"
         android:id="@+id/logout"
-        android:background="@drawable/btn_blue_back"
+        android:background="@drawable/btn_back_blue"
         android:textColor="#ffffff"
         android:textAlignment="center"
         android:text="Logout"/>

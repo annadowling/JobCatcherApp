@@ -4,6 +4,7 @@ package app.com.jobcatcherapp;
  * Created by annadowling on 06/02/2017.
  */
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;

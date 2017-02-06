@@ -13,7 +13,7 @@
         android:layout_height="100px"
         android:layout_gravity="center"
         android:background="#5ba4e5"
-        android:src="@drawable/logo" />
+        android:src="" />
 
     <EditText
         android:layout_width="440px"
@@ -46,7 +46,7 @@
         android:layout_marginTop="10px"
         android:id="@+id/login"
         android:layout_gravity="center"
-        android:background="@drawable/btn_blue_back"
+        android:background="@drawable/btn_back_blue"
         android:textColor="#ffffff"
         android:textAlignment="center"
         android:text="Login Now"/>
