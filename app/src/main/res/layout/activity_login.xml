@@ -7,13 +7,13 @@
     android:orientation="vertical"
     tools:context=".LoginActivity">
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="fill_parent"
-        android:layout_height="100px"
-        android:layout_gravity="center"
-        android:background="#5ba4e5"
-        android:src="" />
+    <!--<ImageView-->
+        <!--android:id="@+id/imageView1"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="100px"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:background="#5ba4e5"-->
+        <!--android:src="" />-->
 
     <EditText
         android:id="@+id/email"
