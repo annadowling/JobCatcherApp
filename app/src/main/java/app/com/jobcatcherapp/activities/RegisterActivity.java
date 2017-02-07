@@ -1,4 +1,4 @@
-package app.com.jobcatcherapp;
+package app.com.jobcatcherapp.activities;
 
 /**
  * Created by annadowling on 06/02/2017.
@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import app.com.jobcatcherapp.R;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -59,8 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
                 params.add(new BasicNameValuePair("email", emailtxt));
                 params.add(new BasicNameValuePair("password", passwordtxt));
                 ServerRequest sr = new ServerRequest();
-                JSONObject json = sr.getJSON("http://10.0.2.2:8080/register",params);
-                //JSONObject json = sr.getJSON("http://192.168.56.1:8080/register",params);
+                JSONObject json = sr.getJSON("http://localhost:8080/register",params);
 
                 if(json != null){
                     try{

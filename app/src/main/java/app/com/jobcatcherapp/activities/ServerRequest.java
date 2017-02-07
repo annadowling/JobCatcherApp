@@ -1,4 +1,4 @@
-package app.com.jobcatcherapp;
+package app.com.jobcatcherapp.activities;
 
 /**
  * Created by annadowling on 06/02/2017.

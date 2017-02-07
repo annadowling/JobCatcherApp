@@ -1,4 +1,4 @@
-package app.com.jobcatcherapp;
+package app.com.jobcatcherapp.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.app.Dialog;
@@ -17,6 +17,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import app.com.jobcatcherapp.R;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -63,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                 params.add(new BasicNameValuePair("email", emailtxt));
                 params.add(new BasicNameValuePair("password", passwordtxt));
                 ServerRequest sr = new ServerRequest();
-                JSONObject json = sr.getJSON("http://10.0.2.2:8080/login", params);
+                JSONObject json = sr.getJSON("http://localhost:8080/login", params);
                 if (json != null) {
                     try {
                         String jsonstr = json.getString("response");
@@ -114,8 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                         params = new ArrayList<NameValuePair>();
                         params.add(new BasicNameValuePair("email", email_res_txt));
 
-                        //  JSONObject json = sr.getJSON("http://192.168.56.1:8080/api/resetpass", params);
-                        JSONObject json = sr.getJSON("http://10.0.2.2:8080/api/resetpass", params);
+                        JSONObject json = sr.getJSON("http://localhost:8080/api/resetpass", params);
 
                         if (json != null) {
                             try {
@@ -146,8 +147,7 @@ public class LoginActivity extends AppCompatActivity {
                                             params.add(new BasicNameValuePair("code", code_txt));
                                             params.add(new BasicNameValuePair("newpass", npass_txt));
 
-                                            JSONObject json = sr.getJSON("http://10.0.2.2:8080/api/resetpass/chg", params);
-                                            //   JSONObject json = sr.getJSON("http://192.168.56.1:8080/api/resetpass/chg", params);
+                                            JSONObject json = sr.getJSON("http://localhost:8080/api/resetpass/chg", params);
 
                                             if (json != null) {
                                                 try {

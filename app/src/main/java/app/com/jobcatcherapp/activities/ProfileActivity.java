@@ -1,10 +1,9 @@
-package app.com.jobcatcherapp;
+package app.com.jobcatcherapp.activities;
 
 /**
  * Created by annadowling on 06/02/2017.
  */
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,17 +23,18 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import app.com.jobcatcherapp.R;
+
 
 public class ProfileActivity extends AppCompatActivity {
 
 
-
     SharedPreferences pref;
-    String token,grav,oldpasstxt,newpasstxt;
+    String token, grav, oldpasstxt, newpasstxt;
     WebView web;
-    Button chgpass,chgpassfr,cancel,logout;
+    Button chgpass, chgpassfr, cancel, logout;
     Dialog dlg;
-    EditText oldpass,newpass;
+    EditText oldpass, newpass;
     List<NameValuePair> params;
 
 
@@ -42,17 +42,17 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        web = (WebView)findViewById(R.id.webView);
-        chgpass = (Button)findViewById(R.id.chgbtn);
-        logout = (Button)findViewById(R.id.logout);
+        web = (WebView) findViewById(R.id.webView);
+        chgpass = (Button) findViewById(R.id.chgbtn);
+        logout = (Button) findViewById(R.id.logout);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SharedPreferences.Editor edit = pref.edit();
                 //Storing Data using SharedPreferences
                 edit.putString("token", "");
-                edit.commit();
-                Intent loginactivity = new Intent(ProfileActivity.this,LoginActivity.class);
+                edit.commit(); //TODO look at using apply() instead
+                Intent loginactivity = new Intent(ProfileActivity.this, LoginActivity.class);
 
                 startActivity(loginactivity);
                 finish();
@@ -73,13 +73,13 @@ public class ProfileActivity extends AppCompatActivity {
                 dlg = new Dialog(ProfileActivity.this);
                 dlg.setContentView(R.layout.chgpassword_fragment);
                 dlg.setTitle("Change Password");
-                chgpassfr = (Button)dlg.findViewById(R.id.chgbtn);
+                chgpassfr = (Button) dlg.findViewById(R.id.chgbtn);
 
                 chgpassfr.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        oldpass = (EditText)dlg.findViewById(R.id.oldpass);
-                        newpass = (EditText)dlg.findViewById(R.id.newpass);
+                        oldpass = (EditText) dlg.findViewById(R.id.oldpass);
+                        newpass = (EditText) dlg.findViewById(R.id.newpass);
                         oldpasstxt = oldpass.getText().toString();
                         newpasstxt = newpass.getText().toString();
                         params = new ArrayList<NameValuePair>();
@@ -87,27 +87,26 @@ public class ProfileActivity extends AppCompatActivity {
                         params.add(new BasicNameValuePair("newpass", newpasstxt));
                         params.add(new BasicNameValuePair("id", token));
                         ServerRequest sr = new ServerRequest();
-                        //    JSONObject json = sr.getJSON("http://192.168.56.1:8080/api/chgpass",params);
-                        JSONObject json = sr.getJSON("http://10.0.2.2:8080/api/chgpass",params);
-                        if(json != null){
-                            try{
+                        JSONObject json = sr.getJSON("http://10.0.2.2:8080/api/chgpass", params);
+                        if (json != null) {
+                            try {
                                 String jsonstr = json.getString("response");
-                                if(json.getBoolean("res")){
+                                if (json.getBoolean("res")) {
 
                                     dlg.dismiss();
-                                    Toast.makeText(getApplication(),jsonstr,Toast.LENGTH_SHORT).show();
-                                }else {
-                                    Toast.makeText(getApplication(),jsonstr,Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplication(), jsonstr, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getApplication(), jsonstr, Toast.LENGTH_SHORT).show();
 
                                 }
-                            }catch (JSONException e) {
+                            } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
 
                     }
                 });
-                cancel = (Button)dlg.findViewById(R.id.cancelbtn);
+                cancel = (Button) dlg.findViewById(R.id.cancelbtn);
                 cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -119,10 +118,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
 
-
     }
-
-
 
 
 }
