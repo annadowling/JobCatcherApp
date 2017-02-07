@@ -10,6 +10,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
@@ -28,13 +34,15 @@ public class LoginActivity extends AppCompatActivity {
     List<NameValuePair> params;
     SharedPreferences pref;
     Dialog reset;
-    ServerRequest sr;
+    ServerRequest serverRequest;
+    public static final String REQUEST_TAG = "LoginActivity";
+    private RequestQueue mQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        sr = new ServerRequest();
+        serverRequest = new ServerRequest();
 
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
@@ -64,8 +72,8 @@ public class LoginActivity extends AppCompatActivity {
                 params = new ArrayList<NameValuePair>();
                 params.add(new BasicNameValuePair("email", emailtxt));
                 params.add(new BasicNameValuePair("password", passwordtxt));
-                ServerRequest sr = new ServerRequest();
-                JSONObject json = sr.getJSON("http://localhost:8080/login", params);
+                ServerRequest serverRequest = new ServerRequest();
+                JSONObject json = serverRequest.getJSON("http://10.0.2.2:8080/login", params);
                 if (json != null) {
                     try {
                         String jsonstr = json.getString("response");
@@ -116,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
                         params = new ArrayList<NameValuePair>();
                         params.add(new BasicNameValuePair("email", email_res_txt));
 
-                        JSONObject json = sr.getJSON("http://localhost:8080/api/resetpass", params);
+                        JSONObject json = serverRequest.getJSON("http://10.0.2.2:8080/api/resetpass", params);
 
                         if (json != null) {
                             try {
@@ -147,7 +155,7 @@ public class LoginActivity extends AppCompatActivity {
                                             params.add(new BasicNameValuePair("code", code_txt));
                                             params.add(new BasicNameValuePair("newpass", npass_txt));
 
-                                            JSONObject json = sr.getJSON("http://localhost:8080/api/resetpass/chg", params);
+                                            JSONObject json = serverRequest.getJSON("http://10.0.2.2:8080/api/resetpass/chg", params);
 
                                             if (json != null) {
                                                 try {

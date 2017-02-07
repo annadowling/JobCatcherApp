@@ -3,81 +3,93 @@ package app.com.jobcatcherapp.activities;
 /**
  * Created by annadowling on 06/02/2017.
  */
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import app.com.jobcatcherapp.R;
 
 
-public class RegisterActivity extends AppCompatActivity {
-    EditText email,password;
-    Button login,register;
-    String emailtxt,passwordtxt;
-    List<NameValuePair> params;
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
+    public static final String KEY_PASSWORD = "password";
+    public static final String KEY_EMAIL = "email";
+    EditText email, password;
+    Button login, register;
+    String emailtxt, passwordtxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        email = (EditText)findViewById(R.id.email);
-        password = (EditText)findViewById(R.id.password);
-        register = (Button)findViewById(R.id.registerbtn);
-        login = (Button)findViewById(R.id.login);
+        email = (EditText) findViewById(R.id.email);
+        password = (EditText) findViewById(R.id.password);
+        register = (Button) findViewById(R.id.registerbtn);
+        login = (Button) findViewById(R.id.login);
 
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent regactivity = new Intent(RegisterActivity.this,LoginActivity.class);
-                startActivity(regactivity);
-                finish();
-            }
-        });
+        register.setOnClickListener(this);
+        login.setOnClickListener(this);
 
-
-        register.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                emailtxt = email.getText().toString();
-                passwordtxt = password.getText().toString();
-                params = new ArrayList<NameValuePair>();
-                params.add(new BasicNameValuePair("email", emailtxt));
-                params.add(new BasicNameValuePair("password", passwordtxt));
-                ServerRequest sr = new ServerRequest();
-                JSONObject json = sr.getJSON("http://localhost:8080/register",params);
-
-                if(json != null){
-                    try{
-                        String jsonstr = json.getString("response");
-
-                        Toast.makeText(getApplication(),jsonstr,Toast.LENGTH_LONG).show();
-
-                        Log.d("Hello", jsonstr);
-                    }catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
     }
 
+    private void registerUser(){
+        emailtxt = email.getText().toString();
+        passwordtxt = password.getText().toString();
+        String url = "http://10.0.2.2:8080/register";
 
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(RegisterActivity.this,response,Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(RegisterActivity.this,error.toString(),Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put(KEY_PASSWORD, passwordtxt);
+                params.put(KEY_EMAIL, emailtxt);
+                return params;
+            }
 
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+    private void loginToApp(){
+        Intent regactivity = new Intent(RegisterActivity.this,LoginActivity.class);
+        startActivity(regactivity);
+        finish();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v == register){
+            registerUser();
+        }else if(v == login){
+            loginToApp();
+        }
+    }
 
 }

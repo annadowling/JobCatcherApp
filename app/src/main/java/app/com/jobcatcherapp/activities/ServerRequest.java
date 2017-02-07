@@ -25,11 +25,17 @@ import org.json.JSONObject;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
 public class ServerRequest {
 
     static InputStream is = null;
     static JSONObject jObj = null;
     static String json = "";
+    JSONObject jobj;
 
 
     public ServerRequest() {
@@ -83,7 +89,6 @@ public class ServerRequest {
         return jObj;
 
     }
-    JSONObject jobj;
     public JSONObject getJSON(String url, List<NameValuePair> params) {
 
         Params param = new Params(url,params);
