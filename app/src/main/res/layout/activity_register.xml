@@ -24,6 +24,22 @@
         android:hint="example@mail.com"/>
 
     <EditText
+        android:layout_width="440px"
+        android:layout_height="80px"
+        android:inputType="textPersonName"
+        android:layout_gravity="center"
+        android:id="@+id/firstName"
+        android:hint="First Name" />
+
+    <EditText
+        android:layout_width="440px"
+        android:layout_height="80px"
+        android:inputType="textPersonName"
+        android:layout_gravity="center"
+        android:id="@+id/lastName"
+        android:hint="Last Name" />
+
+    <EditText
         android:id="@+id/password"
         android:layout_gravity="center"
         android:layout_width="440px"
