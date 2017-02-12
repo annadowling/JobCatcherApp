@@ -37,7 +37,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     SharedPreferences pref;
     String token, grav, oldpasstxt, newpasstxt;
     WebView web;
-    Button chgpass, chgpassfr, cancel, logout;
+    Button chgpass, chgpassfr, cancel, logout, mapButton;
     Dialog dlg;
     EditText oldpass, newpass;
     public static final String KEY_OLDPASSWORD = "oldpass";
@@ -52,6 +52,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         web = (WebView) findViewById(R.id.webView);
         chgpass = (Button) findViewById(R.id.chgbtn);
         logout = (Button) findViewById(R.id.logout);
+        mapButton = (Button) findViewById(R.id.mapButton);
 
         chgpass.setOnClickListener(this);
 
@@ -65,6 +66,20 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 Intent loginactivity = new Intent(ProfileActivity.this, LoginActivity.class);
 
                 startActivity(loginactivity);
+                finish();
+            }
+        });
+
+        mapButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor edit = pref.edit();
+                //Storing Data using SharedPreferences
+                edit.putString("token", "");
+                edit.commit();
+                Intent mapactivity = new Intent(ProfileActivity.this, MapsActivity.class);
+
+                startActivity(mapactivity);
                 finish();
             }
         });

@@ -21,6 +21,16 @@
         android:textColor="#ffffff"
         android:textAlignment="center"
         android:text="Change Password"/>
+
+    <Button
+        android:text="View Map"
+        android:layout_width="440px"
+        android:layout_gravity="center"
+        android:layout_marginTop="30px"
+        android:layout_height="80px"
+        android:textAlignment="center"
+        android:id="@+id/mapButton" />
+
     <Button
         android:layout_width="440px"
         android:layout_gravity="center"
