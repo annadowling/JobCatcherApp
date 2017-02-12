@@ -3,6 +3,7 @@ package app.com.jobcatcherapp.activities;
 /**
  * Created by annadowling on 06/02/2017.
  */
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -25,10 +27,12 @@ import app.com.jobcatcherapp.R;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     public static final String KEY_PASSWORD = "password";
+    public static final String KEY_FIRSTNAME = "firstName";
+    public static final String KEY_LASTNAME = "lastName";
     public static final String KEY_EMAIL = "email";
-    EditText email, password;
+    EditText email, firstName, lastName, password;
     Button login, register;
-    String emailtxt, passwordtxt;
+    String emailtxt, passwordtxt, firstNametxt, lastNametxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_register);
 
         email = (EditText) findViewById(R.id.email);
+        firstName = (EditText) findViewById(R.id.firstName);
+        lastName = (EditText) findViewById(R.id.lastName);
         password = (EditText) findViewById(R.id.password);
         register = (Button) findViewById(R.id.registerbtn);
         login = (Button) findViewById(R.id.login);
@@ -45,8 +51,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-    private void registerUser(){
+    private void registerUser() {
         emailtxt = email.getText().toString();
+        firstNametxt = firstName.getText().toString();
+        lastNametxt = lastName.getText().toString();
         passwordtxt = password.getText().toString();
         String url = "http://10.0.2.2:8080/register";
 
@@ -54,19 +62,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(RegisterActivity.this,response,Toast.LENGTH_LONG).show();
+                        Toast.makeText(RegisterActivity.this, response, Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(RegisterActivity.this,error.toString(),Toast.LENGTH_LONG).show();
+                        Toast.makeText(RegisterActivity.this, error.toString(), Toast.LENGTH_LONG).show();
                     }
-                }){
+                }) {
             @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
                 params.put(KEY_PASSWORD, passwordtxt);
+                params.put(KEY_FIRSTNAME, firstNametxt);
+                params.put(KEY_LASTNAME, lastNametxt);
                 params.put(KEY_EMAIL, emailtxt);
                 return params;
             }
@@ -77,17 +87,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         requestQueue.add(stringRequest);
     }
 
-    private void loginToApp(){
-        Intent regactivity = new Intent(RegisterActivity.this,LoginActivity.class);
+    private void loginToApp() {
+        Intent regactivity = new Intent(RegisterActivity.this, LoginActivity.class);
         startActivity(regactivity);
         finish();
     }
 
     @Override
     public void onClick(View v) {
-        if(v == register){
+        if (v == register) {
             registerUser();
-        }else if(v == login){
+        } else if (v == login) {
             loginToApp();
         }
     }
