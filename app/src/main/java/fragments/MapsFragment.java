@@ -1,4 +1,4 @@
-package app.com.jobcatcherapp.activities;
+package fragments;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import app.com.jobcatcherapp.R;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsFragment extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 

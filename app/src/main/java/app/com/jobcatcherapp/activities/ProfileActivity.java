@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import app.com.jobcatcherapp.R;
+import fragments.MapsFragment;
 
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
@@ -77,7 +78,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 //Storing Data using SharedPreferences
                 edit.putString("token", "");
                 edit.commit();
-                Intent mapactivity = new Intent(ProfileActivity.this, MapsActivity.class);
+                Intent mapactivity = new Intent(ProfileActivity.this, MapsFragment.class);
 
                 startActivity(mapactivity);
                 finish();
