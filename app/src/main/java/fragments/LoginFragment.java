@@ -1,12 +1,16 @@
-package app.com.jobcatcherapp.activities;
+package fragments;
 
-import android.support.v7.app.AppCompatActivity;
 import android.app.Dialog;
-import android.content.Intent;
+import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -17,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,8 +30,17 @@ import java.util.Map;
 
 import app.com.jobcatcherapp.R;
 
+import static android.content.Context.MODE_PRIVATE;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link LoginFragment.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link LoginFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class LoginFragment extends android.app.Fragment implements View.OnClickListener {
     EditText email, password, res_email, code, newpass;
     Button login, cont, cont_code, cancel, cancel1, register, forpass;
     String emailtxt, passwordtxt, email_res_txt, code_txt, npass_txt;
@@ -35,31 +49,87 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_EMAIL = "email";
 
+    private OnFragmentInteractionListener mListener;
+
+    public LoginFragment() {
+        // Required empty public constructor
+    }
+
+    public static LoginFragment newInstance() {
+        LoginFragment fragment = new LoginFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+    }
 
-        email = (EditText) findViewById(R.id.email);
-        password = (EditText) findViewById(R.id.password);
-        login = (Button) findViewById(R.id.loginbtn);
-        register = (Button) findViewById(R.id.register);
-        forpass = (Button) findViewById(R.id.forgotpass);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        email = (EditText) view.findViewById(R.id.email);
+        password = (EditText) view.findViewById(R.id.password);
+        login = (Button) view.findViewById(R.id.loginbtn);
+        register = (Button) view.findViewById(R.id.register);
+        forpass = (Button) view.findViewById(R.id.forgotpass);
 
-        pref = getSharedPreferences("AppPref", MODE_PRIVATE);
+        pref = getActivity().getSharedPreferences("AppPref", MODE_PRIVATE);
 
         register.setOnClickListener(this);
 
         login.setOnClickListener(this);
 
         forpass.setOnClickListener(this);
+        return view;
     }
 
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
 
     public void register() {
-        Intent regactivity = new Intent(LoginActivity.this, RegisterActivity.class);
-        startActivity(regactivity);
-        finish();
+//        Intent regactivity = new Intent(LoginActivity.this, RegisterActivity.class);
+//        startActivity(regactivity);
+//        finish();
     }
 
     public void login() {
@@ -82,16 +152,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 edit.putString("token", token);
                                 edit.putString("grav", grav);
                                 edit.commit();
-                                Intent profactivity = new Intent(LoginActivity.this, ProfileActivity.class);
 
-                                startActivity(profactivity);
-                                finish();
+                                FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+                                ProfileFragment profileFragment = ProfileFragment.newInstance();
+                                ft.replace(R.id.loginFrame, profileFragment);
+                                ft.commit();
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(getApplication(), response, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity().getApplicationContext(), "You are logged in!", Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {
@@ -109,12 +181,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         };
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
         requestQueue.add(stringRequest);
     }
 
     public void forgotPassword() {
-        reset = new Dialog(LoginActivity.this);
+        reset = new Dialog(getActivity().getApplicationContext());
         reset.setTitle("Reset Password");
         reset.setContentView(R.layout.reset_password);
         cont = (Button) reset.findViewById(R.id.resbtn);
@@ -147,7 +219,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             JSONObject josnOBJ = new JSONObject(response);
                             if (josnOBJ.getBoolean("res")) {
                                 Log.e("JSON", josnOBJ.toString());
-                                Toast.makeText(getApplication(), response, Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity().getApplicationContext(), response, Toast.LENGTH_LONG).show();
                                 reset.setContentView(R.layout.reset_passcode);
                                 cont_code = (Button) reset.findViewById(R.id.conbtn);
                                 code = (EditText) reset.findViewById(R.id.code);
@@ -160,7 +232,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(getApplication(), response, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity().getApplicationContext(), response, Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {
@@ -177,11 +249,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         };
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
         requestQueue.add(stringRequest);
 
     }
-
 
     public void setCode() {
         code_txt = code.getText().toString();
@@ -199,9 +270,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             JSONObject josnOBJ = new JSONObject(response);
                             if (josnOBJ.getBoolean("res")) {
                                 reset.dismiss();
-                                Toast.makeText(getApplication(), response, Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity().getApplicationContext(), response, Toast.LENGTH_LONG).show();
                             } else {
-                                Toast.makeText(getApplication(), response, Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity().getApplicationContext(), response, Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -211,7 +282,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity().getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
                     }
                 }) {
             @Override
@@ -224,31 +295,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
 
         };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-
     }
 
-
-    @Override
-    public void onClick(View v) {
-        if (v == register) {
-            register();
-        } else if (v == login) {
-            login();
-
-        } else if (v == forpass) {
-            forgotPassword();
-        } else if (v == cancel) {
-            cancel();
-        } else if (v == cont) {
-            changePassword();
-        } else if (v == cancel1) {
-            cancel();
-        } else if (v == cont_code) {
-            setCode();
+        @Override
+        public void onClick(View v){
+            if (v == register) {
+                register();
+            } else if (v == login) {
+                login();
+            } else if (v == forpass) {
+                forgotPassword();
+            } else if (v == cancel) {
+                cancel();
+            } else if (v == cont) {
+                changePassword();
+            } else if (v == cancel1) {
+                cancel();
+            } else if (v == cont_code) {
+                setCode();
+            }
         }
     }
-}
-

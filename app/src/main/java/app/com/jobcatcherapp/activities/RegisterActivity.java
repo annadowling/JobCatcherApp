@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import app.com.jobcatcherapp.R;
+import fragments.LoginFragment;
 
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
@@ -88,7 +89,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void loginToApp() {
-        Intent regactivity = new Intent(RegisterActivity.this, LoginActivity.class);
+        Intent regactivity = new Intent(RegisterActivity.this, LoginFragment.class);
         startActivity(regactivity);
         finish();
     }

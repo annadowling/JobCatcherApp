@@ -1,46 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--tools:context="fragments.ProfileFragment">-->
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="fill_parent"
-        android:layout_height="100px"
-        android:layout_gravity="center"
-        android:src="@drawable/magnifyingglassicon" />
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="fill_parent"
+            android:layout_height="100px"
+            android:layout_gravity="center"
+            android:src="@drawable/magnifyingglassicon" />
 
-    <Button
-        android:layout_width="440px"
-        android:layout_gravity="center"
-        android:layout_marginTop="30px"
-        android:layout_height="80px"
-        android:id="@+id/chgbtn"
-        android:background="@drawable/btn_back"
-        android:textColor="#ffffff"
-        android:textAlignment="center"
-        android:text="Change Password"/>
+        <Button
+            android:id="@+id/chgbtn"
+            android:layout_width="440px"
+            android:layout_height="80px"
+            android:layout_gravity="center"
+            android:layout_marginTop="30px"
+            android:background="@drawable/btn_back"
+            android:text="Change Password"
+            android:textAlignment="center"
+            android:textColor="#ffffff" />
 
-    <Button
-        android:text="Nearby Jobs"
-        android:layout_width="440px"
-        android:layout_gravity="center"
-        android:layout_marginTop="30px"
-        android:layout_height="80px"
-        android:textAlignment="center"
-        android:id="@+id/mapButton" />
+        <Button
+            android:id="@+id/mapButton"
+            android:layout_width="440px"
+            android:layout_height="80px"
+            android:layout_gravity="center"
+            android:layout_marginTop="30px"
+            android:text="Nearby Jobs"
+            android:textAlignment="center" />
 
-    <Button
-        android:layout_width="440px"
-        android:layout_gravity="center"
-        android:layout_marginTop="10px"
-        android:layout_height="80px"
-        android:id="@+id/logout"
-        android:background="@drawable/btn_back_blue"
-        android:textColor="#ffffff"
-        android:textAlignment="center"
-        android:text="Logout"/>
+        <Button
+            android:id="@+id/logout"
+            android:layout_width="440px"
+            android:layout_height="80px"
+            android:layout_gravity="center"
+            android:layout_marginTop="10px"
+            android:background="@drawable/btn_back_blue"
+            android:text="Logout"
+            android:textAlignment="center"
+            android:textColor="#ffffff" />
 
-</LinearLayout>
+    </LinearLayout>
+<!--</FrameLayout>-->
