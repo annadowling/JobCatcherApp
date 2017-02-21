@@ -157,6 +157,7 @@ public class LoginFragment extends android.app.Fragment implements View.OnClickL
 
                                 ProfileFragment profileFragment = ProfileFragment.newInstance();
                                 ft.replace(R.id.loginFrame, profileFragment);
+                                ft.addToBackStack(null);
                                 ft.commit();
                             }
 

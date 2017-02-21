@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
         LoginFragment loginFragment = LoginFragment.newInstance();
         ft.replace(R.id.homeFrame, loginFragment);
+        ft.addToBackStack(null);
         ft.commit();
     }
 }
