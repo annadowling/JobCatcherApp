@@ -1,6 +1,7 @@
 package fragments;
 
 import android.app.Dialog;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -93,10 +94,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                 //Storing Data using SharedPreferences
                 edit.putString("token", "");
                 edit.commit();
-                Intent loginactivity = new Intent(getActivity().getApplicationContext(), LoginFragment.class);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
 
-                startActivity(loginactivity);
-                getActivity().finish();
+                LoginFragment loginFragment = LoginFragment.newInstance();
+                ft.replace(R.id.profileFrame, loginFragment);
+                ft.commit();
             }
         });
 
@@ -166,7 +168,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     }
 
     private void changePassword() {
-        dlg = new Dialog(getActivity().getApplicationContext());
+        dlg = new Dialog(getActivity());
         dlg.setContentView(R.layout.chgpassword_fragment);
         dlg.setTitle("Change Password");
         chgpassfr = (Button) dlg.findViewById(R.id.chgbtn);

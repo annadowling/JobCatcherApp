@@ -1,6 +1,7 @@
 package fragments;
 
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -127,9 +128,12 @@ public class LoginFragment extends android.app.Fragment implements View.OnClickL
     }
 
     public void register() {
-//        Intent regactivity = new Intent(LoginActivity.this, RegisterActivity.class);
-//        startActivity(regactivity);
-//        finish();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+        RegisterFragment registerFragment = RegisterFragment.newInstance();
+        ft.replace(R.id.loginFrame, registerFragment);
+        ft.addToBackStack(null);
+        ft.commit();
     }
 
     public void login() {
@@ -187,7 +191,7 @@ public class LoginFragment extends android.app.Fragment implements View.OnClickL
     }
 
     public void forgotPassword() {
-        reset = new Dialog(getActivity().getApplicationContext());
+        reset = new Dialog(getActivity());
         reset.setTitle("Reset Password");
         reset.setContentView(R.layout.reset_password);
         cont = (Button) reset.findViewById(R.id.resbtn);
