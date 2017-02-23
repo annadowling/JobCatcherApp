@@ -45,8 +45,10 @@
         <activity
             android:name="fragments.MapsFragment"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.Base"></activity>
     </application>
 
 </manifest>

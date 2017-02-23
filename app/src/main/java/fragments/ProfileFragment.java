@@ -45,7 +45,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     SharedPreferences pref;
     String token, grav, oldpasstxt, newpasstxt;
     //WebView web;
-    Button chgpass, chgpassfr, cancel, logout, mapButton;
+    Button chgpass, chgpassfr, cancel, logout;
     Dialog dlg;
     EditText oldpass, newpass;
     public static final String KEY_OLDPASSWORD = "oldpass";
@@ -83,7 +83,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
        // web = (WebView) view.findViewById(R.id.webView);
         chgpass = (Button) view.findViewById(R.id.chgbtn);
         logout = (Button) view.findViewById(R.id.logout);
-        mapButton = (Button) view.findViewById(R.id.mapButton);
 
         chgpass.setOnClickListener(this);
 
@@ -99,21 +98,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                 LoginFragment loginFragment = LoginFragment.newInstance();
                 ft.replace(R.id.profileFrame, loginFragment);
                 ft.commit();
-            }
-        });
-
-        mapButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                SharedPreferences.Editor edit = pref.edit();
-                //Storing Data using SharedPreferences
-                edit.putString("token", "");
-                edit.commit();
-                Intent mapactivity = new Intent(getActivity().getApplicationContext(), MapsFragment.class);
-
-                startActivity(mapactivity);
-                getActivity().finish();
-
             }
         });
 

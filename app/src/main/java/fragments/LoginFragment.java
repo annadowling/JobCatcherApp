@@ -1,9 +1,9 @@
 package fragments;
 
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import app.com.jobcatcherapp.R;
+import app.com.jobcatcherapp.activities.MainActivity;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -157,12 +158,8 @@ public class LoginFragment extends android.app.Fragment implements View.OnClickL
                                 edit.putString("grav", grav);
                                 edit.commit();
 
-                                FragmentTransaction ft = getFragmentManager().beginTransaction();
-
-                                ProfileFragment profileFragment = ProfileFragment.newInstance();
-                                ft.replace(R.id.loginFrame, profileFragment);
-                                ft.addToBackStack(null);
-                                ft.commit();
+                                Intent intent = new Intent(getActivity(), MainActivity.class);
+                                getActivity().startActivity(intent);
                             }
 
                         } catch (JSONException e) {
@@ -207,7 +204,7 @@ public class LoginFragment extends android.app.Fragment implements View.OnClickL
         reset.dismiss();
     }
 
-    public void setListenersForButton(){
+    public void setListenersForButton() {
         cancel1.setOnClickListener(this);
         cont_code.setOnClickListener(this);
     }
@@ -302,22 +299,22 @@ public class LoginFragment extends android.app.Fragment implements View.OnClickL
         };
     }
 
-        @Override
-        public void onClick(View v){
-            if (v == register) {
-                register();
-            } else if (v == login) {
-                login();
-            } else if (v == forpass) {
-                forgotPassword();
-            } else if (v == cancel) {
-                cancel();
-            } else if (v == cont) {
-                changePassword();
-            } else if (v == cancel1) {
-                cancel();
-            } else if (v == cont_code) {
-                setCode();
-            }
+    @Override
+    public void onClick(View v) {
+        if (v == register) {
+            register();
+        } else if (v == login) {
+            login();
+        } else if (v == forpass) {
+            forgotPassword();
+        } else if (v == cancel) {
+            cancel();
+        } else if (v == cont) {
+            changePassword();
+        } else if (v == cancel1) {
+            cancel();
+        } else if (v == cont_code) {
+            setCode();
         }
     }
+}

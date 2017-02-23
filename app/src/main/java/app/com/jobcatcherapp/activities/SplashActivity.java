@@ -3,7 +3,6 @@ package app.com.jobcatcherapp.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import app.com.jobcatcherapp.R;
@@ -30,7 +29,7 @@ public class SplashActivity extends Activity {
 
                 if (!mIsBackButtonPressed) {
                     // start the home screen if the back button wasn't pressed already
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                    Intent intent = new Intent(SplashActivity.this, Base.class);
                     SplashActivity.this.startActivity(intent);
                 }
             }
