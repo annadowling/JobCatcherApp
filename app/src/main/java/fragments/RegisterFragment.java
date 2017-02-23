@@ -10,19 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import app.com.jobcatcherapp.R;
+import requests.VolleyRequest;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -123,33 +116,14 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         passwordtxt = password.getText().toString();
         String url = "http://10.0.2.2:8080/register";
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Toast.makeText(getActivity().getApplicationContext(), response, Toast.LENGTH_LONG).show();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getActivity().getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put(KEY_PASSWORD, passwordtxt);
-                params.put(KEY_FIRSTNAME, firstNametxt);
-                params.put(KEY_LASTNAME, lastNametxt);
-                params.put(KEY_EMAIL, emailtxt);
-                return params;
-            }
+        Map<String, String> params = new HashMap<String, String>();
+        params.put(KEY_PASSWORD, passwordtxt);
+        params.put(KEY_FIRSTNAME, firstNametxt);
+        params.put(KEY_LASTNAME, lastNametxt);
+        params.put(KEY_EMAIL, emailtxt);
 
-        };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
-        requestQueue.add(stringRequest);
+        VolleyRequest request = new VolleyRequest();
+        request.makeVolleyRequest(getActivity().getApplicationContext(), params, url);
     }
 
     private void loginToApp() {
