@@ -4,10 +4,54 @@
     android:layout_height="match_parent"
     tools:context="fragments.EmployerFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="fill_parent"
+            android:layout_height="100px"
+            android:layout_gravity="center"
+            android:src="@drawable/magnifyingglassicon" />
+
+        <EditText
+            android:layout_width="440px"
+            android:layout_height="80px"
+            android:layout_gravity="center"
+            android:id="@+id/employer_email"
+            android:layout_marginTop="30px"
+            android:hint="example@mail.com"/>
+
+        <EditText
+            android:layout_width="440px"
+            android:layout_height="80px"
+            android:inputType="textPersonName"
+            android:layout_gravity="center"
+            android:id="@+id/company_name"
+            android:hint="Company Name" />
+
+        <EditText
+            android:layout_width="440px"
+            android:layout_height="80px"
+            android:layout_gravity="center"
+            android:ems="10"
+            android:id="@+id/address"
+            android:hint="Address"/>
+
+        <Button
+            android:layout_width="440px"
+            android:layout_height="80px"
+            android:id="@+id/register_employer"
+            android:layout_gravity="center"
+            android:background="@drawable/btn_back"
+            android:textColor="#ffffff"
+            android:textAlignment="center"
+            android:text="Register"/>
+
+    </LinearLayout>
+
 
 </FrameLayout>
