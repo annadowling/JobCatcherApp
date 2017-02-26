@@ -1,20 +1,17 @@
 package fragments;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
+import android.location.Geocoder;
 import android.location.Location;
-import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
+import android.view.View;
+import android.widget.EditText;
+
+import android.location.Address;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -26,38 +23,39 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
+import java.util.List;
+
+
 import app.com.jobcatcherapp.R;
 
-public class MapsFragment extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class MapsFragment extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
+
 
     LocationRequest mLocationRequest;
     GoogleApiClient mGoogleApiClient;
 
     LatLng latLng;
-    GoogleMap mGoogleMap;
+    GoogleMap mMap;
     SupportMapFragment mFragment;
     Marker currLocationMarker;
-    Location mLastLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_maps);
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        mFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        mFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mFragment.getMapAsync(this);
     }
 
-
     @Override
     public void onMapReady(GoogleMap gMap) {
-        mGoogleMap = gMap;
+        mMap = gMap;
         try {
-            mGoogleMap.setMyLocationEnabled(true);
-        } catch (SecurityException e) {
-            //TODO log exception
+            mMap.setMyLocationEnabled(true);
+        } catch (SecurityException exception) {
+
         }
 
         buildGoogleApiClient();
@@ -77,36 +75,31 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onConnected(Bundle bundle) {
-        Toast.makeText(this, "onConnected", Toast.LENGTH_SHORT).show();
         try {
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        } catch (SecurityException e) {
-            //TODO log exception
-        }
-        if (mLastLocation != null) {
-            //place marker at current position
-            //mGoogleMap.clear();
-            latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(latLng);
-            markerOptions.title("Current Position");
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-            currLocationMarker = mGoogleMap.addMarker(markerOptions);
-        }
+            Toast.makeText(this, "onConnected", Toast.LENGTH_SHORT).show();
+            Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            if (mLastLocation != null) {
+                //place marker at current position
+                //mGoogleMap.clear();
+                latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng);
+                markerOptions.title("Current Position");
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+                currLocationMarker = mMap.addMarker(markerOptions);
+            }
 
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(5000); //5 seconds
-        mLocationRequest.setFastestInterval(3000); //3 seconds
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        //mLocationRequest.setSmallestDisplacement(0.1F); //1/10 meter
+            mLocationRequest = new LocationRequest();
+            mLocationRequest.setInterval(5000); //5 seconds
+            mLocationRequest.setFastestInterval(3000); //3 seconds
+            mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+            //mLocationRequest.setSmallestDisplacement(0.1F); //1/10 meter
 
-        try{
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        }catch (SecurityException e) {
-            //TODO log exception
+
+        } catch (SecurityException exception) {
+
         }
-
-
     }
 
     @Override
@@ -123,7 +116,7 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
     public void onLocationChanged(Location location) {
 
         //place marker at current position
-        //mGoogleMap.clear();
+        mMap.clear();
         if (currLocationMarker != null) {
             currLocationMarker.remove();
         }
@@ -132,17 +125,36 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
         markerOptions.position(latLng);
         markerOptions.title("Current Position");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        currLocationMarker = mGoogleMap.addMarker(markerOptions);
+        currLocationMarker = mMap.addMarker(markerOptions);
 
         Toast.makeText(this, "Location Changed", Toast.LENGTH_SHORT).show();
 
         //zoom to current position:
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
-
-        //If you only need one location, unregister the listener
-        //LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
 
     }
+
+    public void onMapSearch(View view) {
+        EditText locationSearch = (EditText) findViewById(R.id.editText);
+        String location = locationSearch.getText().toString();
+        List<android.location.Address> addressList = null;
+
+        if (location != null && !location.equals("")) {
+            Geocoder geocoder = new Geocoder(this);
+            try {
+                addressList = geocoder.getFromLocationName(location, 1);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "Invalid Input", Toast.LENGTH_SHORT).show();
+            }
+            Address address = addressList.get(0);
+            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+            mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+        }
+    }
+
 
 }
 

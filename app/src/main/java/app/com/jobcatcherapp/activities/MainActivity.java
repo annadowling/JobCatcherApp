@@ -4,7 +4,6 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,7 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import app.com.jobcatcherapp.R;
-import fragments.LoginFragment;
+import fragments.ContactFragment;
+import fragments.EmployerFragment;
 import fragments.MapsFragment;
 import fragments.ProfileFragment;
 
@@ -33,8 +33,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+                ContactFragment contactFragment = ContactFragment.newInstance();
+                ft.replace(R.id.homeFrame, contactFragment);
+                ft.addToBackStack(null);
+                ft.commit();
             }
         });
 
@@ -96,16 +100,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.nav_map) {
             Intent mapactivity = new Intent(MainActivity.this, MapsFragment.class);
             startActivity(mapactivity);
-        } else if (id == R.id.nav_gallery) {
+        }else if(id == R.id.contact_options){
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
 
-        } else if (id == R.id.nav_slideshow) {
+            ContactFragment contactFragment = ContactFragment.newInstance();
+            ft.replace(R.id.homeFrame, contactFragment);
+            ft.addToBackStack(null);
+            ft.commit();
+        }else if(id == R.id.register_employer){
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
 
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+            EmployerFragment employerFragment = EmployerFragment.newInstance();
+            ft.replace(R.id.homeFrame, employerFragment);
+            ft.addToBackStack(null);
+            ft.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
