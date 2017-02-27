@@ -17,6 +17,7 @@ import android.view.View;
 import app.com.jobcatcherapp.R;
 import fragments.ContactFragment;
 import fragments.EmployerFragment;
+import fragments.EmployerPortalFragment;
 import fragments.MapsFragment;
 import fragments.ProfileFragment;
 
@@ -112,6 +113,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             EmployerFragment employerFragment = EmployerFragment.newInstance();
             ft.replace(R.id.homeFrame, employerFragment);
+            ft.addToBackStack(null);
+            ft.commit();
+        }else if(id == R.id.employer_portal){
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+            EmployerPortalFragment portalFragment = EmployerPortalFragment.newInstance();
+            ft.replace(R.id.homeFrame, portalFragment);
             ft.addToBackStack(null);
             ft.commit();
         }
