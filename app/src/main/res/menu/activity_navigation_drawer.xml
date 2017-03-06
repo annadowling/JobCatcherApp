@@ -10,17 +10,15 @@
             android:title="Nearby Jobs" />
         <item
             android:id="@+id/contact_options"
-            android:title="Contact Options" />
+            android:title="Contact" />
         <item
             android:id="@+id/register_employer"
             android:title="Register Employer" />
         <item
             android:id="@+id/employer_portal"
-            android:title="Employer Portal" />
+            android:title="Employer Login" />
         <item
             android:id="@+id/favourite_jobs"
             android:title="Favourite Jobs" />
     </group>
-
-
 </menu>
