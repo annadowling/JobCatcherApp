@@ -1,5 +1,6 @@
 package fragments;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -63,10 +64,10 @@ public class EmployerFragment extends Fragment implements View.OnClickListener{
         longitude = (EditText) view.findViewById(R.id.longitude);
         password = (EditText) view.findViewById(R.id.employerPassword);
         register = (Button) view.findViewById(R.id.register_employer);
-        //login = (Button) view.findViewById(R.id.);
+        login = (Button) view.findViewById(R.id.employer_login);
 
         register.setOnClickListener(this);
-        //login.setOnClickListener(this);
+        login.setOnClickListener(this);
         return view;
     }
 
@@ -131,10 +132,21 @@ public class EmployerFragment extends Fragment implements View.OnClickListener{
         request.makeVolleyRequest(getActivity().getApplicationContext(), params, url);
     }
 
+    private void loginToEmployerPortal() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+        EmployerPortalFragment loginFragment = EmployerPortalFragment.newInstance();
+        ft.replace(R.id.registerFrame, loginFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
     @Override
     public void onClick(View v) {
         if (v == register) {
             registerEmployer();
+        }else if(v == login){
+            loginToEmployerPortal();
         }
     }
 }

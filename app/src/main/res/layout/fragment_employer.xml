@@ -77,6 +77,18 @@
             android:textAlignment="center"
             android:text="Register"/>
 
+
+        <Button
+            android:layout_width="440px"
+            android:layout_height="80px"
+            android:layout_marginTop="10px"
+            android:id="@+id/employer_login"
+            android:layout_gravity="center"
+            android:background="@drawable/btn_back_blue"
+            android:textColor="#ffffff"
+            android:textAlignment="center"
+            android:text="Login Now"/>
+
     </LinearLayout>
 
 

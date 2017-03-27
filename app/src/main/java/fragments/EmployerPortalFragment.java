@@ -1,14 +1,36 @@
 package fragments;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import app.com.jobcatcherapp.R;
+import app.com.jobcatcherapp.activities.MainActivity;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,10 +40,17 @@ import app.com.jobcatcherapp.R;
  * Use the {@link EmployerPortalFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EmployerPortalFragment extends Fragment {
+public class EmployerPortalFragment extends Fragment implements View.OnClickListener {
 
 
     private OnFragmentInteractionListener mListener;
+
+    EditText email, password;
+    Button login;
+    String emailtxt, passwordtxt;
+    SharedPreferences pref;
+    public static final String KEY_PASSWORD = "password";
+    public static final String KEY_EMAIL = "email";
 
     public EmployerPortalFragment() {
         // Required empty public constructor
@@ -42,7 +71,15 @@ public class EmployerPortalFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_employer_portal, container, false);
+        View view = inflater.inflate(R.layout.fragment_employer_portal, container, false);
+        email = (EditText) view.findViewById(R.id.employer_email);
+        password = (EditText) view.findViewById(R.id.employer_password);
+        login = (Button) view.findViewById(R.id.employer_loginbtn);
+
+        pref = getActivity().getSharedPreferences("AppPref", MODE_PRIVATE);
+
+        login.setOnClickListener(this);
+
         return view;
     }
 
@@ -83,5 +120,62 @@ public class EmployerPortalFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void loginToPortal() {
+        emailtxt = email.getText().toString();
+        passwordtxt = password.getText().toString();
+
+        String url = "http://10.0.2.2:8080/employerLogin";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject josnOBJ = new JSONObject(response);
+                            if (josnOBJ.getBoolean("res")) {
+                                String token = josnOBJ.getString("token");
+                                String grav = josnOBJ.getString("grav");
+                                SharedPreferences.Editor edit = pref.edit();
+                                //Storing Data using SharedPreferences
+                                edit.putString("token", token);
+                                edit.putString("grav", grav);
+                                edit.commit();
+
+                                Intent intent = new Intent(getActivity(), MainActivity.class);
+                                getActivity().startActivity(intent);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(getActivity().getApplicationContext(), "You are logged in!", Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(KEY_PASSWORD, passwordtxt);
+                params.put(KEY_EMAIL, emailtxt);
+                return params;
+            }
+
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        requestQueue.add(stringRequest);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == login) {
+            loginToPortal();
+        }
     }
 }

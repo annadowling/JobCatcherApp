@@ -22,6 +22,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,6 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import app.com.jobcatcherapp.R;
+import app.com.jobcatcherapp.activities.GoogleSignInActivity;
 import app.com.jobcatcherapp.activities.MainActivity;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -42,16 +47,19 @@ import static android.content.Context.MODE_PRIVATE;
  * Use the {@link LoginFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LoginFragment extends android.app.Fragment implements View.OnClickListener {
+public class LoginFragment extends android.app.Fragment implements  View.OnClickListener {
     EditText email, password, res_email, code, newpass;
     Button login, cont, cont_code, cancel, cancel1, register, forpass;
     String emailtxt, passwordtxt, email_res_txt, code_txt, npass_txt;
     SharedPreferences pref;
     Dialog reset;
+    SignInButton googleSignInButton;
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_EMAIL = "email";
+    private static final int RC_SIGN_IN = 9001;
 
     private OnFragmentInteractionListener mListener;
+
 
     public LoginFragment() {
         // Required empty public constructor
@@ -79,6 +87,7 @@ public class LoginFragment extends android.app.Fragment implements View.OnClickL
         login = (Button) view.findViewById(R.id.loginbtn);
         register = (Button) view.findViewById(R.id.register);
         forpass = (Button) view.findViewById(R.id.forgotpass);
+        googleSignInButton = (SignInButton) view.findViewById(R.id.sign_in_button);
 
         pref = getActivity().getSharedPreferences("AppPref", MODE_PRIVATE);
 
@@ -87,6 +96,8 @@ public class LoginFragment extends android.app.Fragment implements View.OnClickL
         login.setOnClickListener(this);
 
         forpass.setOnClickListener(this);
+
+        googleSignInButton.setOnClickListener(this);
         return view;
     }
 
@@ -126,6 +137,11 @@ public class LoginFragment extends android.app.Fragment implements View.OnClickL
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void googleSignIn() {
+        Intent intent = new Intent(getActivity(), GoogleSignInActivity.class);
+        getActivity().startActivity(intent);
     }
 
     public void register() {
@@ -315,6 +331,8 @@ public class LoginFragment extends android.app.Fragment implements View.OnClickL
             cancel();
         } else if (v == cont_code) {
             setCode();
-        }
+        }else if(v == googleSignInButton){
+            googleSignIn();
+        };
     }
 }

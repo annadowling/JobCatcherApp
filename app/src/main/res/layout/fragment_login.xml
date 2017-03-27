@@ -77,6 +77,12 @@
 
 
         </LinearLayout>
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_button"
+            android:layout_gravity="center"
+            android:layout_width="440px"
+            android:layout_height="80px"
+            android:textAlignment="center"/>
 
     </LinearLayout>
 </FrameLayout>
