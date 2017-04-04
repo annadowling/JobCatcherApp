@@ -1,5 +1,6 @@
 package fragments;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -23,9 +24,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.maps.SupportMapFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,7 +52,7 @@ import static android.content.Context.MODE_PRIVATE;
  * Use the {@link LoginFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LoginFragment extends android.app.Fragment implements  View.OnClickListener {
+public class LoginFragment extends android.app.Fragment implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
     EditText email, password, res_email, code, newpass;
     Button login, cont, cont_code, cancel, cancel1, register, forpass;
     String emailtxt, passwordtxt, email_res_txt, code_txt, npass_txt;
@@ -56,7 +61,11 @@ public class LoginFragment extends android.app.Fragment implements  View.OnClick
     SignInButton googleSignInButton;
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_EMAIL = "email";
+    private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
+
+    private GoogleApiClient mGoogleApiClient;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -97,6 +106,21 @@ public class LoginFragment extends android.app.Fragment implements  View.OnClick
 
         forpass.setOnClickListener(this);
 
+        // Configure sign-in to request the user's ID, email address, and basic
+        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        // Build a GoogleApiClient with access to the Google Sign-In API and the
+        // options specified by gso.
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity().getApplicationContext())
+                //.enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+
+        googleSignInButton = (SignInButton) view.findViewById(R.id.sign_in_button);
         googleSignInButton.setOnClickListener(this);
         return view;
     }
@@ -140,8 +164,8 @@ public class LoginFragment extends android.app.Fragment implements  View.OnClick
     }
 
     private void googleSignIn() {
-        Intent intent = new Intent(getActivity(), GoogleSignInActivity.class);
-        getActivity().startActivity(intent);
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     public void register() {
@@ -316,6 +340,42 @@ public class LoginFragment extends android.app.Fragment implements  View.OnClick
     }
 
     @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Toast.makeText(getActivity().getApplicationContext(), "onConnectionFailed", Toast.LENGTH_SHORT).show();
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+        if (result.isSuccess()) {
+            // Signed in successfully, show authenticated UI.
+            //GoogleSignInAccount acct = result.getSignInAccount();
+            //mStatusTextView.setText(getString("0x7f1000ec", acct.getDisplayName()));
+            updateUI(true);
+        } else {
+            // Signed out, show unauthenticated UI.
+            updateUI(true);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+        }
+    }
+
+    public void updateUI(Boolean updateUI) {
+        if (updateUI) {
+            Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
+            LoginFragment.this.startActivity(intent);
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         if (v == register) {
             register();
@@ -331,8 +391,8 @@ public class LoginFragment extends android.app.Fragment implements  View.OnClick
             cancel();
         } else if (v == cont_code) {
             setCode();
-        }else if(v == googleSignInButton){
+        } else if (v == googleSignInButton) {
             googleSignIn();
-        };
+        }
     }
 }
