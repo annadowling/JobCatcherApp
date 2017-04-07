@@ -1,6 +1,7 @@
 package fragments;
 
 import android.app.Dialog;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -143,8 +144,12 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
                                 edit.putString("grav", grav);
                                 edit.commit();
 
-                                Intent intent = new Intent(getActivity(), MainActivity.class);
-                                getActivity().startActivity(intent);
+                                FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+                                JobFragment jobFragment = JobFragment.newInstance();
+                                ft.replace(R.id.baseFrame, jobFragment);
+                                ft.addToBackStack(null);
+                                ft.commit();
                             }
 
                         } catch (JSONException e) {
