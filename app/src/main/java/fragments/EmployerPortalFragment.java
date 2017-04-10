@@ -60,6 +60,8 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
     // TODO: Rename and change types and number of parameters
     public static EmployerPortalFragment newInstance() {
         EmployerPortalFragment fragment = new EmployerPortalFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -147,7 +149,7 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
                                 FragmentTransaction ft = getFragmentManager().beginTransaction();
 
                                 JobFragment jobFragment = JobFragment.newInstance();
-                                ft.replace(R.id.baseFrame, jobFragment);
+                                ft.replace(R.id.employerPortalFrame, jobFragment);
                                 ft.addToBackStack(null);
                                 ft.commit();
                             }

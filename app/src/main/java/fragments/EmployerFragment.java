@@ -44,6 +44,8 @@ public class EmployerFragment extends Fragment implements View.OnClickListener{
 
     public static EmployerFragment newInstance() {
         EmployerFragment fragment = new EmployerFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -136,7 +138,7 @@ public class EmployerFragment extends Fragment implements View.OnClickListener{
         FragmentTransaction ft = getFragmentManager().beginTransaction();
 
         EmployerPortalFragment loginFragment = EmployerPortalFragment.newInstance();
-        ft.replace(R.id.registerFrame, loginFragment);
+        ft.replace(R.id.employerRegisterFrame, loginFragment);
         ft.addToBackStack(null);
         ft.commit();
     }
