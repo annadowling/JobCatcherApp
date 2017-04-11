@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import app.com.jobcatcherapp.R;
+import requests.VolleyRequest;
 
 import static app.com.jobcatcherapp.R.id.newpass;
 
@@ -127,46 +128,17 @@ public class JobFragment extends Fragment implements View.OnClickListener {
         final String jobDescriptionTxt = jobDescription.getText().toString();
         final String addressTxt = address.getText().toString();
 
-        String url = "http://10.0.2.2:8080/api/addJob";
+        String url = "http://10.0.2.2:8080/addJob";
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject josnOBJ = new JSONObject(response);
-                            if (josnOBJ.getBoolean("res")) {
-                                Toast.makeText(getActivity().getApplicationContext(), response, Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(getActivity().getApplicationContext(), response, Toast.LENGTH_SHORT).show();
-                            }
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("email", emailTxt);
+        params.put("contactNumber", phoneTxt);
+        params.put("jobTitle", jobTitleTxt);
+        params.put("jobDescription", jobDescriptionTxt);
+        params.put("address", addressTxt);
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getActivity().getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("email", emailTxt);
-                params.put("contactNumber", phoneTxt);
-                params.put("jobTitle", jobTitleTxt);
-                params.put("jobDescription", jobDescriptionTxt);
-                params.put("address", addressTxt);
-                return params;
-            }
-
-        };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
-        requestQueue.add(stringRequest);
+        VolleyRequest request = new VolleyRequest();
+        request.makeVolleyRequest(getActivity().getApplicationContext(), params, url);
     }
 
 
