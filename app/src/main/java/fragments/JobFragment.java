@@ -40,7 +40,7 @@ import static app.com.jobcatcherapp.R.id.newpass;
 public class JobFragment extends Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mListener;
-    EditText email, phone, jobTitle, jobDescription, address;
+    EditText email, phone, jobTitle, jobDescription;
     Button addJob;
 
     public JobFragment() {
@@ -74,7 +74,6 @@ public class JobFragment extends Fragment implements View.OnClickListener {
         phone = (EditText) view.findViewById(R.id.phone);
         jobTitle = (EditText) view.findViewById(R.id.jobTitle);
         jobDescription = (EditText) view.findViewById(R.id.jobDescription);
-        address = (EditText) view.findViewById(R.id.jobAddress);
         addJob = (Button) view.findViewById(R.id.addjob);
 
         addJob.setOnClickListener(this);
@@ -126,7 +125,6 @@ public class JobFragment extends Fragment implements View.OnClickListener {
         final String phoneTxt = phone.getText().toString();
         final String jobTitleTxt = jobTitle.getText().toString();
         final String jobDescriptionTxt = jobDescription.getText().toString();
-        final String addressTxt = address.getText().toString();
 
         String url = "http://10.0.2.2:8080/addJob";
 
@@ -135,7 +133,6 @@ public class JobFragment extends Fragment implements View.OnClickListener {
         params.put("contactNumber", phoneTxt);
         params.put("jobTitle", jobTitleTxt);
         params.put("jobDescription", jobDescriptionTxt);
-        params.put("address", addressTxt);
 
         VolleyRequest request = new VolleyRequest();
         request.makeVolleyRequest(getActivity().getApplicationContext(), params, url);

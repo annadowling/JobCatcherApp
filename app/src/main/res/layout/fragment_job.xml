@@ -54,19 +54,6 @@
             android:scrollbars="vertical"
             android:hint="Job Description" />
 
-        <EditText
-            android:layout_width="440px"
-            android:layout_height="80px"
-            android:lines="4"
-            android:minLines="1"
-            android:maxLines="6"
-            android:layout_gravity="center"
-            android:id="@+id/jobAddress"
-            android:inputType="textMultiLine"
-            android:scrollbars="vertical"
-            android:hint="Address" />
-
-
 
         <Button
             android:layout_width="440px"
