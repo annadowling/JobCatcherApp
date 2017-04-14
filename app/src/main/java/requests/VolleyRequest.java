@@ -7,9 +7,15 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +25,9 @@ import java.util.Map;
 
 public class VolleyRequest {
 
-    public void makeVolleyRequest(Context context, Map<String, String> requestParameters, String url) {
+    private ArrayList<String> responseEntries;
+
+    public void makeVolleyPostRequest(Context context, Map<String, String> requestParameters, String url) {
         final Context applicationContext = context;
         final Map<String, String> mapParameters = requestParameters;
 
@@ -47,6 +55,37 @@ public class VolleyRequest {
 
         RequestQueue requestQueue = Volley.newRequestQueue(applicationContext);
         requestQueue.add(stringRequest);
+    }
+
+    public ArrayList<String> makeVolleyGetRequest(Context context, String url) {
+        final Context applicationContext = context;
+        JsonArrayRequest request = new JsonArrayRequest(url,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray jsonArray) {
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            try {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                responseEntries.add(jsonObject.toString());
+                            } catch (JSONException e) {
+                                responseEntries.add("Error: " + e.getLocalizedMessage());
+                            }
+                        }
+
+                        //allDone();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(applicationContext, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        //mEntries = new ArrayList<>();
+        RequestQueue requestQueue = Volley.newRequestQueue(applicationContext);
+        requestQueue.add(request);
+        return responseEntries;
     }
 
 

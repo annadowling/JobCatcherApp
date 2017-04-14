@@ -3,7 +3,6 @@ package fragments;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,10 +24,12 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import app.com.jobcatcherapp.R;
+import requests.VolleyRequest;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -43,9 +44,9 @@ import static android.content.Context.MODE_PRIVATE;
 public class ProfileFragment extends Fragment implements View.OnClickListener{
 
     SharedPreferences pref;
+    VolleyRequest request;
     String token, grav, oldpasstxt, newpasstxt;
-    //WebView web;
-    Button chgpass, chgpassfr, cancel, logout;
+    Button viewProfile, chgpass, chgpassfr, cancel, logout;
     Dialog dlg;
     EditText oldpass, newpass;
     public static final String KEY_OLDPASSWORD = "oldpass";
@@ -80,11 +81,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-       // web = (WebView) view.findViewById(R.id.webView);
+
+        viewProfile =  (Button) view.findViewById(R.id.viewDetails);
         chgpass = (Button) view.findViewById(R.id.chgbtn);
         logout = (Button) view.findViewById(R.id.logout);
 
         chgpass.setOnClickListener(this);
+
+        viewProfile.setOnClickListener(this);
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,9 +109,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         token = pref.getString("token", "");
         grav = pref.getString("grav", "");
 
-       // web.getSettings().setUseWideViewPort(true);
-        //web.getSettings().setLoadWithOverviewMode(true);
-       // web.loadUrl(grav);
 
         // Inflate the layout for this fragment
         return view;
@@ -216,12 +217,19 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         requestQueue.add(stringRequest);
     }
 
+    public void configureUserProfile(){
+        String url = "http://10.0.2.2:8080/getUserDetails";
+        ArrayList<String> userDetails = request.makeVolleyGetRequest(getActivity().getApplicationContext(), url);
+    }
+
     @Override
     public void onClick(View v) {
         if (v == chgpass) {
             changePassword();
         } else if (v == chgpassfr) {
             handleChangePasswordFragment();
+        } else if(v == viewProfile){
+            configureUserProfile();
         }
     }
 }

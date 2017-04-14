@@ -20,6 +20,17 @@
             android:src="@drawable/magnifyingglassicon" />
 
         <Button
+            android:id="@+id/viewDetails"
+            android:layout_width="440px"
+            android:layout_height="80px"
+            android:layout_gravity="center"
+            android:layout_marginTop="30px"
+            android:background="@drawable/btn_back_orange"
+            android:text="Profile Details"
+            android:textAlignment="center"
+            android:textColor="#ffffff" />
+
+        <Button
             android:id="@+id/chgbtn"
             android:layout_width="440px"
             android:layout_height="80px"

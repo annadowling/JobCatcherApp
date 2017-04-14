@@ -131,7 +131,7 @@ public class EmployerFragment extends Fragment implements View.OnClickListener{
         params.put(KEY_EMAIL, emailtxt);
 
         VolleyRequest request = new VolleyRequest();
-        request.makeVolleyRequest(getActivity().getApplicationContext(), params, url);
+        request.makeVolleyPostRequest(getActivity().getApplicationContext(), params, url);
     }
 
     private void loginToEmployerPortal() {
