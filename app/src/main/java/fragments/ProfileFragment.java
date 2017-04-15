@@ -41,7 +41,7 @@ import static android.content.Context.MODE_PRIVATE;
  * Use the {@link ProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProfileFragment extends Fragment implements View.OnClickListener{
+public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     SharedPreferences pref;
     VolleyRequest request;
@@ -82,7 +82,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        viewProfile =  (Button) view.findViewById(R.id.viewDetails);
+        viewProfile = (Button) view.findViewById(R.id.viewDetails);
         chgpass = (Button) view.findViewById(R.id.chgbtn);
         logout = (Button) view.findViewById(R.id.logout);
 
@@ -217,9 +217,19 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         requestQueue.add(stringRequest);
     }
 
-    public void configureUserProfile(){
+    public void configureUserProfile() {
         String url = "http://10.0.2.2:8080/getUserDetails";
-        ArrayList<String> userDetails = request.makeVolleyGetRequest(getActivity().getApplicationContext(), url);
+        String token = pref.getString("token", "default");
+
+        request = new VolleyRequest();
+        Map<String, String> userDetails = request.makeVolleyGetRequest(getActivity().getApplicationContext(), url, token);
+
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+        UserProfileFragment profileFragment = UserProfileFragment.newInstance(userDetails);
+        ft.replace(R.id.profileFrame, profileFragment);
+        ft.addToBackStack(null);
+        ft.commit();
     }
 
     @Override
@@ -228,7 +238,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
             changePassword();
         } else if (v == chgpassfr) {
             handleChangePasswordFragment();
-        } else if(v == viewProfile){
+        } else if (v == viewProfile) {
             configureUserProfile();
         }
     }

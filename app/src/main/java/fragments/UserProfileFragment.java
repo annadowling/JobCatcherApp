@@ -7,6 +7,10 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+
+import java.util.Map;
 
 import app.com.jobcatcherapp.R;
 
@@ -22,6 +26,9 @@ public class UserProfileFragment extends Fragment {
 
 
     private OnFragmentInteractionListener mListener;
+    TextView userName, email;
+    public static String userNameText;
+    public static String emailText;
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -30,13 +37,17 @@ public class UserProfileFragment extends Fragment {
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
+     *
      * @return A new instance of fragment UserProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static UserProfileFragment newInstance() {
+    public static UserProfileFragment newInstance(Map<String, String> userDetails) {
         UserProfileFragment fragment = new UserProfileFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+        userNameText = userDetails.get("firstName") + " " + userDetails.get("lastName");
+        emailText = userDetails.get("email");
+
         return fragment;
     }
 
@@ -48,8 +59,15 @@ public class UserProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
+
+        userName = (TextView) view.findViewById(R.id.user_profile_name);
+        userName.setText(userNameText);
+        email = (TextView) view.findViewById(R.id.user_profile_email);
+        email.setText(emailText);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_profile, container, false);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
