@@ -73,7 +73,6 @@ public class EmployerFragment extends Fragment implements View.OnClickListener{
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);

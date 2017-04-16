@@ -22,11 +22,12 @@ import app.com.jobcatcherapp.R;
  * Use the {@link UserProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class UserProfileFragment extends Fragment {
+public class UserProfileFragment extends Fragment implements View.OnClickListener{
 
 
     private OnFragmentInteractionListener mListener;
     TextView userName, email;
+    Button uploadFile;
     public static String userNameText;
     public static String emailText;
 
@@ -66,6 +67,9 @@ public class UserProfileFragment extends Fragment {
         userName.setText(userNameText);
         email = (TextView) view.findViewById(R.id.user_profile_email);
         email.setText(emailText);
+
+        uploadFile = (Button) view.findViewById(R.id.uploadcv);
+        uploadFile.setOnClickListener(this);
         // Inflate the layout for this fragment
         return view;
     }
@@ -107,5 +111,12 @@ public class UserProfileFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v == uploadFile){
+            //TODO
+        }
     }
 }

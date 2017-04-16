@@ -92,6 +92,30 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:text="CV Upload"
+                    android:textSize="25sp"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_height="wrap_content" />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Select File"
+                    android:id="@+id/selectfile"/>
+                <ImageView
+                    android:layout_width="400px"
+                    android:layout_height="400px"
+                    android:layout_gravity="center"
+                    android:id="@+id/file"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Upload CV"
+                    android:id="@+id/uploadcv"/>
+
+                <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"

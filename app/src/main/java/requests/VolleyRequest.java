@@ -1,9 +1,11 @@
 package requests;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -61,14 +63,16 @@ public class VolleyRequest {
     }
 
     public Map<String, String> makeVolleyGetRequest(Context context, String url, String token) {
-        final String userToken = token;
         final Context applicationContext = context;
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+
+        String getUrl = url + "/token=" + token;
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getUrl, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        Log.d("Response", response.toString());
                         try {
-                            VolleyLog.v("Response:%n %s", response.toString(4));
                             responseEntries.put("email", response.getString("email"));
                             responseEntries.put("firstName", response.getString("firstName"));
                             responseEntries.put("lastName", response.getString("lastName"));
@@ -79,22 +83,20 @@ public class VolleyRequest {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                VolleyLog.e("Error: ", error.getMessage());
+                Log.d("Error: ", error.getMessage());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<>();
-                map.put("Content-Type", "application/json; charset=utf-8");
-                map.put("token", userToken);
-                return map;
-            }
-
-        };
+        });
 
         RequestQueue requestQueue = Volley.newRequestQueue(applicationContext);
+        request.setRetryPolicy(new DefaultRetryPolicy(0, -1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue.add(request);
+
         return responseEntries;
+    }
+
+
+    public void uploadImageVolleyRequest(Context context, String url, String token){
+
     }
 
 
