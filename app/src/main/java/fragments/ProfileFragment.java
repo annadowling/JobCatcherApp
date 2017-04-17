@@ -219,18 +219,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     public void configureUserProfile() {
+
         String url = "http://10.0.2.2:8080/getUserDetails";
         String token = pref.getString("token", "default");
 
         request = new VolleyRequest();
-        Map<String, String> userDetails = request.makeVolleyGetRequest(getActivity().getApplicationContext(), url, token);
-
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-
-        UserProfileFragment profileFragment = UserProfileFragment.newInstance(userDetails);
-        ft.replace(R.id.profileFrame, profileFragment);
-        ft.addToBackStack(null);
-        ft.commit();
+        request.makeVolleyGetRequestForUserDetails(getActivity().getApplicationContext(), url, token, ft);
     }
 
     @Override

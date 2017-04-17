@@ -1,7 +1,14 @@
 package requests;
 
+import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -11,6 +18,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
@@ -24,13 +32,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import app.com.jobcatcherapp.R;
+import fragments.UserProfileFragment;
+
 /**
  * Created by annadowling on 23/02/2017.
  */
 
 public class VolleyRequest {
 
-    private Map<String, String> responseEntries;
+    TextView userName, userEmail;
+
 
     public void makeVolleyPostRequest(Context context, Map<String, String> requestParameters, String url) {
         final Context applicationContext = context;
@@ -62,8 +74,11 @@ public class VolleyRequest {
         requestQueue.add(stringRequest);
     }
 
-    public Map<String, String> makeVolleyGetRequest(Context context, String url, String token) {
+    public void makeVolleyGetRequestForUserDetails(Context context, String url, String token, FragmentTransaction ft) {
         final Context applicationContext = context;
+        final FragmentTransaction fragmentTransaction = ft;
+
+        final Map<String, String> responseEntries = new HashMap<String, String>();
 
         String getUrl = url + "/token=" + token;
 
@@ -76,6 +91,12 @@ public class VolleyRequest {
                             responseEntries.put("email", response.getString("email"));
                             responseEntries.put("firstName", response.getString("firstName"));
                             responseEntries.put("lastName", response.getString("lastName"));
+
+
+                            UserProfileFragment profileFragment = UserProfileFragment.newInstance(responseEntries);
+                            fragmentTransaction.replace(R.id.profileFrame, profileFragment);
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -88,14 +109,30 @@ public class VolleyRequest {
         });
 
         RequestQueue requestQueue = Volley.newRequestQueue(applicationContext);
-        request.setRetryPolicy(new DefaultRetryPolicy(0, -1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue.add(request);
-
-        return responseEntries;
     }
 
-
-    public void uploadImageVolleyRequest(Context context, String url, String token){
+    public void uploadFileVolleyRequest(Context context, String url, String token) {
+//        final Context applicationContext = context;
+//
+//        ImageRequest imgRequest = new ImageRequest(new String(url.toString()),
+//                new Response.Listener<Bitmap>() {
+//                    @Override
+//                    public void onResponse(Bitmap response) {
+//                        app.googlePhoto = response;
+//                        //googlePhoto.setImageBitmap(app.googlePhoto);
+//                    }
+//                }, 0, 0, ImageView.ScaleType.FIT_XY, Bitmap.Config.ARGB_8888, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                System.out.println("Something went wrong!");
+//                error.printStackTrace();
+//            }
+//        });
+//
+//// Add the request to the queue
+//        RequestQueue requestQueue = Volley.newRequestQueue(applicationContext);
+//        requestQueue.add(imgRequest);
 
     }
 

@@ -1,6 +1,7 @@
 package fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import java.util.Map;
 
 import app.com.jobcatcherapp.R;
+import requests.VolleyRequest;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +32,8 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
     Button uploadFile;
     public static String userNameText;
     public static String emailText;
+    SharedPreferences pref;
+    VolleyRequest request;
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -44,10 +48,10 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
     // TODO: Rename and change types and number of parameters
     public static UserProfileFragment newInstance(Map<String, String> userDetails) {
         UserProfileFragment fragment = new UserProfileFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         userNameText = userDetails.get("firstName") + " " + userDetails.get("lastName");
         emailText = userDetails.get("email");
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
 
         return fragment;
     }
