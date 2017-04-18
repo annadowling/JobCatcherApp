@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import app.com.jobcatcherapp.R;
+import fragments.EmployerProfileFragment;
 import fragments.UserProfileFragment;
 
 /**
@@ -95,6 +96,46 @@ public class VolleyRequest {
 
                             UserProfileFragment profileFragment = UserProfileFragment.newInstance(responseEntries);
                             fragmentTransaction.replace(R.id.profileFrame, profileFragment);
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Error: ", error.getMessage());
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(applicationContext);
+        requestQueue.add(request);
+    }
+
+    public void makeVolleyGetRequestForEmployerDetails(Context context, String url, String token, FragmentTransaction ft) {
+        final Context applicationContext = context;
+        final FragmentTransaction fragmentTransaction = ft;
+
+        final Map<String, String> responseEntries = new HashMap<String, String>();
+
+        String getUrl = url + "/token=" + token;
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getUrl, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Response", response.toString());
+                        try {
+                            responseEntries.put("email", response.getString("email"));
+                            responseEntries.put("companyName", response.getString("companyName"));
+                            responseEntries.put("address", response.getString("address"));
+                            responseEntries.put("latitude", response.getString("latitude"));
+                            responseEntries.put("longitude", response.getString("longitude"));
+
+
+                            EmployerProfileFragment profileFragment = EmployerProfileFragment.newInstance(responseEntries);
+                            fragmentTransaction.replace(R.id.employerPortalFrame, profileFragment);
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
                         } catch (JSONException e) {

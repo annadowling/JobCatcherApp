@@ -2,6 +2,7 @@ package app.com.jobcatcherapp.activities;
 
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import app.com.jobcatcherapp.R;
@@ -24,10 +26,21 @@ import fragments.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    SharedPreferences pref;
+
+    public static TextView emailText, userNameText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        pref = this.getSharedPreferences("AppPref", MODE_PRIVATE);
+        String email = pref.getString("email", "default");
+        String firstName = pref.getString("firstName", "default");
+        String lastName = pref.getString("lastName", "default");
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -52,6 +65,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View view = findViewById(R.id.navHeaderView);
+
+        emailText = (TextView) view.findViewById(R.id.navUserEmail);
+        emailText.setText(email);
+        userNameText = (TextView) view.findViewById(R.id.navUserName);
+        userNameText.setText(firstName + " " + lastName);
+
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
 
@@ -102,21 +123,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.nav_map) {
             Intent mapactivity = new Intent(MainActivity.this, MapsFragment.class);
             startActivity(mapactivity);
-        }else if(id == R.id.contact_options){
+        } else if (id == R.id.contact_options) {
             FragmentTransaction ft = getFragmentManager().beginTransaction();
 
             ContactFragment contactFragment = ContactFragment.newInstance();
             ft.replace(R.id.homeFrame, contactFragment);
             ft.addToBackStack(null);
             ft.commit();
-        }else if(id == R.id.register_employer){
+        } else if (id == R.id.register_employer) {
             FragmentTransaction ft = getFragmentManager().beginTransaction();
 
             EmployerFragment employerFragment = EmployerFragment.newInstance();
             ft.replace(R.id.homeFrame, employerFragment);
             ft.addToBackStack(null);
             ft.commit();
-        }else if(id == R.id.employer_portal){
+        } else if (id == R.id.employer_portal) {
             FragmentTransaction ft = getFragmentManager().beginTransaction();
 
             EmployerPortalFragment portalFragment = EmployerPortalFragment.newInstance();

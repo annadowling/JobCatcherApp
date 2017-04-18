@@ -54,7 +54,7 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class LoginFragment extends android.app.Fragment implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
     EditText email, password, res_email, code, newpass;
-    Button login, cont, cont_code, cancel, cancel1, register, forpass;
+    Button login, cont, cont_code, cancel, cancel1, register, employerPortal;
     String emailtxt, passwordtxt, email_res_txt, code_txt, npass_txt;
     SharedPreferences pref;
     Dialog reset;
@@ -95,7 +95,7 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
         password = (EditText) view.findViewById(R.id.password);
         login = (Button) view.findViewById(R.id.loginbtn);
         register = (Button) view.findViewById(R.id.register);
-        forpass = (Button) view.findViewById(R.id.forgotpass);
+        employerPortal = (Button) view.findViewById(R.id.employerPortalButton);
         googleSignInButton = (SignInButton) view.findViewById(R.id.sign_in_button);
 
         pref = getActivity().getSharedPreferences("AppPref", MODE_PRIVATE);
@@ -104,7 +104,7 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
 
         login.setOnClickListener(this);
 
-        forpass.setOnClickListener(this);
+        employerPortal.setOnClickListener(this);
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -196,6 +196,9 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
                                 //Storing Data using SharedPreferences
                                 edit.putString("token", token);
                                 edit.putString("grav", grav);
+                                edit.putString("firstName", josnOBJ.getString("firstName"));
+                                edit.putString("lastName", josnOBJ.getString("lastName"));
+                                edit.putString("email", josnOBJ.getString("email"));
                                 edit.commit();
 
                                 Intent intent = new Intent(getActivity(), MainActivity.class);
@@ -227,18 +230,18 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
         requestQueue.add(stringRequest);
     }
 
-    public void forgotPassword() {
-        reset = new Dialog(getActivity());
-        reset.setTitle("Reset Password");
-        reset.setContentView(R.layout.reset_password);
-        cont = (Button) reset.findViewById(R.id.resbtn);
-        cancel = (Button) reset.findViewById(R.id.cancelbtn);
-        res_email = (EditText) reset.findViewById(R.id.email);
-
-        cancel.setOnClickListener(this);
-        cont.setOnClickListener(this);
-        reset.show();
-    }
+//    public void forgotPassword() {
+//        reset = new Dialog(getActivity());
+//        reset.setTitle("Reset Password");
+//        reset.setContentView(R.layout.reset_password);
+//        cont = (Button) reset.findViewById(R.id.resbtn);
+//        cancel = (Button) reset.findViewById(R.id.cancelbtn);
+//        res_email = (EditText) reset.findViewById(R.id.email);
+//
+//        cancel.setOnClickListener(this);
+//        cont.setOnClickListener(this);
+//        reset.show();
+//    }
 
     public void cancel() {
         reset.dismiss();
@@ -375,14 +378,23 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
         }
     }
 
+    public void launchEmployerPortal() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+        EmployerPortalFragment portalFragment = EmployerPortalFragment.newInstance();
+        ft.replace(R.id.loginFrame, portalFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
     @Override
     public void onClick(View v) {
         if (v == register) {
             register();
         } else if (v == login) {
             login();
-        } else if (v == forpass) {
-            forgotPassword();
+        } else if (v == employerPortal) {
+            launchEmployerPortal();
         } else if (v == cancel) {
             cancel();
         } else if (v == cont) {

@@ -30,6 +30,7 @@ import java.util.Map;
 
 import app.com.jobcatcherapp.R;
 import app.com.jobcatcherapp.activities.MainActivity;
+import requests.VolleyRequest;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -47,8 +48,9 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
     private OnFragmentInteractionListener mListener;
 
     EditText email, password;
-    Button login;
+    Button login, register;
     String emailtxt, passwordtxt;
+    VolleyRequest request;
     SharedPreferences pref;
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_EMAIL = "email";
@@ -78,10 +80,12 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
         email = (EditText) view.findViewById(R.id.employer_email);
         password = (EditText) view.findViewById(R.id.employer_password);
         login = (Button) view.findViewById(R.id.employer_loginbtn);
+        register =  (Button) view.findViewById(R.id.registerEmployerBtn);
 
         pref = getActivity().getSharedPreferences("AppPref", MODE_PRIVATE);
 
         login.setOnClickListener(this);
+        register.setOnClickListener(this);
 
         return view;
     }
@@ -146,12 +150,7 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
                                 edit.putString("grav", grav);
                                 edit.commit();
 
-                                FragmentTransaction ft = getFragmentManager().beginTransaction();
-
-                                JobFragment jobFragment = JobFragment.newInstance();
-                                ft.replace(R.id.employerPortalFrame, jobFragment);
-                                ft.addToBackStack(null);
-                                ft.commit();
+                                configureEmployerProfile();
                             }
 
                         } catch (JSONException e) {
@@ -179,10 +178,31 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
         requestQueue.add(stringRequest);
     }
 
+    public void launchRegisterPage(){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+        EmployerFragment employerFragment = EmployerFragment.newInstance();
+        ft.replace(R.id.employerPortalFrame, employerFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    public void configureEmployerProfile() {
+
+        String url = "http://10.0.2.2:8080/getEmployerDetails";
+        String token = pref.getString("token", "default");
+
+        request = new VolleyRequest();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        request.makeVolleyGetRequestForEmployerDetails(getActivity().getApplicationContext(), url, token, ft);
+    }
+
     @Override
     public void onClick(View v) {
         if (v == login) {
             loginToPortal();
+        }else if(v == register){
+            launchRegisterPage();
         }
     }
 }

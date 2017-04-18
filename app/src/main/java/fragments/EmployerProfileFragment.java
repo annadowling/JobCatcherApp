@@ -1,5 +1,6 @@
 package fragments;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,43 +8,35 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
 import java.util.Map;
 
 import app.com.jobcatcherapp.R;
-import requests.VolleyRequest;
-
-import static app.com.jobcatcherapp.R.id.newpass;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link JobFragment.OnFragmentInteractionListener} interface
+ * {@link EmployerProfileFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link JobFragment#newInstance} factory method to
+ * Use the {@link EmployerProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class JobFragment extends Fragment implements View.OnClickListener {
+public class EmployerProfileFragment extends Fragment implements View.OnClickListener{
+
 
     private OnFragmentInteractionListener mListener;
-    EditText email, phone, jobTitle, jobDescription;
-    Button addJob;
 
-    public JobFragment() {
+    ImageView addJobIcon;
+    TextView latitude, longitude, address, email, companyname;
+    public static String companyNameText;
+    public static String emailText;
+    public static String latitudeNameText;
+    public static String longitudeText;
+    public static String addressText;
+
+    public EmployerProfileFragment() {
         // Required empty public constructor
     }
 
@@ -51,10 +44,17 @@ public class JobFragment extends Fragment implements View.OnClickListener {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment JobFragment.
+     * @return A new instance of fragment EmployerProfileFragment.
      */
-    public static JobFragment newInstance() {
-        JobFragment fragment = new JobFragment();
+    // TODO: Rename and change types and number of parameters
+    public static EmployerProfileFragment newInstance(Map<String, String> mapEntries) {
+        EmployerProfileFragment fragment = new EmployerProfileFragment();
+        companyNameText = mapEntries.get("companyName");
+        emailText = mapEntries.get("email");
+        latitudeNameText = mapEntries.get("latitude");
+        longitudeText = mapEntries.get("longitude");
+        addressText = mapEntries.get("address");
+
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -68,14 +68,26 @@ public class JobFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_job, container, false);
-        email = (EditText) view.findViewById(R.id.employerEmail);
-        phone = (EditText) view.findViewById(R.id.phone);
-        jobTitle = (EditText) view.findViewById(R.id.jobTitle);
-        jobDescription = (EditText) view.findViewById(R.id.jobDescription);
-        addJob = (Button) view.findViewById(R.id.addjob);
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_employer_profile, container, false);
 
-        addJob.setOnClickListener(this);
+        companyname = (TextView) view.findViewById(R.id.employer_profile_name);
+        companyname.setText(companyNameText);
+
+        email = (TextView) view.findViewById(R.id.employer_profile_email);
+        email.setText(emailText);
+
+        address =  (TextView) view.findViewById(R.id.employer_address);
+        address.setText(addressText);
+
+        latitude =  (TextView) view.findViewById(R.id.employer_lat);
+        latitude.setText(latitudeNameText);
+
+        longitude =  (TextView) view.findViewById(R.id.employer_long);
+        longitude.setText(longitudeText);
+
+        addJobIcon = (ImageView) view.findViewById(R.id.add_job);
+        addJobIcon.setOnClickListener(this);
 
         return view;
     }
@@ -119,29 +131,19 @@ public class JobFragment extends Fragment implements View.OnClickListener {
         void onFragmentInteraction(Uri uri);
     }
 
-    private void addJob() {
-        final String emailTxt = email.getText().toString();
-        final String phoneTxt = phone.getText().toString();
-        final String jobTitleTxt = jobTitle.getText().toString();
-        final String jobDescriptionTxt = jobDescription.getText().toString();
+    public void launchAddJob() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
 
-        String url = "http://10.0.2.2:8080/addJob";
-
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("email", emailTxt);
-        params.put("contactNumber", phoneTxt);
-        params.put("jobTitle", jobTitleTxt);
-        params.put("jobDescription", jobDescriptionTxt);
-
-        VolleyRequest request = new VolleyRequest();
-        request.makeVolleyPostRequest(getActivity().getApplicationContext(), params, url);
+        JobFragment jobFragment = JobFragment.newInstance();
+        ft.replace(R.id.employerProfileFrame, jobFragment);
+        ft.addToBackStack(null);
+        ft.commit();
     }
-
 
     @Override
     public void onClick(View v) {
-        if (v == addJob) {
-            addJob();
+        if(v == addJobIcon){
+            launchAddJob();
         }
     }
 }

@@ -46,6 +46,16 @@
         android:textAlignment="center"
         android:textColor="#ffffff" />
 
+        <Button
+            android:id="@+id/registerEmployerBtn"
+            android:layout_width="440px"
+            android:layout_height="80px"
+            android:layout_gravity="center"
+            android:background="@drawable/btn_back_blue"
+            android:text="Register"
+            android:textAlignment="center"
+            android:textColor="#ffffff" />
+
     </LinearLayout>
 
 </FrameLayout>
