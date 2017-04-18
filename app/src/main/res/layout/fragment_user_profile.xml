@@ -2,7 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="fragments.UserProfileFragment">
+    android:id="@+id/userProfileFrame"
+    tools:context="fragments.UserProfileFragment"
+    android:background="@color/white">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -42,24 +44,6 @@
                 android:paddingBottom="24dp">
 
 
-                <!--<ImageView-->
-                    <!--android:id="@+id/add_friend"-->
-                    <!--android:layout_width="30dp"-->
-                    <!--android:layout_height="30dp"-->
-                    <!--android:layout_marginLeft="16dp"-->
-                    <!--android:layout_marginTop="16dp"-->
-                    <!--android:layout_toLeftOf="@+id/drop_down_option_menu"-->
-                    <!--android:src="@drawable/ic_action_user_add" />-->
-
-                <!--<ImageView-->
-                    <!--android:id="@+id/drop_down_option_menu"-->
-                    <!--android:layout_width="30dp"-->
-                    <!--android:layout_height="30dp"-->
-                    <!--android:layout_alignParentRight="true"-->
-                    <!--android:layout_marginLeft="16dp"-->
-                    <!--android:layout_marginTop="16dp"-->
-                    <!--android:src="@drawable/ic_action_overflow" />-->
-
                 <TextView
                     android:id="@+id/user_profile_name"
                     android:layout_width="wrap_content"
@@ -81,6 +65,16 @@
                     android:text=""
                     android:textColor="#fff"
                     android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/editUser"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_toRightOf="@+id/user_profile_email"
+                    android:src="@drawable/ic_mode_edit_white" />
             </RelativeLayout>
 
 
@@ -92,30 +86,34 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:text="CV Upload"
-                    android:textSize="25sp"
-                    android:layout_width="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_height="wrap_content" />
-                <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Select File"
-                    android:id="@+id/selectfile"/>
+                    android:text="CV Upload"
+                    android:textSize="25sp" />
+
+                <Button
+                    android:id="@+id/selectfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Select File" />
+
                 <ImageView
+                    android:id="@+id/file"
                     android:layout_width="400px"
                     android:layout_height="400px"
-                    android:layout_gravity="center"
-                    android:id="@+id/file"/>
+                    android:layout_gravity="center" />
+
                 <Button
+                    android:id="@+id/uploadcv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Upload CV"
-                    android:id="@+id/uploadcv"/>
+                    android:text="Upload CV" />
 
                 <TextView
+                    android:id="@+id/userAge"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
@@ -126,28 +124,7 @@
                     android:text="" />
 
                 <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:layout_marginBottom="3dp"
-                    android:layout_marginTop="3dp"
-                    android:background="#fff"
-                    android:clickable="true"
-                    android:elevation="4dp"
-                    android:padding="20dp"
-                    android:text="" />
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:background="#fff"
-                    android:clickable="true"
-                    android:elevation="4dp"
-                    android:padding="20dp"
-                    android:text="" />
-
-                <TextView
+                    android:id="@+id/userProfession"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
@@ -160,6 +137,7 @@
                     android:text="" />
 
                 <TextView
+                    android:id="@+id/userBio"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
@@ -168,6 +146,7 @@
                     android:elevation="4dp"
                     android:padding="20dp"
                     android:text="" />
+
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>

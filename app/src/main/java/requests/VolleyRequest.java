@@ -92,6 +92,9 @@ public class VolleyRequest {
                             responseEntries.put("email", response.getString("email"));
                             responseEntries.put("firstName", response.getString("firstName"));
                             responseEntries.put("lastName", response.getString("lastName"));
+                            responseEntries.put("age", response.getString("age"));
+                            responseEntries.put("bio", response.getString("bio"));
+                            responseEntries.put("profession", response.getString("profession"));
 
 
                             UserProfileFragment profileFragment = UserProfileFragment.newInstance(responseEntries);

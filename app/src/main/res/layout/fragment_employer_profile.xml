@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/employerProfileFrame"
-    tools:context="fragments.EmployerProfileFragment">
+    tools:context="fragments.EmployerProfileFragment"
+    android:background="@color/white">
 
     <ScrollView
         android:layout_width="match_parent"

@@ -12,9 +12,6 @@
             android:id="@+id/contact_options"
             android:title="Contact" />
         <item
-            android:id="@+id/register_employer"
-            android:title="Register Employer" />
-        <item
             android:id="@+id/employer_portal"
             android:title="Employer Login" />
         <item

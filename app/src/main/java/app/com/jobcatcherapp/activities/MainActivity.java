@@ -1,5 +1,6 @@
 package app.com.jobcatcherapp.activities;
 
+import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -66,7 +68,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        View view = findViewById(R.id.navHeaderView);
+        LayoutInflater factory = getLayoutInflater();
+
+        View view = factory.inflate(R.layout.nav_header_navigation, null);
 
         emailText = (TextView) view.findViewById(R.id.navUserEmail);
         emailText.setText(email);
@@ -76,8 +80,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
 
-        ProfileFragment profilFragment = ProfileFragment.newInstance();
-        ft.replace(R.id.homeFrame, profilFragment);
+        ProfileFragment profileFragment = ProfileFragment.newInstance();
+        ft.replace(R.id.homeFrame, profileFragment);
         ft.addToBackStack(null);
         ft.commit();
     }
@@ -128,13 +132,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             ContactFragment contactFragment = ContactFragment.newInstance();
             ft.replace(R.id.homeFrame, contactFragment);
-            ft.addToBackStack(null);
-            ft.commit();
-        } else if (id == R.id.register_employer) {
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-
-            EmployerFragment employerFragment = EmployerFragment.newInstance();
-            ft.replace(R.id.homeFrame, employerFragment);
             ft.addToBackStack(null);
             ft.commit();
         } else if (id == R.id.employer_portal) {

@@ -7,30 +7,23 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import java.util.HashMap;
-import java.util.Map;
 
 import app.com.jobcatcherapp.R;
-import requests.VolleyRequest;
-
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link JobFragment.OnFragmentInteractionListener} interface
+ * {@link EmployerJobFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link JobFragment#newInstance} factory method to
+ * Use the {@link EmployerJobFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class JobFragment extends Fragment implements View.OnClickListener {
+public class EmployerJobFragment extends Fragment {
+
 
     private OnFragmentInteractionListener mListener;
-    EditText email, phone, jobTitle, jobDescription;
-    Button addJob;
 
-    public JobFragment() {
+    public EmployerJobFragment() {
         // Required empty public constructor
     }
 
@@ -38,10 +31,13 @@ public class JobFragment extends Fragment implements View.OnClickListener {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment JobFragment.
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment EmployerJobFragment.
      */
-    public static JobFragment newInstance() {
-        JobFragment fragment = new JobFragment();
+    // TODO: Rename and change types and number of parameters
+    public static EmployerJobFragment newInstance() {
+        EmployerJobFragment fragment = new EmployerJobFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -55,16 +51,8 @@ public class JobFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_job, container, false);
-        email = (EditText) view.findViewById(R.id.employerEmail);
-        phone = (EditText) view.findViewById(R.id.phone);
-        jobTitle = (EditText) view.findViewById(R.id.jobTitle);
-        jobDescription = (EditText) view.findViewById(R.id.jobDescription);
-        addJob = (Button) view.findViewById(R.id.addjob);
-
-        addJob.setOnClickListener(this);
-
-        return view;
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_employer_job, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -104,31 +92,5 @@ public class JobFragment extends Fragment implements View.OnClickListener {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    private void addJob() {
-        final String emailTxt = email.getText().toString();
-        final String phoneTxt = phone.getText().toString();
-        final String jobTitleTxt = jobTitle.getText().toString();
-        final String jobDescriptionTxt = jobDescription.getText().toString();
-
-        String url = "http://10.0.2.2:8080/addJob";
-
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("email", emailTxt);
-        params.put("contactNumber", phoneTxt);
-        params.put("jobTitle", jobTitleTxt);
-        params.put("jobDescription", jobDescriptionTxt);
-
-        VolleyRequest request = new VolleyRequest();
-        request.makeVolleyPostRequest(getActivity().getApplicationContext(), params, url);
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        if (v == addJob) {
-            addJob();
-        }
     }
 }

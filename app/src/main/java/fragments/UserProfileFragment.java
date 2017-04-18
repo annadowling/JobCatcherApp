@@ -1,5 +1,6 @@
 package fragments;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Map;
@@ -24,14 +26,18 @@ import requests.VolleyRequest;
  * Use the {@link UserProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class UserProfileFragment extends Fragment implements View.OnClickListener{
+public class UserProfileFragment extends Fragment implements View.OnClickListener {
 
 
     private OnFragmentInteractionListener mListener;
-    TextView userName, email;
+    TextView userName, email, age, profession, bio;
     Button uploadFile;
-    public static String userNameText;
-    public static String emailText;
+    public static String userNameText = "";
+    public static String emailText = "";
+    public static String ageText = "";
+    public static String professionText = "";
+    public static String bioText = "";
+    ImageView editUser;
     SharedPreferences pref;
     VolleyRequest request;
 
@@ -50,6 +56,9 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         UserProfileFragment fragment = new UserProfileFragment();
         userNameText = userDetails.get("firstName") + " " + userDetails.get("lastName");
         emailText = userDetails.get("email");
+        ageText = userDetails.get("age");
+        professionText = userDetails.get("profession");
+        bioText = userDetails.get("bio");
         Bundle args = new Bundle();
         fragment.setArguments(args);
 
@@ -72,8 +81,21 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         email = (TextView) view.findViewById(R.id.user_profile_email);
         email.setText(emailText);
 
+        age = (TextView) view.findViewById(R.id.userAge);
+        age.setText(ageText);
+
+        profession = (TextView) view.findViewById(R.id.userProfession);
+        profession.setText(professionText);
+
+        bio = (TextView) view.findViewById(R.id.userBio);
+        bio.setText(bioText);
+
         uploadFile = (Button) view.findViewById(R.id.uploadcv);
         uploadFile.setOnClickListener(this);
+
+        editUser = (ImageView) view.findViewById(R.id.editUser);
+        editUser.setOnClickListener(this);
+
         // Inflate the layout for this fragment
         return view;
     }
@@ -117,10 +139,21 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         void onFragmentInteraction(Uri uri);
     }
 
+    public void editUser() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+        EditUserFragment editUserFragment = EditUserFragment.newInstance();
+        ft.replace(R.id.userProfileFrame, editUserFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
     @Override
     public void onClick(View v) {
-        if(v == uploadFile){
+        if (v == uploadFile) {
             //TODO
+        } else if (v == editUser) {
+            editUser();
         }
     }
 }

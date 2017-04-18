@@ -9,28 +9,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import java.util.HashMap;
-import java.util.Map;
 
 import app.com.jobcatcherapp.R;
-import requests.VolleyRequest;
-
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link JobFragment.OnFragmentInteractionListener} interface
+ * {@link EditUserFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link JobFragment#newInstance} factory method to
+ * Use the {@link EditUserFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class JobFragment extends Fragment implements View.OnClickListener {
+public class EditUserFragment extends Fragment implements View.OnClickListener{
 
     private OnFragmentInteractionListener mListener;
-    EditText email, phone, jobTitle, jobDescription;
-    Button addJob;
 
-    public JobFragment() {
+    EditText firstName, lastName, password, age, bio, profession;
+    Button saveEdits;
+
+    public EditUserFragment() {
         // Required empty public constructor
     }
 
@@ -38,10 +35,10 @@ public class JobFragment extends Fragment implements View.OnClickListener {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment JobFragment.
+     * @return A new instance of fragment EditUserFragment.
      */
-    public static JobFragment newInstance() {
-        JobFragment fragment = new JobFragment();
+    public static EditUserFragment newInstance() {
+        EditUserFragment fragment = new EditUserFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -55,15 +52,18 @@ public class JobFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_job, container, false);
-        email = (EditText) view.findViewById(R.id.employerEmail);
-        phone = (EditText) view.findViewById(R.id.phone);
-        jobTitle = (EditText) view.findViewById(R.id.jobTitle);
-        jobDescription = (EditText) view.findViewById(R.id.jobDescription);
-        addJob = (Button) view.findViewById(R.id.addjob);
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_edit_user, container, false);
 
-        addJob.setOnClickListener(this);
+        firstName = (EditText) view.findViewById(R.id.editFirstName);
+        lastName = (EditText) view.findViewById(R.id.editLastName);
+        password = (EditText) view.findViewById(R.id.editPassword);
+        age = (EditText) view.findViewById(R.id.editAge);
+        bio = (EditText) view.findViewById(R.id.editBio);
+        profession = (EditText) view.findViewById(R.id.editProfession);
 
+        saveEdits = (Button) view.findViewById(R.id.editProfileBtn);
+        saveEdits.setOnClickListener(this);
         return view;
     }
 
@@ -106,29 +106,10 @@ public class JobFragment extends Fragment implements View.OnClickListener {
         void onFragmentInteraction(Uri uri);
     }
 
-    private void addJob() {
-        final String emailTxt = email.getText().toString();
-        final String phoneTxt = phone.getText().toString();
-        final String jobTitleTxt = jobTitle.getText().toString();
-        final String jobDescriptionTxt = jobDescription.getText().toString();
-
-        String url = "http://10.0.2.2:8080/addJob";
-
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("email", emailTxt);
-        params.put("contactNumber", phoneTxt);
-        params.put("jobTitle", jobTitleTxt);
-        params.put("jobDescription", jobDescriptionTxt);
-
-        VolleyRequest request = new VolleyRequest();
-        request.makeVolleyPostRequest(getActivity().getApplicationContext(), params, url);
-    }
-
-
     @Override
     public void onClick(View v) {
-        if (v == addJob) {
-            addJob();
+        if(v == saveEdits){
+            //TODO updateUser method
         }
     }
 }
