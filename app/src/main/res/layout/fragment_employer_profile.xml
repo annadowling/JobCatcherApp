@@ -1,10 +1,10 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/employerProfileFrame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/employerProfileFrame"
-    tools:context="fragments.EmployerProfileFragment"
-    android:background="@color/white">
+    android:background="@color/white"
+    tools:context="fragments.EmployerProfileFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -45,7 +45,6 @@
                 android:paddingBottom="24dp">
 
 
-
                 <TextView
                     android:id="@+id/employer_profile_name"
                     android:layout_width="wrap_content"
@@ -73,11 +72,21 @@
                     android:id="@+id/add_job"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="16dp"
-                    android:layout_alignParentRight="true"
                     android:layout_toRightOf="@+id/employer_profile_email"
                     android:src="@drawable/ic_note_add_white" />
+
+                <ImageView
+                    android:id="@+id/editEmployer"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_toLeftOf="@+id/employer_profile_email"
+                    android:src="@drawable/ic_mode_edit_white" />
 
             </RelativeLayout>
 
@@ -91,8 +100,8 @@
 
 
                 <TextView
-                    android:layout_width="fill_parent"
                     android:id="@+id/employer_address"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/profile_layout"
                     android:layout_margin="5dp"
@@ -103,9 +112,9 @@
                     android:text="" />
 
                 <TextView
+                    android:id="@+id/employer_lat"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/employer_lat"
                     android:layout_below="@+id/employer_address"
                     android:layout_margin="5dp"
                     android:layout_marginBottom="3dp"
@@ -117,9 +126,9 @@
                     android:text="" />
 
                 <TextView
+                    android:id="@+id/employer_long"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/employer_long"
                     android:layout_below="@+id/employer_lat"
                     android:layout_margin="5dp"
                     android:background="#fff"

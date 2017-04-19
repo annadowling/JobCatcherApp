@@ -23,12 +23,12 @@ import app.com.jobcatcherapp.R;
  * Use the {@link EmployerProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EmployerProfileFragment extends Fragment implements View.OnClickListener{
+public class EmployerProfileFragment extends Fragment implements View.OnClickListener {
 
 
     private OnFragmentInteractionListener mListener;
 
-    ImageView addJobIcon;
+    ImageView addJobIcon, editEmployerIcon;
     TextView latitude, longitude, address, email, companyname;
     public static String companyNameText;
     public static String emailText;
@@ -77,17 +77,20 @@ public class EmployerProfileFragment extends Fragment implements View.OnClickLis
         email = (TextView) view.findViewById(R.id.employer_profile_email);
         email.setText(emailText);
 
-        address =  (TextView) view.findViewById(R.id.employer_address);
+        address = (TextView) view.findViewById(R.id.employer_address);
         address.setText(addressText);
 
-        latitude =  (TextView) view.findViewById(R.id.employer_lat);
+        latitude = (TextView) view.findViewById(R.id.employer_lat);
         latitude.setText(latitudeNameText);
 
-        longitude =  (TextView) view.findViewById(R.id.employer_long);
+        longitude = (TextView) view.findViewById(R.id.employer_long);
         longitude.setText(longitudeText);
 
         addJobIcon = (ImageView) view.findViewById(R.id.add_job);
         addJobIcon.setOnClickListener(this);
+
+        editEmployerIcon = (ImageView) view.findViewById(R.id.editEmployer);
+        editEmployerIcon.setOnClickListener(this);
 
         return view;
     }
@@ -140,10 +143,21 @@ public class EmployerProfileFragment extends Fragment implements View.OnClickLis
         ft.commit();
     }
 
+    public void launchEditEmployerProfile() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+        EditEmployerFragment editFragment = EditEmployerFragment.newInstance();
+        ft.replace(R.id.employerProfileFrame, editFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
     @Override
     public void onClick(View v) {
-        if(v == addJobIcon){
+        if (v == addJobIcon) {
             launchAddJob();
+        } else if (v == editEmployerIcon) {
+            launchEditEmployerProfile();
         }
     }
 }
