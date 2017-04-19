@@ -1,6 +1,8 @@
 package fragments;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -10,7 +12,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import app.com.jobcatcherapp.R;
+import requests.VolleyRequest;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,12 +28,15 @@ import app.com.jobcatcherapp.R;
  * Use the {@link EditUserFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EditUserFragment extends Fragment implements View.OnClickListener{
+public class EditUserFragment extends Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mListener;
 
     EditText firstName, lastName, password, age, bio, profession;
     Button saveEdits;
+
+    VolleyRequest request;
+    SharedPreferences pref;
 
     public EditUserFragment() {
         // Required empty public constructor
@@ -54,6 +65,8 @@ public class EditUserFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_user, container, false);
+
+        pref = getActivity().getSharedPreferences("AppPref", MODE_PRIVATE);
 
         firstName = (EditText) view.findViewById(R.id.editFirstName);
         lastName = (EditText) view.findViewById(R.id.editLastName);
@@ -106,10 +119,28 @@ public class EditUserFragment extends Fragment implements View.OnClickListener{
         void onFragmentInteraction(Uri uri);
     }
 
+    public void saveEditsToUserProfile() {
+        String url = "http://10.0.2.2:8080/updateUser";
+        String token = pref.getString("token", "default");
+
+        Map<String, String> requestParameters = new HashMap<String, String>();
+        requestParameters.put("firstName", firstName.getText().toString());
+        requestParameters.put("lastName", lastName.getText().toString());
+        requestParameters.put("password", password.getText().toString());
+        requestParameters.put("age", age.getText().toString());
+        requestParameters.put("bio", bio.getText().toString());
+        requestParameters.put("profession", profession.getText().toString());
+
+        String postUrl = url + "/token=" + token;
+
+        request = new VolleyRequest();
+        request.makeVolleyPostRequest(getActivity().getApplicationContext(), requestParameters, postUrl);
+    }
+
     @Override
     public void onClick(View v) {
-        if(v == saveEdits){
-            //TODO updateUser method
+        if (v == saveEdits) {
+            saveEditsToUserProfile();
         }
     }
 }
