@@ -75,9 +75,10 @@ public class VolleyRequest {
         requestQueue.add(stringRequest);
     }
 
-    public void makeVolleyGetRequestForUserDetails(Context context, String url, String token, FragmentTransaction ft) {
+    public void makeVolleyGetRequestForUserDetails(Context context, String url, String token, FragmentTransaction ft, int i) {
         final Context applicationContext = context;
         final FragmentTransaction fragmentTransaction = ft;
+        final int frameId = i;
 
         final Map<String, String> responseEntries = new HashMap<String, String>();
 
@@ -98,7 +99,7 @@ public class VolleyRequest {
 
 
                             UserProfileFragment profileFragment = UserProfileFragment.newInstance(responseEntries);
-                            fragmentTransaction.replace(R.id.profileFrame, profileFragment);
+                            fragmentTransaction.replace(frameId, profileFragment);
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
                         } catch (JSONException e) {
@@ -116,9 +117,10 @@ public class VolleyRequest {
         requestQueue.add(request);
     }
 
-    public void makeVolleyGetRequestForEmployerDetails(Context context, String url, String token, FragmentTransaction ft) {
+    public void makeVolleyGetRequestForEmployerDetails(Context context, String url, String token, FragmentTransaction ft, int i) {
         final Context applicationContext = context;
         final FragmentTransaction fragmentTransaction = ft;
+        final int frameId = i;
 
         final Map<String, String> responseEntries = new HashMap<String, String>();
 
@@ -138,7 +140,7 @@ public class VolleyRequest {
 
 
                             EmployerProfileFragment profileFragment = EmployerProfileFragment.newInstance(responseEntries);
-                            fragmentTransaction.replace(R.id.employerPortalFrame, profileFragment);
+                            fragmentTransaction.replace(frameId, profileFragment);
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
                         } catch (JSONException e) {

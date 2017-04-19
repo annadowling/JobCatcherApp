@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +35,7 @@ public class EditUserFragment extends Fragment implements View.OnClickListener {
 
     EditText firstName, lastName, password, age, bio, profession;
     Button saveEdits;
+    ImageView backToProfile;
 
     VolleyRequest request;
     SharedPreferences pref;
@@ -77,6 +79,9 @@ public class EditUserFragment extends Fragment implements View.OnClickListener {
 
         saveEdits = (Button) view.findViewById(R.id.editProfileBtn);
         saveEdits.setOnClickListener(this);
+
+        backToProfile = (ImageView) view.findViewById(R.id.backToUserProfile);
+        backToProfile.setOnClickListener(this);
         return view;
     }
 
@@ -137,10 +142,21 @@ public class EditUserFragment extends Fragment implements View.OnClickListener {
         request.makeVolleyPostRequest(getActivity().getApplicationContext(), requestParameters, postUrl);
     }
 
+    public void backToUserProfile(){
+        String url = "http://10.0.2.2:8080/getUserDetails";
+        String token = pref.getString("token", "default");
+
+        request = new VolleyRequest();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        request.makeVolleyGetRequestForUserDetails(getActivity().getApplicationContext(), url, token, ft, R.id.editUserFrame);
+    }
+
     @Override
     public void onClick(View v) {
         if (v == saveEdits) {
             saveEditsToUserProfile();
+        }else if(v == backToProfile){
+            backToUserProfile();
         }
     }
 }

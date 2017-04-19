@@ -225,7 +225,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         request = new VolleyRequest();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        request.makeVolleyGetRequestForUserDetails(getActivity().getApplicationContext(), url, token, ft);
+        request.makeVolleyGetRequestForUserDetails(getActivity().getApplicationContext(), url, token, ft, R.id.profileFrame);
     }
 
     @Override

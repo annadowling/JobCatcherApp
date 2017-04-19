@@ -1,5 +1,6 @@
 package fragments;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,12 +29,13 @@ import static android.content.Context.MODE_PRIVATE;
  * Use the {@link EditEmployerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EditEmployerFragment extends Fragment implements View.OnClickListener{
+public class EditEmployerFragment extends Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mListener;
 
     EditText companyName, address, latitude, longitude, password;
     Button saveEdits;
+    ImageView backToProfile;
 
     VolleyRequest request;
     SharedPreferences pref;
@@ -44,6 +47,7 @@ public class EditEmployerFragment extends Fragment implements View.OnClickListen
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
+     *
      * @return A new instance of fragment EditEmployerFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -70,12 +74,15 @@ public class EditEmployerFragment extends Fragment implements View.OnClickListen
 
         companyName = (EditText) view.findViewById(R.id.editCompanyName);
         password = (EditText) view.findViewById(R.id.editEmployerPassword);
-        latitude =  (EditText) view.findViewById(R.id.editLatitude);
+        latitude = (EditText) view.findViewById(R.id.editLatitude);
         longitude = (EditText) view.findViewById(R.id.editLongitude);
         address = (EditText) view.findViewById(R.id.editAddress);
 
         saveEdits = (Button) view.findViewById(R.id.editEmployerBtn);
         saveEdits.setOnClickListener(this);
+
+        backToProfile = (ImageView) view.findViewById(R.id.backToEmployerProfile);
+        backToProfile.setOnClickListener(this);
         return view;
     }
 
@@ -135,10 +142,21 @@ public class EditEmployerFragment extends Fragment implements View.OnClickListen
         request.makeVolleyPostRequest(getActivity().getApplicationContext(), requestParameters, postUrl);
     }
 
+    public void backToEmployerProfile() {
+        String url = "http://10.0.2.2:8080/getEmployerDetails";
+        String token = pref.getString("token", "default");
+
+        request = new VolleyRequest();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        request.makeVolleyGetRequestForEmployerDetails(getActivity().getApplicationContext(), url, token, ft, R.id.employerEditProfileFrame);
+    }
+
     @Override
     public void onClick(View v) {
         if (v == saveEdits) {
             saveEditsToEmployerProfile();
+        } else if (v == backToProfile) {
+            backToEmployerProfile();
         }
     }
 }

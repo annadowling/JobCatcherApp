@@ -194,7 +194,7 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
 
         request = new VolleyRequest();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        request.makeVolleyGetRequestForEmployerDetails(getActivity().getApplicationContext(), url, token, ft);
+        request.makeVolleyGetRequestForEmployerDetails(getActivity().getApplicationContext(), url, token, ft, R.id.employerPortalFrame);
     }
 
     @Override
