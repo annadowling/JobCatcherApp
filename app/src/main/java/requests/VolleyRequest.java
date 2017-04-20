@@ -30,11 +30,16 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeMap;
 
 import app.com.jobcatcherapp.R;
+import fragments.EmployerJobListFragment;
 import fragments.EmployerProfileFragment;
 import fragments.UserProfileFragment;
+
+import static com.android.volley.VolleyLog.TAG;
 
 /**
  * Created by annadowling on 23/02/2017.
@@ -158,6 +163,49 @@ public class VolleyRequest {
         requestQueue.add(request);
     }
 
+    public void makeVolleyGetRequestForEmployerJobDetails(Context context, String url, String token, FragmentTransaction ft, int i) {
+        final Context applicationContext = context;
+        final FragmentTransaction fragmentTransaction = ft;
+        final int frameId = i;
+
+        final TreeMap<String, String> responseEntries = new TreeMap<String, String>();
+
+        String getUrl = url + "/token=" + token;
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getUrl, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("JsonArray",response.toString());
+                        JSONArray jsonArray = null;
+                        try {
+                            jsonArray = response.getJSONArray("job");
+                            for(int i=0; i<jsonArray.length(); i++){
+                                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                                responseEntries.put("jobName", jsonObject.getString("jobName"));
+                                responseEntries.put("jobDescription", jsonObject.getString("jobDescription"));
+                                responseEntries.put("contactNumber", jsonObject.getString("contactNumber"));
+                            }
+
+
+                            EmployerJobListFragment jobListFragment = EmployerJobListFragment.newInstance(responseEntries);
+                            fragmentTransaction.replace(frameId, jobListFragment);
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Error: ", error.getMessage());
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(applicationContext);
+        requestQueue.add(request);
+    }
 
 
     public void uploadFileVolleyRequest(Context context, String url, String token) {

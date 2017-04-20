@@ -2,18 +2,23 @@ package fragments;
 
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Map;
 
 import app.com.jobcatcherapp.R;
+import requests.VolleyRequest;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,11 +35,15 @@ public class EmployerProfileFragment extends Fragment implements View.OnClickLis
 
     ImageView addJobIcon, editEmployerIcon;
     TextView latitude, longitude, address, email, companyname;
+    Button manageJobs;
     public static String companyNameText;
     public static String emailText;
     public static String latitudeNameText;
     public static String longitudeText;
     public static String addressText;
+
+    VolleyRequest request;
+    SharedPreferences pref;
 
     public EmployerProfileFragment() {
         // Required empty public constructor
@@ -71,6 +80,8 @@ public class EmployerProfileFragment extends Fragment implements View.OnClickLis
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_employer_profile, container, false);
 
+        pref = getActivity().getSharedPreferences("AppPref", MODE_PRIVATE);
+
         companyname = (TextView) view.findViewById(R.id.employer_profile_name);
         companyname.setText(companyNameText);
 
@@ -91,6 +102,9 @@ public class EmployerProfileFragment extends Fragment implements View.OnClickLis
 
         editEmployerIcon = (ImageView) view.findViewById(R.id.editEmployer);
         editEmployerIcon.setOnClickListener(this);
+
+        manageJobs = (Button) view.findViewById(R.id.manageJobBtn);
+        manageJobs.setOnClickListener(this);
 
         return view;
     }
@@ -152,12 +166,23 @@ public class EmployerProfileFragment extends Fragment implements View.OnClickLis
         ft.commit();
     }
 
+    public void launchManageJobsFragment(){
+        String url = "http://10.0.2.2:8080/getEmployerJobsList";
+        String token = pref.getString("token", "default");
+
+        request = new VolleyRequest();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        request.makeVolleyGetRequestForEmployerJobDetails(getActivity().getApplicationContext(), url, token, ft, R.id.employerProfileFrame);
+    }
+
     @Override
     public void onClick(View v) {
         if (v == addJobIcon) {
             launchAddJob();
         } else if (v == editEmployerIcon) {
             launchEditEmployerProfile();
+        }else if(v == manageJobs){
+            launchManageJobsFragment();
         }
     }
 }

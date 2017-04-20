@@ -98,6 +98,16 @@
                 android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
+                <Button
+                    android:id="@+id/manageJobBtn"
+                    android:layout_width="440px"
+                    android:layout_height="80px"
+                    android:layout_gravity="center"
+                    android:background="#00CDCD"
+                    android:text="Manage Jobs"
+                    android:textAlignment="center"
+                    android:textColor="#ffffff" />
+
 
                 <TextView
                     android:id="@+id/employer_address"
