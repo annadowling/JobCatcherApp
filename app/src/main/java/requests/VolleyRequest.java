@@ -31,6 +31,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -38,6 +39,7 @@ import app.com.jobcatcherapp.R;
 import fragments.EmployerJobListFragment;
 import fragments.EmployerProfileFragment;
 import fragments.UserProfileFragment;
+import models.Job;
 
 import static com.android.volley.VolleyLog.TAG;
 
@@ -168,27 +170,27 @@ public class VolleyRequest {
         final FragmentTransaction fragmentTransaction = ft;
         final int frameId = i;
 
-        final TreeMap<String, String> responseEntries = new TreeMap<String, String>();
-
         String getUrl = url + "/token=" + token;
 
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getUrl, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("JsonArray",response.toString());
+                        Log.d("JsonArray", response.toString());
                         JSONArray jsonArray = null;
                         try {
-                            jsonArray = response.getJSONArray("job");
-                            for(int i=0; i<jsonArray.length(); i++){
+                            jsonArray = response.getJSONArray("response");
+
+                            List<Job> jobsList = new ArrayList<Job>();
+
+                            for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                                responseEntries.put("jobName", jsonObject.getString("jobName"));
-                                responseEntries.put("jobDescription", jsonObject.getString("jobDescription"));
-                                responseEntries.put("contactNumber", jsonObject.getString("contactNumber"));
+                                Job job = new Job(jsonObject.getString("_id"),jsonObject.getString("jobTitle"), jsonObject.getString("jobDescription"), jsonObject.getString("contactNumber"));
+                                jobsList.add(job);
                             }
 
 
-                            EmployerJobListFragment jobListFragment = EmployerJobListFragment.newInstance(responseEntries);
+                            EmployerJobListFragment jobListFragment = EmployerJobListFragment.newInstance(jobsList);
                             fragmentTransaction.replace(frameId, jobListFragment);
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
@@ -205,6 +207,22 @@ public class VolleyRequest {
 
         RequestQueue requestQueue = Volley.newRequestQueue(applicationContext);
         requestQueue.add(request);
+    }
+
+
+    public List<Job> parseJobsList(JSONArray jsonArray) {
+        List<Job> jobsList = new ArrayList<Job>();
+        try {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                Job job = new Job(jsonObject.getString("_id"), jsonObject.getString("jobTitle"), jsonObject.getString("jobDescription"), jsonObject.getString("contactNumber"));
+                jobsList.add(job);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jobsList;
     }
 
 

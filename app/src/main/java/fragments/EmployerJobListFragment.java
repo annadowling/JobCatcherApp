@@ -7,13 +7,18 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import app.com.jobcatcherapp.R;
+import models.Job;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,8 +34,8 @@ public class EmployerJobListFragment extends Fragment implements View.OnClickLis
     private OnFragmentInteractionListener mListener;
 
     ImageView delete;
-    TextView jobName, jobDescription, contactNumber;
-    public static TreeMap<String, String> jobParameters;
+    TextView jobName, jobDescription, contactNumber, hiddenValue;
+    public static List<Job> employerJobsList;
 
     public EmployerJobListFragment() {
         // Required empty public constructor
@@ -43,11 +48,12 @@ public class EmployerJobListFragment extends Fragment implements View.OnClickLis
      * @return A new instance of fragment EmployerJobListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EmployerJobListFragment newInstance(TreeMap<String, String> mapParameters) {
+    public static EmployerJobListFragment newInstance(List<Job> jobsList) {
         EmployerJobListFragment fragment = new EmployerJobListFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
-        jobParameters.putAll(mapParameters);
+        employerJobsList = new ArrayList<Job>();
+        employerJobsList.addAll(jobsList);
         return fragment;
     }
 
@@ -59,24 +65,30 @@ public class EmployerJobListFragment extends Fragment implements View.OnClickLis
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_employer_job_list, container, false);
-
-        for (Map.Entry<String, String> entry : jobParameters.entrySet()) {
-            if (entry.getKey().contains("jobName")) {
-                jobName = (TextView) view.findViewById(R.id.rowJobName);
-                jobName.setText(entry.getValue());
-            } else if (entry.getKey().contains("jobDescription")) {
-                jobDescription = (TextView) view.findViewById(R.id.rowJobDescription);
-                jobDescription.setText(entry.getValue());
-            } else if (entry.getKey().contains("contactNumber")) {
-                contactNumber = (TextView) view.findViewById(R.id.rowContactNumber);
-                contactNumber.setText(entry.getValue());
-            }
-            delete = (ImageView) view.findViewById(R.id.imgDelete);
-            delete.setOnClickListener(this);
+        View view = inflater.inflate(R.layout.fragment_employer_job_list_main, container, false);
+        for (Job job : employerJobsList) {
+            initView(view, job);
         }
-
         return view;
+    }
+
+    public void initView(View rootView, Job job) {
+        FrameLayout frameLayoutContainer = (FrameLayout) rootView.findViewById(R.id.fragmentEmployerJobListMain);
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View listView = inflater.inflate(R.layout.fragment_employer_job_list, frameLayoutContainer, false);
+        jobName = (TextView) listView.findViewById(R.id.rowJobName);
+        jobDescription = (TextView) listView.findViewById(R.id.rowJobDescription);
+        contactNumber = (TextView) listView.findViewById(R.id.rowContactNumber);
+        hiddenValue = (TextView) listView.findViewById(R.id.hidden_value);
+
+        jobName.setText(job.jobName);
+        jobDescription.setText(job.jobDescription);
+        contactNumber.setText(job.contactNumber);
+        hiddenValue.setText(job.jobToken);
+        delete = (ImageView) listView.findViewById(R.id.imgDelete);
+        delete.setOnClickListener(this);
+        frameLayoutContainer.addView(listView);
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -120,7 +132,7 @@ public class EmployerJobListFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        if(v == delete){
+        if (v == delete) {
             //TODO
         }
     }

@@ -13,12 +13,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import app.com.jobcatcherapp.R;
+import models.Job;
 import requests.VolleyRequest;
 
 import static android.content.Context.MODE_PRIVATE;
+import static app.com.jobcatcherapp.R.id.employerProfileFrame;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,6 +48,8 @@ public class EmployerProfileFragment extends Fragment implements View.OnClickLis
 
     VolleyRequest request;
     SharedPreferences pref;
+
+    List<Job> jobsList;
 
     public EmployerProfileFragment() {
         // Required empty public constructor
@@ -152,7 +158,7 @@ public class EmployerProfileFragment extends Fragment implements View.OnClickLis
         FragmentTransaction ft = getFragmentManager().beginTransaction();
 
         JobFragment jobFragment = JobFragment.newInstance();
-        ft.replace(R.id.employerProfileFrame, jobFragment);
+        ft.replace(employerProfileFrame, jobFragment);
         ft.addToBackStack(null);
         ft.commit();
     }
@@ -161,18 +167,19 @@ public class EmployerProfileFragment extends Fragment implements View.OnClickLis
         FragmentTransaction ft = getFragmentManager().beginTransaction();
 
         EditEmployerFragment editFragment = EditEmployerFragment.newInstance();
-        ft.replace(R.id.employerProfileFrame, editFragment);
+        ft.replace(employerProfileFrame, editFragment);
         ft.addToBackStack(null);
         ft.commit();
     }
 
-    public void launchManageJobsFragment(){
+    public void getEmployerJobDetails() {
         String url = "http://10.0.2.2:8080/getEmployerJobsList";
         String token = pref.getString("token", "default");
 
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+
         request = new VolleyRequest();
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        request.makeVolleyGetRequestForEmployerJobDetails(getActivity().getApplicationContext(), url, token, ft, R.id.employerProfileFrame);
+        request.makeVolleyGetRequestForEmployerJobDetails(getActivity().getApplicationContext(), url, token, fragmentTransaction, R.id.employerProfileFrame);
     }
 
     @Override
@@ -181,8 +188,8 @@ public class EmployerProfileFragment extends Fragment implements View.OnClickLis
             launchAddJob();
         } else if (v == editEmployerIcon) {
             launchEditEmployerProfile();
-        }else if(v == manageJobs){
-            launchManageJobsFragment();
+        } else if (v == manageJobs) {
+            getEmployerJobDetails();
         }
     }
 }
