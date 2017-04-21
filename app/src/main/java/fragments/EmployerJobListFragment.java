@@ -131,10 +131,14 @@ public class EmployerJobListFragment extends Fragment implements View.OnClickLis
         void onFragmentInteraction(Uri uri);
     }
 
+    public void deleteJob(){
+
+    }
+
     @Override
     public void onClick(View v) {
         if (v == delete) {
-            //TODO
+            deleteJob();
         }
     }
 }

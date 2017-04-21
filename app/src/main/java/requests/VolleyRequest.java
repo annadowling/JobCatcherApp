@@ -49,8 +49,6 @@ import static com.android.volley.VolleyLog.TAG;
 
 public class VolleyRequest {
 
-    TextView userName, userEmail;
-
 
     public void makeVolleyPostRequest(Context context, Map<String, String> requestParameters, String url) {
         final Context applicationContext = context;
@@ -185,7 +183,7 @@ public class VolleyRequest {
 
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                                Job job = new Job(jsonObject.getString("_id"),jsonObject.getString("jobTitle"), jsonObject.getString("jobDescription"), jsonObject.getString("contactNumber"));
+                                Job job = new Job(jsonObject.getString("_id"), jsonObject.getString("jobTitle"), jsonObject.getString("jobDescription"), jsonObject.getString("contactNumber"));
                                 jobsList.add(job);
                             }
 
@@ -209,21 +207,6 @@ public class VolleyRequest {
         requestQueue.add(request);
     }
 
-
-    public List<Job> parseJobsList(JSONArray jsonArray) {
-        List<Job> jobsList = new ArrayList<Job>();
-        try {
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                Job job = new Job(jsonObject.getString("_id"), jsonObject.getString("jobTitle"), jsonObject.getString("jobDescription"), jsonObject.getString("contactNumber"));
-                jobsList.add(job);
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return jobsList;
-    }
 
 
     public void uploadFileVolleyRequest(Context context, String url, String token) {
