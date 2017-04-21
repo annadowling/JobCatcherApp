@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -66,28 +67,28 @@ public class EmployerJobListFragment extends Fragment implements View.OnClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_employer_job_list_main, container, false);
-        for (Job job : employerJobsList) {
-            initView(view, job);
-        }
+        initView(view);
         return view;
     }
 
-    public void initView(View rootView, Job job) {
-        FrameLayout frameLayoutContainer = (FrameLayout) rootView.findViewById(R.id.fragmentEmployerJobListMain);
+    public void initView(View rootView) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View listView = inflater.inflate(R.layout.fragment_employer_job_list, frameLayoutContainer, false);
-        jobName = (TextView) listView.findViewById(R.id.rowJobName);
-        jobDescription = (TextView) listView.findViewById(R.id.rowJobDescription);
-        contactNumber = (TextView) listView.findViewById(R.id.rowContactNumber);
-        hiddenValue = (TextView) listView.findViewById(R.id.hidden_value);
+        LinearLayout parentPanel = (LinearLayout) rootView.findViewById(R.id.fragmentEmployerJobListMain);
+        for (Job job : employerJobsList) {
+            View listView = inflater.inflate(R.layout.fragment_employer_job_list, null);
+            jobName = (TextView) listView.findViewById(R.id.rowJobName);
+            jobDescription = (TextView) listView.findViewById(R.id.rowJobDescription);
+            contactNumber = (TextView) listView.findViewById(R.id.rowContactNumber);
+            hiddenValue = (TextView) listView.findViewById(R.id.hidden_value);
 
-        jobName.setText(job.jobName);
-        jobDescription.setText(job.jobDescription);
-        contactNumber.setText(job.contactNumber);
-        hiddenValue.setText(job.jobToken);
-        delete = (ImageView) listView.findViewById(R.id.imgDelete);
-        delete.setOnClickListener(this);
-        frameLayoutContainer.addView(listView);
+            jobName.setText(job.jobName);
+            jobDescription.setText(job.jobDescription);
+            contactNumber.setText(job.contactNumber);
+            hiddenValue.setText(job.jobToken);
+            delete = (ImageView) listView.findViewById(R.id.imgDelete);
+            delete.setOnClickListener(this);
+            parentPanel.addView(listView);
+        }
 
     }
 
