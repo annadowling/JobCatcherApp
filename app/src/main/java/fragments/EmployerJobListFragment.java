@@ -1,6 +1,8 @@
 package fragments;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -20,6 +22,9 @@ import java.util.TreeMap;
 
 import app.com.jobcatcherapp.R;
 import models.Job;
+import requests.VolleyRequest;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +42,8 @@ public class EmployerJobListFragment extends Fragment implements View.OnClickLis
     ImageView delete;
     TextView jobName, jobDescription, contactNumber, hiddenValue;
     public static List<Job> employerJobsList;
+    VolleyRequest request;
+    SharedPreferences pref;
 
     public EmployerJobListFragment() {
         // Required empty public constructor
@@ -67,6 +74,7 @@ public class EmployerJobListFragment extends Fragment implements View.OnClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_employer_job_list_main, container, false);
+        pref = getActivity().getSharedPreferences("AppPref", MODE_PRIVATE);
         initView(view);
         return view;
     }
@@ -132,7 +140,22 @@ public class EmployerJobListFragment extends Fragment implements View.OnClickLis
     }
 
     public void deleteJob(){
+        String url = "http://10.0.2.2:8080/deleteJob";
+        String token = hiddenValue.getText().toString();
 
+        request = new VolleyRequest();
+        request.makeVolleyDeleteRequest(getActivity().getApplicationContext(), url, token);
+        //refreshJobDetails();
+    }
+
+    public void refreshJobDetails() {
+        String url = "http://10.0.2.2:8080/getEmployerJobsList";
+        String token = pref.getString("token", "default");
+
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+
+        request = new VolleyRequest();
+        request.makeVolleyGetRequestForEmployerJobDetails(getActivity().getApplicationContext(), url, token, fragmentTransaction, R.id.fragmentEmployerJobListMain);
     }
 
     @Override

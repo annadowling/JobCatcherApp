@@ -207,6 +207,30 @@ public class VolleyRequest {
         requestQueue.add(request);
     }
 
+    public void makeVolleyDeleteRequest(Context context, String token, String url) {
+        final Context applicationContext = context;
+        String deleteUrl = url + "/token=" + token;
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, deleteUrl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(applicationContext, response, Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(applicationContext, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(applicationContext);
+        requestQueue.add(stringRequest);
+    }
 
 
     public void uploadFileVolleyRequest(Context context, String url, String token) {
