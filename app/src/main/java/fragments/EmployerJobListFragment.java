@@ -146,7 +146,7 @@ public class EmployerJobListFragment extends Fragment implements View.OnClickLis
 
         request = new VolleyRequest();
         request.makeVolleyDeleteRequest(getActivity().getApplicationContext(), token, employerToken, url);
-        //refreshJobDetails();
+        refreshJobDetails();
     }
 
     public void refreshJobDetails() {
