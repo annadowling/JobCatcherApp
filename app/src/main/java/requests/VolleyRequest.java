@@ -207,12 +207,13 @@ public class VolleyRequest {
         requestQueue.add(request);
     }
 
-    public void makeVolleyDeleteRequest(Context context, String token, String url) {
+    public void makeVolleyDeleteRequest(Context context, String token, String employerToken, String url) {
         final Context applicationContext = context;
-        String deleteUrl = url + "/token=" + token;
+        final String requestToken = token;
+        final String requestEmployerToken = employerToken;
 
 
-        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, deleteUrl,
+        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -225,6 +226,13 @@ public class VolleyRequest {
                         Toast.makeText(applicationContext, error.toString(), Toast.LENGTH_LONG).show();
                     }
                 }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError{
+                Map<String, String> headers = new HashMap<String, String>();
+                headers.put("token", requestToken);
+                headers.put("employerToken", requestEmployerToken);
+                return headers;
+            }
 
         };
 

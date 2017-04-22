@@ -142,9 +142,10 @@ public class EmployerJobListFragment extends Fragment implements View.OnClickLis
     public void deleteJob(){
         String url = "http://10.0.2.2:8080/deleteJob";
         String token = hiddenValue.getText().toString();
+        String employerToken = pref.getString("token", "default");
 
         request = new VolleyRequest();
-        request.makeVolleyDeleteRequest(getActivity().getApplicationContext(), url, token);
+        request.makeVolleyDeleteRequest(getActivity().getApplicationContext(), token, employerToken, url);
         //refreshJobDetails();
     }
 
