@@ -1,5 +1,6 @@
 package requests;
 
+import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -163,12 +164,16 @@ public class VolleyRequest {
         requestQueue.add(request);
     }
 
-    public void makeVolleyGetRequestForEmployerJobDetails(Context context, String url, String token, FragmentTransaction ft, int i) {
+    public void makeVolleyGetRequestForEmployerJobDetails(Activity activityPointer, Context context, String url, String token, FragmentTransaction ft, int i) {
         final Context applicationContext = context;
         final FragmentTransaction fragmentTransaction = ft;
         final int frameId = i;
 
         String getUrl = url + "/token=" + token;
+
+        final ProgressDialog progressDialog = new ProgressDialog(activityPointer);
+        progressDialog.setMessage("Loading page ....");
+        progressDialog.show();
 
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getUrl, null,
                 new Response.Listener<JSONObject>() {
@@ -187,7 +192,7 @@ public class VolleyRequest {
                                 jobsList.add(job);
                             }
 
-
+                            progressDialog.dismiss();
                             EmployerJobListFragment jobListFragment = EmployerJobListFragment.newInstance(jobsList);
                             fragmentTransaction.replace(frameId, jobListFragment);
                             fragmentTransaction.addToBackStack(null);
@@ -199,7 +204,10 @@ public class VolleyRequest {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("Error: ", error.getMessage());
+                String err = (error.getMessage()==null)?"No Jobs found!":error.getMessage();
+                Log.d("Error: ", err);
+                Toast.makeText(applicationContext, "No Jobs found!", Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
             }
         });
 
@@ -211,7 +219,6 @@ public class VolleyRequest {
         final Context applicationContext = context;
         final String requestToken = token;
         final String requestEmployerToken = employerToken;
-
 
         StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url,
                 new Response.Listener<String>() {

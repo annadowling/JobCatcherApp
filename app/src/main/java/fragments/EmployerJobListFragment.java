@@ -75,7 +75,9 @@ public class EmployerJobListFragment extends Fragment implements View.OnClickLis
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_employer_job_list_main, container, false);
         pref = getActivity().getSharedPreferences("AppPref", MODE_PRIVATE);
-        initView(view);
+        if(employerJobsList != null){
+            initView(view);
+        }
         return view;
     }
 
@@ -139,7 +141,7 @@ public class EmployerJobListFragment extends Fragment implements View.OnClickLis
         void onFragmentInteraction(Uri uri);
     }
 
-    public void deleteJob(){
+    public void deleteJob() {
         String url = "http://10.0.2.2:8080/deleteJob";
         String token = hiddenValue.getText().toString();
         String employerToken = pref.getString("token", "default");
@@ -156,7 +158,7 @@ public class EmployerJobListFragment extends Fragment implements View.OnClickLis
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
         request = new VolleyRequest();
-        request.makeVolleyGetRequestForEmployerJobDetails(getActivity().getApplicationContext(), url, token, fragmentTransaction, R.id.fragmentEmployerJobListMain);
+        request.makeVolleyGetRequestForEmployerJobDetails(getActivity(), getActivity().getApplicationContext(), url, token, fragmentTransaction, R.id.RelativeLayout1);
     }
 
     @Override

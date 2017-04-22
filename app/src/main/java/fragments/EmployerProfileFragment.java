@@ -179,7 +179,7 @@ public class EmployerProfileFragment extends Fragment implements View.OnClickLis
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
         request = new VolleyRequest();
-        request.makeVolleyGetRequestForEmployerJobDetails(getActivity().getApplicationContext(), url, token, fragmentTransaction, R.id.employerProfileFrame);
+        request.makeVolleyGetRequestForEmployerJobDetails(getActivity(),getActivity().getApplicationContext(), url, token, fragmentTransaction, R.id.employerProfileFrame);
     }
 
     @Override
