@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/employer_profile"
+            android:title="Profile Page" />
+        <item
+            android:id="@+id/edit_profile"
+            android:title="Edit Profile" />
+        <item
+            android:id="@+id/employer_jobs_list"
+            android:title="Jobs List" />
+        <item
+            android:id="@+id/contact_options"
+            android:title="Contact" />
+        <item
+            android:id="@+id/add_job"
+            android:title="Add Job" />
+    </group>
+
+</menu>

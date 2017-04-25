@@ -64,6 +64,10 @@
         <activity
             android:name=".activities.GoogleSignInActivity"
             android:label="@string/title_activity_google_sign_in"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.MainEmployerActivity"
+            android:label="@string/title_activity_main_employer"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

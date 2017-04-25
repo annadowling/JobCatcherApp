@@ -30,6 +30,7 @@ import java.util.Map;
 
 import app.com.jobcatcherapp.R;
 import app.com.jobcatcherapp.activities.MainActivity;
+import app.com.jobcatcherapp.activities.MainEmployerActivity;
 import requests.VolleyRequest;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -80,7 +81,7 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
         email = (EditText) view.findViewById(R.id.employer_email);
         password = (EditText) view.findViewById(R.id.employer_password);
         login = (Button) view.findViewById(R.id.employer_loginbtn);
-        register =  (Button) view.findViewById(R.id.registerEmployerBtn);
+        register = (Button) view.findViewById(R.id.registerEmployerBtn);
 
         pref = getActivity().getSharedPreferences("AppPref", MODE_PRIVATE);
 
@@ -178,7 +179,7 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
         requestQueue.add(stringRequest);
     }
 
-    public void launchRegisterPage(){
+    public void launchRegisterPage() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
 
         EmployerFragment employerFragment = EmployerFragment.newInstance();
@@ -188,20 +189,15 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
     }
 
     public void configureEmployerProfile() {
-
-        String url = "http://10.0.2.2:8080/getEmployerDetails";
-        String token = pref.getString("token", "default");
-
-        request = new VolleyRequest();
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        request.makeVolleyGetRequestForEmployerDetails(getActivity().getApplicationContext(), url, token, ft, R.id.employerPortalFrame);
+        Intent intent = new Intent(getActivity(), MainEmployerActivity.class);
+        getActivity().startActivity(intent);
     }
 
     @Override
     public void onClick(View v) {
         if (v == login) {
             loginToPortal();
-        }else if(v == register){
+        } else if (v == register) {
             launchRegisterPage();
         }
     }

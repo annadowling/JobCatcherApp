@@ -2,11 +2,16 @@ package fragments;
 
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import app.com.jobcatcherapp.R;
+import app.com.jobcatcherapp.activities.MainActivity;
 import models.Job;
 import requests.VolleyRequest;
 
@@ -48,8 +54,6 @@ public class EmployerProfileFragment extends Fragment implements View.OnClickLis
 
     VolleyRequest request;
     SharedPreferences pref;
-
-    List<Job> jobsList;
 
     public EmployerProfileFragment() {
         // Required empty public constructor
@@ -179,7 +183,7 @@ public class EmployerProfileFragment extends Fragment implements View.OnClickLis
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
         request = new VolleyRequest();
-        request.makeVolleyGetRequestForEmployerJobDetails(getActivity(),getActivity().getApplicationContext(), url, token, fragmentTransaction, R.id.employerProfileFrame);
+        request.makeVolleyGetRequestForEmployerJobDetails(getActivity(), getActivity().getApplicationContext(), url, token, fragmentTransaction, R.id.employerProfileFrame);
     }
 
     @Override

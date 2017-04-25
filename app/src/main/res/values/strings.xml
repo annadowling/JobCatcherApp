@@ -15,4 +15,5 @@
     <string name="compose_email">Compose Email</string>
     <string name="dial_number">Place Call</string>
     <string name="title_activity_google_sign_in">GoogleSignInActivity</string>
+    <string name="title_activity_main_employer">MainEmployerActivity</string>
 </resources>
