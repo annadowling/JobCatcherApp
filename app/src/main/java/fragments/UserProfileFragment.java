@@ -1,23 +1,38 @@
 package fragments;
 
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.util.HashMap;
 import java.util.Map;
 
 import app.com.jobcatcherapp.R;
@@ -50,6 +65,9 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
     SharedPreferences pref;
     VolleyRequest request;
     int PICKFILE_REQUEST_CODE = 1;
+    Bitmap bitmap;
+    Uri selectedFileURI;
+    String encodedBase64;
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -164,7 +182,53 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
     }
 
     public void uploadFile() {
+        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Uploading, please wait...");
+        progressDialog.show();
 
+
+        File fileToUpload = new File(selectedFileURI.getPath());
+
+        try {
+            FileInputStream fileInputStreamReader = new FileInputStream(fileToUpload);
+            byte[] bytes = new byte[(int) fileToUpload.length()];
+            fileInputStreamReader.read(bytes);
+            encodedBase64 = Base64.encodeToString(bytes, Base64.DEFAULT);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String URL = "http://10.0.2.2:8080/upload";
+
+        //sending image to server
+        StringRequest request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                progressDialog.dismiss();
+                if (s.equals("true")) {
+                    Toast.makeText(getActivity(), "Upload Successful", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getActivity(), "Some error occurred!", Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Toast.makeText(getActivity(), "Some error occurred -> " + volleyError, Toast.LENGTH_LONG).show();
+                ;
+            }
+        }) {
+            //adding parameters to send
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parameters = new HashMap<String, String>();
+                parameters.put("image", encodedBase64);
+                return parameters;
+            }
+        };
+
+        RequestQueue rQueue = Volley.newRequestQueue(getActivity());
+        rQueue.add(request);
     }
 
     public void chooseFile() {
@@ -176,8 +240,13 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Uri selectedFileURI = data.getData();
-        file.setText(getFileName(selectedFileURI));
+        try {
+            selectedFileURI = data.getData();
+            file.setText(getFileName(selectedFileURI));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 
