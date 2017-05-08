@@ -248,30 +248,6 @@ public class VolleyRequest {
     }
 
 
-    public void uploadFileVolleyRequest(Context context, String url, String token) {
-//        final Context applicationContext = context;
-//
-//        ImageRequest imgRequest = new ImageRequest(new String(url.toString()),
-//                new Response.Listener<Bitmap>() {
-//                    @Override
-//                    public void onResponse(Bitmap response) {
-//                        app.googlePhoto = response;
-//                        //googlePhoto.setImageBitmap(app.googlePhoto);
-//                    }
-//                }, 0, 0, ImageView.ScaleType.FIT_XY, Bitmap.Config.ARGB_8888, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                System.out.println("Something went wrong!");
-//                error.printStackTrace();
-//            }
-//        });
-//
-//// Add the request to the queue
-//        RequestQueue requestQueue = Volley.newRequestQueue(applicationContext);
-//        requestQueue.add(imgRequest);
-
-    }
-
 
 }
 

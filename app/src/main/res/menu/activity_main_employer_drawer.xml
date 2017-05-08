@@ -17,6 +17,9 @@
         <item
             android:id="@+id/add_job"
             android:title="Add Job" />
+        <item
+            android:id="@+id/logout_employer"
+            android:title="Logout" />
     </group>
 
 </menu>

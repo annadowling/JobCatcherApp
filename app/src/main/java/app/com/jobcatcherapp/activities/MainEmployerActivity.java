@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import app.com.jobcatcherapp.R;
 import fragments.ContactFragment;
 import fragments.EditEmployerFragment;
+import fragments.EmployerPortalFragment;
 import fragments.JobFragment;
 import requests.VolleyRequest;
 
@@ -141,6 +142,15 @@ public class MainEmployerActivity extends AppCompatActivity
             ft.addToBackStack(null);
             ft.commit();
 
+        } else if (id == R.id.logout_employer) {
+            SharedPreferences.Editor edit = pref.edit();
+            //Storing Data using SharedPreferences
+            edit.putString("token", "");
+            edit.commit();
+
+            EmployerPortalFragment loginFragment = EmployerPortalFragment.newInstance();
+            ft.replace(R.id.homeFrameEmployer, loginFragment);
+            ft.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

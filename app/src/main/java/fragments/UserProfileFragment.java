@@ -2,10 +2,14 @@ package fragments;
 
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +17,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.Map;
 
 import app.com.jobcatcherapp.R;
 import requests.VolleyRequest;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,14 +39,17 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
     private OnFragmentInteractionListener mListener;
     TextView userName, email, age, profession, bio;
     Button uploadFile;
+    Button selectFile;
     public static String userNameText = "";
     public static String emailText = "";
     public static String ageText = "";
     public static String professionText = "";
     public static String bioText = "";
     ImageView editUser;
+    TextView file;
     SharedPreferences pref;
     VolleyRequest request;
+    int PICKFILE_REQUEST_CODE = 1;
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -89,6 +99,11 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
 
         bio = (TextView) view.findViewById(R.id.userBio);
         bio.setText(bioText);
+
+        selectFile = (Button) view.findViewById(R.id.selectfile);
+        selectFile.setOnClickListener(this);
+
+        file = (TextView) view.findViewById(R.id.file);
 
         uploadFile = (Button) view.findViewById(R.id.uploadcv);
         uploadFile.setOnClickListener(this);
@@ -148,12 +163,54 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         ft.commit();
     }
 
+    public void uploadFile() {
+
+    }
+
+    public void chooseFile() {
+        Intent intent = new Intent();
+        intent.setType("*/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select File"), PICKFILE_REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Uri selectedFileURI = data.getData();
+        file.setText(getFileName(selectedFileURI));
+
+    }
+
+    public String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
+    }
+
     @Override
     public void onClick(View v) {
         if (v == uploadFile) {
-            //TODO
+            uploadFile();
         } else if (v == editUser) {
             editUser();
+        } else if (v == selectFile) {
+            chooseFile();
         }
     }
 }
