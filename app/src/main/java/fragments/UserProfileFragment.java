@@ -2,17 +2,17 @@ package fragments;
 
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.MediaStore;
-import android.provider.OpenableColumns;
-import android.util.Base64;
+import android.provider.OpenableColumns;;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.net.Uri;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -29,16 +30,20 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import android.util.Base64;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import app.com.jobcatcherapp.R;
 import requests.VolleyRequest;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,9 +70,10 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
     SharedPreferences pref;
     VolleyRequest request;
     int PICKFILE_REQUEST_CODE = 1;
-    Bitmap bitmap;
     Uri selectedFileURI;
-    String encodedBase64;
+    String encodedString;
+    byte[] fileByteArray;
+    private static final boolean IS_CHUNKED = true;
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -187,17 +193,22 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         progressDialog.show();
 
 
-        File fileToUpload = new File(selectedFileURI.getPath());
-
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        FileInputStream fis;
         try {
-            FileInputStream fileInputStreamReader = new FileInputStream(fileToUpload);
-            byte[] bytes = new byte[(int) fileToUpload.length()];
-            fileInputStreamReader.read(bytes);
-            encodedBase64 = Base64.encodeToString(bytes, Base64.DEFAULT);
+            String convertedFilePath = getFilePathFromContentUri(selectedFileURI, getActivity().getContentResolver());
+            fis = new FileInputStream(new File(convertedFilePath));
+            byte[] buf = new byte[1024];
+            int n;
+            while (-1 != (n = fis.read(buf)))
+                baos.write(buf, 0, n);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        byte[] bbytes = baos.toByteArray();
+        encodedString = Base64.encodeToString(bbytes, Base64.DEFAULT);
 
+        final String encodedBase64 = encodedString;
         String URL = "http://10.0.2.2:8080/upload";
 
         //sending image to server
@@ -206,15 +217,19 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
             public void onResponse(String s) {
                 progressDialog.dismiss();
                 if (s.equals("true")) {
-                    Toast.makeText(getActivity(), "Upload Successful", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity().getApplicationContext(), "Upload Successful", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(getActivity(), "Some error occurred!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity().getApplicationContext(), "Some error occurred!", Toast.LENGTH_LONG).show();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Toast.makeText(getActivity(), "Some error occurred -> " + volleyError, Toast.LENGTH_LONG).show();
+                if (volleyError != null && volleyError.getMessage() != null) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Some error occurred -> " + volleyError, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), "Some error occurred -> ", Toast.LENGTH_LONG).show();
+                }
                 ;
             }
         }) {
@@ -222,12 +237,12 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parameters = new HashMap<String, String>();
-                parameters.put("image", encodedBase64);
+                parameters.put("file", encodedBase64);
                 return parameters;
             }
         };
 
-        RequestQueue rQueue = Volley.newRequestQueue(getActivity());
+        RequestQueue rQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
         rQueue.add(request);
     }
 
@@ -248,6 +263,21 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         }
 
 
+    }
+
+
+    private String getFilePathFromContentUri(Uri selectedUri, ContentResolver contentResolver) {
+        String filePath = null;
+        if (selectedUri != null && "content".equals(selectedUri.getScheme())) {
+            Cursor cursor = contentResolver.query(selectedUri, new String[] { android.provider.MediaStore.Images.ImageColumns.DATA }, null, null, null);
+            cursor.moveToFirst();
+            filePath = cursor.getString(0);
+            cursor.close();
+        } else {
+            filePath = selectedUri.getPath();
+        }
+        Log.d("","Chosen path = "+ filePath);
+        return filePath;
     }
 
     public String getFileName(Uri uri) {

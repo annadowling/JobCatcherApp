@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import app.com.jobcatcherapp.R;
 import fragments.ContactFragment;
+import fragments.EditUserFragment;
 import fragments.EmployerFragment;
 import fragments.EmployerPortalFragment;
 import fragments.MapsFragment;
@@ -123,22 +124,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
 
         if (id == R.id.nav_map) {
             Intent mapactivity = new Intent(MainActivity.this, MapsFragment.class);
             startActivity(mapactivity);
         } else if (id == R.id.contact_options) {
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
 
             ContactFragment contactFragment = ContactFragment.newInstance();
             ft.replace(R.id.homeFrame, contactFragment);
             ft.addToBackStack(null);
             ft.commit();
         } else if (id == R.id.employer_portal) {
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
 
             EmployerPortalFragment portalFragment = EmployerPortalFragment.newInstance();
             ft.replace(R.id.homeFrame, portalFragment);
+            ft.addToBackStack(null);
+            ft.commit();
+        }else if(id == R.id.edit_user_profile){
+            EditUserFragment editUserFragment = EditUserFragment.newInstance();
+            ft.replace(R.id.homeFrame, editUserFragment);
             ft.addToBackStack(null);
             ft.commit();
         }

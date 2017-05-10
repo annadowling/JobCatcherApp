@@ -26,14 +26,16 @@ dependencies {
     })
     // https://mvnrepository.com/artifact/com.mcxiaoke.volley/library
     compile group: 'com.mcxiaoke.volley', name: 'library', version: '1.0.0'
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpmime
+    compile group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.3.1'
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    compile group: 'commons-io', name: 'commons-io', version: '2.5'
+
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.google.android.gms:play-services:10.0.1'
     compile 'com.android.support:design:25.1.0'
     compile 'com.android.support:support-v4:25.1.0'
     testCompile 'junit:junit:4.12'
-    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpmime
-    compile group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.3.1'
-
 }
 
 android {

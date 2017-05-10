@@ -1,0 +1,89 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout2"
+    android:layout_width="fill_parent"
+    android:layout_height="46dp"
+    android:padding="8dp">
+
+
+    <!--<item android:id="@+id/search"-->
+        <!--android:title="Search"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:icon="@drawable/search"-->
+        <!--android:showAsAction="collapseActionView|ifRoom"-->
+        <!--android:actionViewClass="android.widget.SearchView" />-->
+
+
+    <ImageView
+        android:id="@+id/RowImage2"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="14dp"
+        android:contentDescription="fav"
+        android:gravity="center_vertical"
+        android:src="@drawable/ic_briefcase"
+        tools:ignore="HardcodedText" />
+
+    <ImageView
+        android:id="@+id/imgDelete2"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="fav"
+        android:src="@android:drawable/ic_delete"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/rowJobName2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/RowImage2"
+        android:layout_marginLeft="26dp"
+        android:layout_toRightOf="@+id/RowImage2"
+        android:gravity="center_vertical"
+        android:text="Job Name"
+        android:textColor="#008080"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/rowJobDescription2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/RowImage2"
+        android:layout_alignLeft="@+id/rowJobName2"
+        android:gravity="center_vertical"
+        android:text="Job Description"
+        android:textColor="#00313C"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        tools:ignore="HardcodedText,SmallSp" />
+
+    <TextView
+        android:id="@+id/rowContactNumber2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imgDelete2"
+        android:layout_marginRight="35dp"
+        android:layout_toLeftOf="@+id/imgDelete2"
+        android:gravity="center_vertical"
+        android:text="0861568567"
+        android:textColor="#00313C"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        tools:ignore="HardcodedText,SmallSp" />
+
+    <TextView android:id="@+id/hidden_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="hidden value"
+        android:visibility="gone"/>
+
+
+
+</RelativeLayout>
+

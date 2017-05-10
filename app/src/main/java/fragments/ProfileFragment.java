@@ -3,6 +3,7 @@ package fragments;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,6 +26,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +50,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     SharedPreferences pref;
     VolleyRequest request;
     String token, grav, oldpasstxt, newpasstxt;
-    Button viewProfile, chgpass, chgpassfr, cancel, logout;
+    Button viewProfile, chgpass, chgpassfr, cancel, logout, linkedin;
     Dialog dlg;
     EditText oldpass, newpass;
     public static final String KEY_OLDPASSWORD = "oldpass";
@@ -90,6 +93,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         chgpass.setOnClickListener(this);
 
         viewProfile.setOnClickListener(this);
+        linkedin = (Button) view.findViewById(R.id.linked_in);
+        linkedin.setOnClickListener(this);
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,6 +233,22 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         request.makeVolleyGetRequestForUserDetails(getActivity().getApplicationContext(), url, token, ft, R.id.profileFrame);
     }
 
+    public void shareTolinkedIn(){
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        Uri screenshotUri = Uri.parse("android.resource://app.com.jobcatcherapp/res/drawable/*");
+
+        try {
+            InputStream stream = getActivity().getContentResolver().openInputStream(screenshotUri);
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        sharingIntent.setType("image/jpeg");
+        sharingIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
+        startActivity(Intent.createChooser(sharingIntent, "Share to:"));
+    }
+
     @Override
     public void onClick(View v) {
         if (v == chgpass) {
@@ -236,6 +257,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             handleChangePasswordFragment();
         } else if (v == viewProfile) {
             configureUserProfile();
+        }else if(v == linkedin){
+            shareTolinkedIn();
         }
     }
 }

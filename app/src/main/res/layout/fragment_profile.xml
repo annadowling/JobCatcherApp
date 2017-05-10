@@ -52,5 +52,14 @@
             android:textAlignment="center"
             android:textColor="#ffffff" />
 
+        <Button
+            android:id="@+id/linked_in"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10px"
+            android:background="@drawable/linkedin_40"
+            android:textAlignment="center" />
+
     </LinearLayout>
 </FrameLayout>
