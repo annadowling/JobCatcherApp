@@ -8,13 +8,18 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import app.com.jobcatcherapp.R;
 import models.Job;
 import requests.VolleyRequest;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,8 +33,9 @@ public class JobListFragment extends Fragment {
 
 
     private OnFragmentInteractionListener mListener;
+    ImageView delete;
     TextView jobName, jobDescription, contactNumber, hiddenValue;
-    public static List<Job> employerJobsList;
+    public static List<Job> jobsList;
     VolleyRequest request;
     SharedPreferences pref;
 
@@ -40,16 +46,15 @@ public class JobListFragment extends Fragment {
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment JobListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static JobListFragment newInstance(String param1, String param2) {
+    public static JobListFragment newInstance(List<Job> jobsList) {
         JobListFragment fragment = new JobListFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+        jobsList = new ArrayList<Job>();
+        jobsList.addAll(jobsList);
         return fragment;
     }
 
@@ -61,8 +66,32 @@ public class JobListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_job_list2, container, false);
+        View view = inflater.inflate(R.layout.fragment_job_list_main, container, false);
+        pref = getActivity().getSharedPreferences("AppPref", MODE_PRIVATE);
+        if(jobsList != null){
+            initView(view);
+        }
+        return view;
+    }
+
+    public void initView(View rootView) {
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        LinearLayout parentPanel = (LinearLayout) rootView.findViewById(R.id.fragmentJobListMain);
+        for (Job job : jobsList) {
+            View listView = inflater.inflate(R.layout.fragment_job_list, null);
+            jobName = (TextView) listView.findViewById(R.id.rowJobName2);
+            jobDescription = (TextView) listView.findViewById(R.id.rowJobDescription2);
+            contactNumber = (TextView) listView.findViewById(R.id.rowContactNumber2);
+            hiddenValue = (TextView) listView.findViewById(R.id.hidden_value2);
+
+            jobName.setText(job.jobName);
+            jobDescription.setText(job.jobDescription);
+            contactNumber.setText(job.contactNumber);
+            hiddenValue.setText(job.jobToken);
+            delete = (ImageView) listView.findViewById(R.id.imgDelete2);
+            parentPanel.addView(listView);
+        }
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
