@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import app.com.jobcatcherapp.R;
+import app.com.jobcatcherapp.activities.Base;
 import requests.VolleyRequest;
 
 

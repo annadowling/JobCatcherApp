@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.View;
@@ -37,10 +38,13 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import app.com.jobcatcherapp.R;
+import app.com.jobcatcherapp.activities.MainEmployerActivity;
+import app.com.jobcatcherapp.activities.SearchActivity;
 import fragments.EmployerJobListFragment;
 import fragments.EmployerProfileFragment;
 import fragments.JobListFragment;
 import fragments.UserProfileFragment;
+import main.JobCatcherApp;
 import models.Job;
 
 import static com.android.volley.VolleyLog.TAG;
@@ -50,6 +54,7 @@ import static com.android.volley.VolleyLog.TAG;
  */
 
 public class VolleyRequest {
+    public JobCatcherApp app;
 
 
     public void makeVolleyPostRequest(Context context, Map<String, String> requestParameters, String url) {
@@ -216,10 +221,12 @@ public class VolleyRequest {
         requestQueue.add(request);
     }
 
-    public void makeVolleyGetRequestForAllJobDetails(Activity activityPointer, Context context, String url, FragmentTransaction ft, int i) {
+    public void makeVolleyGetRequestForAllJobDetails(JobCatcherApp app, Activity activityPointer, Context context, String url, FragmentTransaction ft, int i) {
         final Context applicationContext = context;
         final FragmentTransaction fragmentTransaction = ft;
         final int frameId = i;
+        final Activity activity = activityPointer;
+        final JobCatcherApp application = app;
 
 
         final ProgressDialog progressDialog = new ProgressDialog(activityPointer);
@@ -243,11 +250,16 @@ public class VolleyRequest {
                                 jobsList.add(job);
                             }
 
+
                             progressDialog.dismiss();
-                            JobListFragment jobListFragment = JobListFragment.newInstance(jobsList);
-                            fragmentTransaction.replace(frameId, jobListFragment);
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
+                            application.jobsList.addAll(jobsList);
+
+                            Intent intent = new Intent(activity, SearchActivity.class);
+                            activity.startActivity(intent);
+//                            JobListFragment jobListFragment = JobListFragment.newInstance(jobsList);
+//                            fragmentTransaction.replace(frameId, jobListFragment);
+//                            fragmentTransaction.addToBackStack(null);
+//                            fragmentTransaction.commit();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

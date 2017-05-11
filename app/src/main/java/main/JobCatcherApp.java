@@ -6,12 +6,15 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import models.Job;
+
 /**
  * Created by annadowling on 14/02/2017.
  */
 
 public class JobCatcherApp extends Application {
-    //TODO initialise components such as lists etc that will be used throughout apps lifetime
+
+    public List <Job>  jobsList = new ArrayList<Job>();
 
     @Override
     public void onCreate() {

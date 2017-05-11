@@ -2,29 +2,13 @@ package fragments;
 
 import android.app.ListFragment;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import adapters.JobAdapter;
 import adapters.JobFilter;
-import app.com.jobcatcherapp.R;
-import models.Job;
+import main.JobCatcherApp;
 import requests.VolleyRequest;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,13 +22,7 @@ public class JobListFragment extends ListFragment {
 
 
     private OnFragmentInteractionListener mListener;
-    ImageView delete;
-    TextView jobName, jobDescription, contactNumber, hiddenValue;
-    EditText filterText;
-    public static List<Job> fullJobsList;
     VolleyRequest request;
-    SharedPreferences pref;
-    Button searchButton;
 
     protected JobFilter jobFilter;
     protected static JobAdapter jobAdapter;
@@ -60,60 +38,33 @@ public class JobListFragment extends ListFragment {
      * @return A new instance of fragment JobListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static JobListFragment newInstance(List<Job> jobsList) {
+    public static JobListFragment newInstance() {
         JobListFragment fragment = new JobListFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
-        fullJobsList = new ArrayList<Job>();
-        fullJobsList.addAll(jobsList);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_job_list_main, container, false);
-        pref = getActivity().getSharedPreferences("AppPref", MODE_PRIVATE);
-        filterText = (EditText) view.findViewById(R.id.filterText);
-        searchButton = (Button) view.findViewById(R.id.search_button);
-
-        if (fullJobsList != null) {
-            initView(view);
-        }
-        return view;
-    }
-
-    public void initView(View rootView) {
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        LinearLayout parentPanel = (LinearLayout) rootView.findViewById(R.id.fragmentJobListMain);
-        for (Job job : fullJobsList) {
-            View listView = inflater.inflate(R.layout.fragment_job_list, null);
-            jobName = (TextView) listView.findViewById(R.id.rowJobName2);
-            jobDescription = (TextView) listView.findViewById(R.id.rowJobDescription2);
-            contactNumber = (TextView) listView.findViewById(R.id.rowContactNumber2);
-            hiddenValue = (TextView) listView.findViewById(R.id.hidden_value2);
-
-            jobName.setText(job.jobName);
-            jobDescription.setText(job.jobDescription);
-            contactNumber.setText(job.contactNumber);
-            hiddenValue.setText(job.jobToken);
-            delete = (ImageView) listView.findViewById(R.id.imgDelete2);
-            parentPanel.addView(listView);
-        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        jobAdapter = new JobAdapter(getActivity().getApplicationContext(), fullJobsList);
-        jobFilter = new JobFilter(fullJobsList, "all", jobAdapter);
+        JobCatcherApp app = (JobCatcherApp) getActivity().getApplication();
+        jobAdapter = new JobAdapter(getActivity().getApplicationContext(), app.jobsList);
+        jobFilter = new JobFilter(app.jobsList, "all", jobAdapter);
 
         setListAdapter(jobAdapter);
+    }
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -124,15 +75,21 @@ public class JobListFragment extends ListFragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Context context)
+    {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
+
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//        if (context instanceof OnFragmentInteractionListener) {
+//            mListener = (OnFragmentInteractionListener) context;
+//        } else {
+//            throw new RuntimeException(context.toString()
+//                    + " must implement OnFragmentInteractionListener");
+//        }
+//    }
 
     @Override
     public void onDetach() {

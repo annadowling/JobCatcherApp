@@ -24,8 +24,10 @@ import fragments.ContactFragment;
 import fragments.EditUserFragment;
 import fragments.EmployerFragment;
 import fragments.EmployerPortalFragment;
+import fragments.JobListFragment;
 import fragments.MapsFragment;
 import fragments.ProfileFragment;
+import main.JobCatcherApp;
 import requests.VolleyRequest;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -163,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
         request = new VolleyRequest();
-        request.makeVolleyGetRequestForAllJobDetails(this, this.getApplicationContext(), url, fragmentTransaction, R.id.homeFrame);
+        JobCatcherApp app = (JobCatcherApp) getApplication();
+        request.makeVolleyGetRequestForAllJobDetails(app, this, this.getApplicationContext(), url, fragmentTransaction, R.id.homeFrame);
     }
 }
