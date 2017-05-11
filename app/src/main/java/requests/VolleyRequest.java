@@ -39,6 +39,7 @@ import java.util.TreeMap;
 import app.com.jobcatcherapp.R;
 import fragments.EmployerJobListFragment;
 import fragments.EmployerProfileFragment;
+import fragments.JobListFragment;
 import fragments.UserProfileFragment;
 import models.Job;
 
@@ -194,6 +195,56 @@ public class VolleyRequest {
 
                             progressDialog.dismiss();
                             EmployerJobListFragment jobListFragment = EmployerJobListFragment.newInstance(jobsList);
+                            fragmentTransaction.replace(frameId, jobListFragment);
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String err = (error.getMessage()==null)?"No Jobs found!":error.getMessage();
+                Log.d("Error: ", err);
+                Toast.makeText(applicationContext, "No Jobs found!", Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(applicationContext);
+        requestQueue.add(request);
+    }
+
+    public void makeVolleyGetRequestForAllJobDetails(Activity activityPointer, Context context, String url, FragmentTransaction ft, int i) {
+        final Context applicationContext = context;
+        final FragmentTransaction fragmentTransaction = ft;
+        final int frameId = i;
+
+
+        final ProgressDialog progressDialog = new ProgressDialog(activityPointer);
+        progressDialog.setMessage("Loading page ....");
+        progressDialog.show();
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("JsonArray", response.toString());
+                        JSONArray jsonArray = null;
+                        try {
+                            jsonArray = response.getJSONArray("response");
+
+                            List<Job> jobsList = new ArrayList<Job>();
+
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                                Job job = new Job(jsonObject.getString("_id"), jsonObject.getString("jobTitle"), jsonObject.getString("jobDescription"), jsonObject.getString("contactNumber"));
+                                jobsList.add(job);
+                            }
+
+                            progressDialog.dismiss();
+                            JobListFragment jobListFragment = JobListFragment.newInstance(jobsList);
                             fragmentTransaction.replace(frameId, jobListFragment);
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();

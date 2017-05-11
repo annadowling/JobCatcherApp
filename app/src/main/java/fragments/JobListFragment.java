@@ -1,5 +1,6 @@
 package fragments;
 
+import android.app.ListFragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -8,6 +9,8 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,6 +18,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import adapters.JobAdapter;
+import adapters.JobFilter;
 import app.com.jobcatcherapp.R;
 import models.Job;
 import requests.VolleyRequest;
@@ -29,15 +34,20 @@ import static android.content.Context.MODE_PRIVATE;
  * Use the {@link JobListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class JobListFragment extends Fragment {
+public class JobListFragment extends ListFragment {
 
 
     private OnFragmentInteractionListener mListener;
     ImageView delete;
     TextView jobName, jobDescription, contactNumber, hiddenValue;
-    public static List<Job> jobsList;
+    EditText filterText;
+    public static List<Job> fullJobsList;
     VolleyRequest request;
     SharedPreferences pref;
+    Button searchButton;
+
+    protected JobFilter jobFilter;
+    protected static JobAdapter jobAdapter;
 
     public JobListFragment() {
         // Required empty public constructor
@@ -46,6 +56,7 @@ public class JobListFragment extends Fragment {
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
+     *
      * @return A new instance of fragment JobListFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -53,8 +64,8 @@ public class JobListFragment extends Fragment {
         JobListFragment fragment = new JobListFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
-        jobsList = new ArrayList<Job>();
-        jobsList.addAll(jobsList);
+        fullJobsList = new ArrayList<Job>();
+        fullJobsList.addAll(jobsList);
         return fragment;
     }
 
@@ -68,7 +79,10 @@ public class JobListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_job_list_main, container, false);
         pref = getActivity().getSharedPreferences("AppPref", MODE_PRIVATE);
-        if(jobsList != null){
+        filterText = (EditText) view.findViewById(R.id.filterText);
+        searchButton = (Button) view.findViewById(R.id.search_button);
+
+        if (fullJobsList != null) {
             initView(view);
         }
         return view;
@@ -77,7 +91,7 @@ public class JobListFragment extends Fragment {
     public void initView(View rootView) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         LinearLayout parentPanel = (LinearLayout) rootView.findViewById(R.id.fragmentJobListMain);
-        for (Job job : jobsList) {
+        for (Job job : fullJobsList) {
             View listView = inflater.inflate(R.layout.fragment_job_list, null);
             jobName = (TextView) listView.findViewById(R.id.rowJobName2);
             jobDescription = (TextView) listView.findViewById(R.id.rowJobDescription2);
@@ -91,7 +105,15 @@ public class JobListFragment extends Fragment {
             delete = (ImageView) listView.findViewById(R.id.imgDelete2);
             parentPanel.addView(listView);
         }
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        jobAdapter = new JobAdapter(getActivity().getApplicationContext(), fullJobsList);
+        jobFilter = new JobFilter(fullJobsList, "all", jobAdapter);
+
+        setListAdapter(jobAdapter);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

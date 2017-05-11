@@ -26,10 +26,12 @@ import fragments.EmployerFragment;
 import fragments.EmployerPortalFragment;
 import fragments.MapsFragment;
 import fragments.ProfileFragment;
+import requests.VolleyRequest;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     SharedPreferences pref;
+    VolleyRequest request;
 
     public static TextView emailText, userNameText;
 
@@ -141,15 +143,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ft.replace(R.id.homeFrame, portalFragment);
             ft.addToBackStack(null);
             ft.commit();
-        }else if(id == R.id.edit_user_profile){
+        } else if (id == R.id.edit_user_profile) {
             EditUserFragment editUserFragment = EditUserFragment.newInstance();
             ft.replace(R.id.homeFrame, editUserFragment);
             ft.addToBackStack(null);
             ft.commit();
+        } else if (id == R.id.search_jobs) {
+            getAllJobDetails();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void getAllJobDetails() {
+        String url = "http://10.0.2.2:8080/getAllJobsList";
+
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+
+        request = new VolleyRequest();
+        request.makeVolleyGetRequestForAllJobDetails(this, this.getApplicationContext(), url, fragmentTransaction, R.id.homeFrame);
     }
 }

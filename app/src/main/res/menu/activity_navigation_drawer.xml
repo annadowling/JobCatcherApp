@@ -15,7 +15,7 @@
             android:id="@+id/employer_portal"
             android:title="Employer Login" />
         <item
-            android:id="@+id/favourite_jobs"
-            android:title="Favourite Jobs" />
+            android:id="@+id/search_jobs"
+            android:title="Search Jobs" />
     </group>
 </menu>
