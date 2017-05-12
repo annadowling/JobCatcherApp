@@ -161,11 +161,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void getAllJobDetails() {
         String url = "http://10.0.2.2:8080/getAllJobsList";
-
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-
         request = new VolleyRequest();
         JobCatcherApp app = (JobCatcherApp) getApplication();
-        request.makeVolleyGetRequestForAllJobDetails(app, this, this.getApplicationContext(), url, fragmentTransaction, R.id.homeFrame);
+        request.makeVolleyGetRequestForAllJobDetails(app, MainActivity.this, this.getApplicationContext(), url);
     }
 }

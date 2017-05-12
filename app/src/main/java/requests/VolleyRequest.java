@@ -5,23 +5,14 @@ import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.ImageRequest;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -32,22 +23,16 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
-import app.com.jobcatcherapp.R;
-import app.com.jobcatcherapp.activities.MainEmployerActivity;
-import app.com.jobcatcherapp.activities.SearchActivity;
+import app.com.jobcatcherapp.activities.SearchBarActivity;
 import fragments.EmployerJobListFragment;
 import fragments.EmployerProfileFragment;
-import fragments.JobListFragment;
 import fragments.UserProfileFragment;
 import main.JobCatcherApp;
 import models.Job;
 
-import static com.android.volley.VolleyLog.TAG;
 
 /**
  * Created by annadowling on 23/02/2017.
@@ -210,7 +195,7 @@ public class VolleyRequest {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                String err = (error.getMessage()==null)?"No Jobs found!":error.getMessage();
+                String err = (error.getMessage() == null) ? "No Jobs found!" : error.getMessage();
                 Log.d("Error: ", err);
                 Toast.makeText(applicationContext, "No Jobs found!", Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
@@ -221,10 +206,8 @@ public class VolleyRequest {
         requestQueue.add(request);
     }
 
-    public void makeVolleyGetRequestForAllJobDetails(JobCatcherApp app, Activity activityPointer, Context context, String url, FragmentTransaction ft, int i) {
+    public void makeVolleyGetRequestForAllJobDetails(final JobCatcherApp app, Activity activityPointer, Context context, String url) {
         final Context applicationContext = context;
-        final FragmentTransaction fragmentTransaction = ft;
-        final int frameId = i;
         final Activity activity = activityPointer;
         final JobCatcherApp application = app;
 
@@ -251,15 +234,12 @@ public class VolleyRequest {
                             }
 
 
+                            application.jobsList.clear();
                             progressDialog.dismiss();
                             application.jobsList.addAll(jobsList);
 
-                            Intent intent = new Intent(activity, SearchActivity.class);
+                            Intent intent = new Intent(activity, SearchBarActivity.class);
                             activity.startActivity(intent);
-//                            JobListFragment jobListFragment = JobListFragment.newInstance(jobsList);
-//                            fragmentTransaction.replace(frameId, jobListFragment);
-//                            fragmentTransaction.addToBackStack(null);
-//                            fragmentTransaction.commit();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -267,7 +247,7 @@ public class VolleyRequest {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                String err = (error.getMessage()==null)?"No Jobs found!":error.getMessage();
+                String err = (error.getMessage() == null) ? "No Jobs found!" : error.getMessage();
                 Log.d("Error: ", err);
                 Toast.makeText(applicationContext, "No Jobs found!", Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
@@ -297,7 +277,7 @@ public class VolleyRequest {
                     }
                 }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError{
+            public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<String, String>();
                 headers.put("token", requestToken);
                 headers.put("employerToken", requestEmployerToken);
@@ -309,7 +289,6 @@ public class VolleyRequest {
         RequestQueue requestQueue = Volley.newRequestQueue(applicationContext);
         requestQueue.add(stringRequest);
     }
-
 
 
 }
