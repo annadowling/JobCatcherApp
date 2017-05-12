@@ -5,6 +5,7 @@ package fragments;
  */
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,13 +14,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import app.com.jobcatcherapp.R;
 
 
-public class SearchFragment extends JobListFragment implements AdapterView.OnItemSelectedListener, TextWatcher {
+public class SearchFragment extends JobListFragment implements AdapterView.OnItemSelectedListener, TextWatcher, View.OnClickListener {
 
+    ImageView backToProfile;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -51,6 +54,9 @@ public class SearchFragment extends JobListFragment implements AdapterView.OnIte
 
         EditText nameText = (EditText) getActivity().findViewById(R.id.filterTextSearch);
         nameText.addTextChangedListener(this);
+
+        backToProfile = (ImageView) getActivity().findViewById(R.id.backToEmployerProfile);
+        backToProfile.setOnClickListener(this);
     }
 
     @Override
@@ -88,5 +94,17 @@ public class SearchFragment extends JobListFragment implements AdapterView.OnIte
     @Override
     public void afterTextChanged(Editable s) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+         if (v == backToProfile) {
+             FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+             ProfileFragment profileFragment = ProfileFragment.newInstance();
+             ft.replace(R.id.fragmentJobListMain, profileFragment);
+             ft.addToBackStack(null);
+             ft.commit();
+        }
     }
 }
