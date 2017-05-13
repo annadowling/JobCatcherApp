@@ -47,6 +47,7 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
     Marker currLocationMarker;
     JobCatcherApp app;
     VolleyRequest request;
+    Marker jobMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,13 +85,15 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
 
 
     public void addJobs(List<Job> list) {
-        for (Job j : list)
-            mMap.addMarker(new MarkerOptions()
+        for (Job j : list) {
+            jobMarker = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(Double.parseDouble(j.latitude), Double.parseDouble(j.longitude)))
                     .title(j.jobName)
                     .snippet(j.jobDescription + " " + j.contactNumber)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.findajob)));
 
+            jobMarker.setTag(j);
+        }
     }
 
     private final int[] MAP_TYPES = {
@@ -124,14 +127,20 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 
                 @Override
-                public boolean onMarkerClick(Marker arg0) {
-                    Log.d("Message", "got here into marker click");
-                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                public boolean onMarkerClick(Marker marker) {
 
-                    ContactFragment contactFragment = ContactFragment.newInstance();
-                    ft.replace(R.id.map, contactFragment);
-                    ft.addToBackStack(null);
-                    ft.commit();
+                    Log.d("Message", "got here into marker click" + marker.getTag());
+                    String result = marker.getTag().toString();
+                    String jobToken = result.substring(result.indexOf("jobToken ="), result.indexOf(", jobDescription"));
+                    String token = jobToken.split("=")[1];
+
+                    //TODO findJob to pass jobtoken
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    String url = "http://10.0.2.2:8080/findEmployerAndJob";
+
+
+                    request = new VolleyRequest();
+                    request.makeVolleyGetRequestForEmployerAndJob(getApplicationContext(), url, token, ft, R.id.map);
                     return true;
                 }
 

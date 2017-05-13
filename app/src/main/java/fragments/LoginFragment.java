@@ -1,6 +1,5 @@
 package fragments;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.content.Context;

@@ -29,8 +29,10 @@ import java.util.Map;
 import app.com.jobcatcherapp.activities.SearchBarActivity;
 import fragments.EmployerJobListFragment;
 import fragments.EmployerProfileFragment;
+import fragments.JobDetailsFragment;
 import fragments.UserProfileFragment;
 import main.JobCatcherApp;
+import models.Employer;
 import models.Job;
 
 
@@ -213,6 +215,44 @@ public class VolleyRequest {
         RequestQueue requestQueue = Volley.newRequestQueue(applicationContext);
         requestQueue.add(request);
     }
+
+    public void makeVolleyGetRequestForEmployerAndJob(Context context, String url, String token, FragmentTransaction ft, int i) {
+        final Context applicationContext = context;
+        final FragmentTransaction fragmentTransaction = ft;
+        final int frameId = i;
+
+        String getUrl = url + "/token=" + token;
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getUrl, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                                Job returnedJob = new Job(response.getString("id"), response.getString("jobTitle"), response.getString("jobDescription"), response.getString("contactNumber"), response.getString("latitude"), response.getString("longitude"));
+
+                                Employer returnedEmployer = new Employer(response.getString("companyName"), response.getString("email"), response.getString("contactNumber"));
+
+                            JobDetailsFragment jobDetailsFragment = JobDetailsFragment.newInstance(returnedJob, returnedEmployer);
+                            fragmentTransaction.replace(frameId, jobDetailsFragment);
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String err = (error.getMessage() == null) ? "No Jobs found!" : error.getMessage();
+                Log.d("Error: ", err);
+                Toast.makeText(applicationContext, "No Jobs found!", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(applicationContext);
+        requestQueue.add(request);
+    }
+
 
     public void makeVolleyGetRequestForAllJobDetails(final JobCatcherApp app, Activity activityPointer, Context context, String url, final Boolean launchSearchActivity) {
         final Context applicationContext = context;
