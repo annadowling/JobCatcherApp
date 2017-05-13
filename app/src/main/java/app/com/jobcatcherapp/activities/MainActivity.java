@@ -161,6 +161,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String url = "http://10.0.2.2:8080/getAllJobsList";
         request = new VolleyRequest();
         JobCatcherApp app = (JobCatcherApp) getApplication();
-        request.makeVolleyGetRequestForAllJobDetails(app, MainActivity.this, this.getApplicationContext(), url);
+        request.makeVolleyGetRequestForAllJobDetails(app, MainActivity.this, this.getApplicationContext(), url, true);
     }
 }

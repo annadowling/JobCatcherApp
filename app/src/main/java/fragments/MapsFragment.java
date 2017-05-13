@@ -28,7 +28,10 @@ import java.util.List;
 
 
 import app.com.jobcatcherapp.R;
+import app.com.jobcatcherapp.activities.MainActivity;
+import main.JobCatcherApp;
 import models.Job;
+import requests.VolleyRequest;
 
 public class MapsFragment extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
@@ -40,6 +43,8 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
     GoogleMap mMap;
     SupportMapFragment mFragment;
     Marker currLocationMarker;
+    JobCatcherApp app;
+    VolleyRequest request;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +55,19 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
         mFragment.getMapAsync(this);
     }
 
+    public void getAllJobDetails() {
+        String url = "http://10.0.2.2:8080/getAllJobsList";
+        request = new VolleyRequest();
+        request.makeVolleyGetRequestForAllJobDetails(app, this, this.getApplicationContext(), url, false);
+    }
+
     @Override
     public void onMapReady(GoogleMap gMap) {
         mMap = gMap;
-        //mMap.setMapType(MAP_TYPES[curMapTypeIndex]);
         try {
             mMap.setMyLocationEnabled(true);
+            app = (JobCatcherApp) getApplication();
+            getAllJobDetails();
         } catch (SecurityException exception) {
 
         }
@@ -66,14 +78,13 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    public void addJobs(List<Job> list)
-    {
-        //for(Job j : list)
-//            mMap.addMarker(new MarkerOptions()
-//                    .position(new LatLng(c.marker.coords.latitude, c.marker.coords.longitude))
-//                    .title(c.name + " €" + c.price)
-//                    .snippet(c.shop + " " + c.address)
-//                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.coffee_icon)));
+    public void addJobs(List<Job> list) {
+        for (Job j : list)
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(Double.parseDouble(j.latitude), Double.parseDouble(j.longitude)))
+                    .title(j.jobName)
+                    .snippet(j.jobDescription + " " + j.contactNumber)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.findajob)));
 
     }
 
@@ -110,6 +121,7 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
                 markerOptions.title("Current Position");
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
                 currLocationMarker = mMap.addMarker(markerOptions);
+                addJobs(app.jobsList);
             }
 
             mLocationRequest = new LocationRequest();
@@ -124,12 +136,6 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
 
         }
     }
-
-//    @Override
-//    public void setList(List list) {
-//        app.coffeeList = list;
-//        addCoffees(app.coffeeList);
-//    }
 
     @Override
     public void onConnectionSuspended(int i) {

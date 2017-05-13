@@ -181,10 +181,10 @@ public class VolleyRequest {
                                 JSONObject jsonObject = (JSONObject) jsonArray.get(i);
                                 String latitude = null;
                                 String longitude = null;
-                                if(jsonObject.getString("latitude") != null){
+                                if (jsonObject.getString("latitude") != null) {
                                     latitude = jsonObject.getString("latitude");
                                 }
-                                if(jsonObject.getString("longitude") != null){
+                                if (jsonObject.getString("longitude") != null) {
                                     longitude = jsonObject.getString("longitude");
                                 }
                                 Job job = new Job(jsonObject.getString("_id"), jsonObject.getString("jobTitle"), jsonObject.getString("jobDescription"), jsonObject.getString("contactNumber"), latitude, longitude);
@@ -214,7 +214,7 @@ public class VolleyRequest {
         requestQueue.add(request);
     }
 
-    public void makeVolleyGetRequestForAllJobDetails(final JobCatcherApp app, Activity activityPointer, Context context, String url) {
+    public void makeVolleyGetRequestForAllJobDetails(final JobCatcherApp app, Activity activityPointer, Context context, String url, final Boolean launchSearchActivity) {
         final Context applicationContext = context;
         final Activity activity = activityPointer;
         final JobCatcherApp application = app;
@@ -239,10 +239,10 @@ public class VolleyRequest {
                                 JSONObject jsonObject = (JSONObject) jsonArray.get(i);
                                 String latitude = null;
                                 String longitude = null;
-                                if(jsonObject.getString("latitude") != null){
+                                if (jsonObject.getString("latitude") != null) {
                                     latitude = jsonObject.getString("latitude");
                                 }
-                                if(jsonObject.getString("longitude") != null){
+                                if (jsonObject.getString("longitude") != null) {
                                     longitude = jsonObject.getString("longitude");
                                 }
                                 Job job = new Job(jsonObject.getString("_id"), jsonObject.getString("jobTitle"), jsonObject.getString("jobDescription"), jsonObject.getString("contactNumber"), latitude, longitude);
@@ -254,8 +254,10 @@ public class VolleyRequest {
                             progressDialog.dismiss();
                             application.jobsList.addAll(jobsList);
 
-                            Intent intent = new Intent(activity, SearchBarActivity.class);
-                            activity.startActivity(intent);
+                            if (launchSearchActivity) {
+                                Intent intent = new Intent(activity, SearchBarActivity.class);
+                                activity.startActivity(intent);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
