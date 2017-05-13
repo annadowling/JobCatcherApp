@@ -1,9 +1,12 @@
 package fragments;
 
+import android.app.FragmentTransaction;
 import android.location.Geocoder;
 import android.location.Location;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -28,7 +31,6 @@ import java.util.List;
 
 
 import app.com.jobcatcherapp.R;
-import app.com.jobcatcherapp.activities.MainActivity;
 import main.JobCatcherApp;
 import models.Job;
 import requests.VolleyRequest;
@@ -80,6 +82,7 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+
     public void addJobs(List<Job> list) {
         for (Job j : list)
             mMap.addMarker(new MarkerOptions()
@@ -115,21 +118,28 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
             Toast.makeText(this, "onConnected", Toast.LENGTH_SHORT).show();
             Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if (mLastLocation != null) {
-                //place marker at current position
-                //mGoogleMap.clear();
-//                latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-//                MarkerOptions markerOptions = new MarkerOptions();
-//                markerOptions.position(latLng);
-//                markerOptions.title("Current Position");
-//                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
                 addJobs(app.jobsList);
             }
 
+            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+
+                @Override
+                public boolean onMarkerClick(Marker arg0) {
+                    Log.d("Message", "got here into marker click");
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+                    ContactFragment contactFragment = ContactFragment.newInstance();
+                    ft.replace(R.id.map, contactFragment);
+                    ft.addToBackStack(null);
+                    ft.commit();
+                    return true;
+                }
+
+            });
             mLocationRequest = new LocationRequest();
             mLocationRequest.setInterval(5000); //5 seconds
             mLocationRequest.setFastestInterval(3000); //3 seconds
             mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-            //mLocationRequest.setSmallestDisplacement(0.1F); //1/10 meter
 
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
 
