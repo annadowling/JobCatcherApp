@@ -28,6 +28,7 @@ import java.util.List;
 
 
 import app.com.jobcatcherapp.R;
+import models.Job;
 
 public class MapsFragment extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
@@ -52,6 +53,7 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap gMap) {
         mMap = gMap;
+        //mMap.setMapType(MAP_TYPES[curMapTypeIndex]);
         try {
             mMap.setMyLocationEnabled(true);
         } catch (SecurityException exception) {
@@ -63,6 +65,27 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
         mGoogleApiClient.connect();
 
     }
+
+    public void addJobs(List<Job> list)
+    {
+        //for(Job j : list)
+//            mMap.addMarker(new MarkerOptions()
+//                    .position(new LatLng(c.marker.coords.latitude, c.marker.coords.longitude))
+//                    .title(c.name + " €" + c.price)
+//                    .snippet(c.shop + " " + c.address)
+//                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.coffee_icon)));
+
+    }
+
+    private final int[] MAP_TYPES = {
+            GoogleMap.MAP_TYPE_SATELLITE,
+            GoogleMap.MAP_TYPE_NORMAL,
+            GoogleMap.MAP_TYPE_HYBRID,
+            GoogleMap.MAP_TYPE_TERRAIN,
+            GoogleMap.MAP_TYPE_NONE
+    };
+
+    private int curMapTypeIndex = 1;
 
     protected synchronized void buildGoogleApiClient() {
         Toast.makeText(this, "buildGoogleApiClient", Toast.LENGTH_SHORT).show();
@@ -101,6 +124,12 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
 
         }
     }
+
+//    @Override
+//    public void setList(List list) {
+//        app.coffeeList = list;
+//        addCoffees(app.coffeeList);
+//    }
 
     @Override
     public void onConnectionSuspended(int i) {

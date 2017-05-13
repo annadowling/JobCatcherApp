@@ -179,7 +179,15 @@ public class VolleyRequest {
 
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                                Job job = new Job(jsonObject.getString("_id"), jsonObject.getString("jobTitle"), jsonObject.getString("jobDescription"), jsonObject.getString("contactNumber"));
+                                String latitude = null;
+                                String longitude = null;
+                                if(jsonObject.getString("latitude") != null){
+                                    latitude = jsonObject.getString("latitude");
+                                }
+                                if(jsonObject.getString("longitude") != null){
+                                    longitude = jsonObject.getString("longitude");
+                                }
+                                Job job = new Job(jsonObject.getString("_id"), jsonObject.getString("jobTitle"), jsonObject.getString("jobDescription"), jsonObject.getString("contactNumber"), latitude, longitude);
                                 jobsList.add(job);
                             }
 
@@ -229,7 +237,15 @@ public class VolleyRequest {
 
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                                Job job = new Job(jsonObject.getString("_id"), jsonObject.getString("jobTitle"), jsonObject.getString("jobDescription"), jsonObject.getString("contactNumber"));
+                                String latitude = null;
+                                String longitude = null;
+                                if(jsonObject.getString("latitude") != null){
+                                    latitude = jsonObject.getString("latitude");
+                                }
+                                if(jsonObject.getString("longitude") != null){
+                                    longitude = jsonObject.getString("longitude");
+                                }
+                                Job job = new Job(jsonObject.getString("_id"), jsonObject.getString("jobTitle"), jsonObject.getString("jobDescription"), jsonObject.getString("contactNumber"), latitude, longitude);
                                 jobsList.add(job);
                             }
 

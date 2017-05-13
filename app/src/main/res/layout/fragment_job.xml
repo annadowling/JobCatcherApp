@@ -46,6 +46,20 @@
         <EditText
             android:layout_width="440px"
             android:layout_height="80px"
+            android:layout_gravity="center"
+            android:id="@+id/jobLatitude"
+            android:hint="Latitude" />
+
+        <EditText
+            android:layout_width="440px"
+            android:layout_height="80px"
+            android:layout_gravity="center"
+            android:id="@+id/jobLongitude"
+            android:hint="Longitude" />
+
+        <EditText
+            android:layout_width="440px"
+            android:layout_height="80px"
             android:lines="4"
             android:minLines="1"
             android:maxLines="6"

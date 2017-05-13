@@ -28,7 +28,7 @@ import requests.VolleyRequest;
 public class JobFragment extends Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mListener;
-    EditText email, phone, jobTitle, jobDescription;
+    EditText email, phone, jobTitle, jobDescription, jobLatitude, jobLongitude;
     Button addJob;
 
     public JobFragment() {
@@ -61,6 +61,8 @@ public class JobFragment extends Fragment implements View.OnClickListener {
         phone = (EditText) view.findViewById(R.id.phone);
         jobTitle = (EditText) view.findViewById(R.id.jobTitle);
         jobDescription = (EditText) view.findViewById(R.id.jobDescription);
+        jobLatitude =  (EditText) view.findViewById(R.id.jobLatitude);
+        jobLongitude =  (EditText) view.findViewById(R.id.jobLongitude);
         addJob = (Button) view.findViewById(R.id.addjob);
 
         addJob.setOnClickListener(this);
@@ -112,6 +114,8 @@ public class JobFragment extends Fragment implements View.OnClickListener {
         final String phoneTxt = phone.getText().toString();
         final String jobTitleTxt = jobTitle.getText().toString();
         final String jobDescriptionTxt = jobDescription.getText().toString();
+        final String jobLatitudeTxt = jobLatitude.getText().toString();
+        final String jobLongitudeTxt = jobLongitude.getText().toString();
 
         String url = "http://10.0.2.2:8080/addJob";
 
@@ -120,6 +124,8 @@ public class JobFragment extends Fragment implements View.OnClickListener {
         params.put("contactNumber", phoneTxt);
         params.put("jobTitle", jobTitleTxt);
         params.put("jobDescription", jobDescriptionTxt);
+        params.put("latitude", jobLatitudeTxt);
+        params.put("longitude", jobLongitudeTxt);
 
         VolleyRequest request = new VolleyRequest();
         request.makeVolleyPostRequest(getActivity().getApplicationContext(), params, url);
