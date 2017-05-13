@@ -50,6 +50,8 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_maps);
+        app = (JobCatcherApp) getApplication();
+        getAllJobDetails();
 
         mFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mFragment.getMapAsync(this);
@@ -115,12 +117,11 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
             if (mLastLocation != null) {
                 //place marker at current position
                 //mGoogleMap.clear();
-                latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(latLng);
-                markerOptions.title("Current Position");
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-                currLocationMarker = mMap.addMarker(markerOptions);
+//                latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+//                MarkerOptions markerOptions = new MarkerOptions();
+//                markerOptions.position(latLng);
+//                markerOptions.title("Current Position");
+//                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
                 addJobs(app.jobsList);
             }
 
@@ -161,6 +162,7 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
         markerOptions.title("Current Position");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         currLocationMarker = mMap.addMarker(markerOptions);
+        addJobs(app.jobsList);
 
         Toast.makeText(this, "Location Changed", Toast.LENGTH_SHORT).show();
 
