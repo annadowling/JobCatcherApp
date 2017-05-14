@@ -46,7 +46,7 @@ public class MainEmployerActivity extends AppCompatActivity
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
 
                 ContactFragment contactFragment = ContactFragment.newInstance();
-                ft.replace(R.id.homeFrame, contactFragment);
+                ft.replace(R.id.homeFrameEmployer, contactFragment);
                 ft.addToBackStack(null);
                 ft.commit();
             }

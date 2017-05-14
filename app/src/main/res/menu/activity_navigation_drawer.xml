@@ -17,5 +17,8 @@
         <item
             android:id="@+id/search_jobs"
             android:title="Search Jobs" />
+        <item
+            android:id="@+id/logout_menu"
+            android:title="Logout" />
     </group>
 </menu>

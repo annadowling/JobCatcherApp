@@ -233,19 +233,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         request.makeVolleyGetRequestForUserDetails(getActivity().getApplicationContext(), url, token, ft, R.id.profileFrame);
     }
 
-    public void shareTolinkedIn(){
+    public void shareTolinkedIn() {
         Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-        Uri screenshotUri = Uri.parse("android.resource://app.com.jobcatcherapp/res/drawable/*");
-
-        try {
-            InputStream stream = getActivity().getContentResolver().openInputStream(screenshotUri);
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        sharingIntent.setType("image/jpeg");
-        sharingIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
+        sharingIntent.setType("text/*");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
         startActivity(Intent.createChooser(sharingIntent, "Share to:"));
     }
 
@@ -257,7 +248,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             handleChangePasswordFragment();
         } else if (v == viewProfile) {
             configureUserProfile();
-        }else if(v == linkedin){
+        } else if (v == linkedin) {
             shareTolinkedIn();
         }
     }

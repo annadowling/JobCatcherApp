@@ -18,11 +18,11 @@ public class JobAdapter extends ArrayAdapter<Job> {
     private Context context;
     public List<Job> jobList;
 
-    public JobAdapter(Context context, List<Job> coffeeList) {
-        super(context, R.layout.fragment_job_list_main, coffeeList);
+    public JobAdapter(Context context, List<Job> jobList) {
+        super(context, R.layout.fragment_job_list_main, jobList);
 
         this.context = context;
-        this.jobList = coffeeList;
+        this.jobList = jobList;
     }
 
 

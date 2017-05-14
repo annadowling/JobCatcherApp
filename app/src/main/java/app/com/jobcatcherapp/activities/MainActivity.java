@@ -23,6 +23,7 @@ import app.com.jobcatcherapp.R;
 import fragments.ContactFragment;
 import fragments.EditUserFragment;
 import fragments.EmployerPortalFragment;
+import fragments.LoginFragment;
 import fragments.MapsFragment;
 import fragments.ProfileFragment;
 import main.JobCatcherApp;
@@ -150,6 +151,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ft.commit();
         } else if (id == R.id.search_jobs) {
             getAllJobDetails();
+        } else if (id == R.id.logout_menu) {
+            LoginFragment loginFragment = LoginFragment.newInstance();
+            ft.replace(R.id.profileFrame, loginFragment);
+            ft.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

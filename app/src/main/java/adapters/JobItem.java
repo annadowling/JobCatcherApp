@@ -26,8 +26,8 @@ public class JobItem {
 
         updateControls(job);
 
-        ImageView imgDelete = (ImageView) view.findViewById(R.id.imgDelete2);
-        imgDelete.setTag(job);
+//        ImageView imgDelete = (ImageView) view.findViewById(R.id.imgDelete2);
+//        imgDelete.setTag(job);
         //imgDelete.setOnClickListener(deleteListener);
     }
 
@@ -41,6 +41,5 @@ public class JobItem {
         jobDescription.setText(job.jobDescription);
         contactNumber.setText(job.contactNumber);
         hiddenValue.setText(job.jobToken);
-        //ImageView delete = (ImageView) view.findViewById(R.id.imgDelete2);
     }
 }

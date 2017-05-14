@@ -1,8 +1,11 @@
 package fragments;
 
+import android.annotation.SuppressLint;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +13,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;;
 import android.util.Log;
@@ -58,22 +63,22 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
 
     private OnFragmentInteractionListener mListener;
     TextView userName, email, age, profession, bio;
-    Button uploadFile;
-    Button selectFile;
+//    Button uploadFile;
+//    Button selectFile;
     public static String userNameText = "";
     public static String emailText = "";
     public static String ageText = "";
     public static String professionText = "";
     public static String bioText = "";
     ImageView editUser;
-    TextView file;
+    //TextView file;
     SharedPreferences pref;
     VolleyRequest request;
-    int PICKFILE_REQUEST_CODE = 1;
-    Uri selectedFileURI;
-    String encodedString;
-    byte[] fileByteArray;
-    private static final boolean IS_CHUNKED = true;
+//    int PICKFILE_REQUEST_CODE = 1;
+//    Uri selectedFileURI;
+//    String encodedString;
+//    byte[] fileByteArray;
+//    private static final boolean IS_CHUNKED = true;
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -124,13 +129,13 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         bio = (TextView) view.findViewById(R.id.userBio);
         bio.setText(bioText);
 
-        selectFile = (Button) view.findViewById(R.id.selectfile);
-        selectFile.setOnClickListener(this);
-
-        file = (TextView) view.findViewById(R.id.file);
-
-        uploadFile = (Button) view.findViewById(R.id.uploadcv);
-        uploadFile.setOnClickListener(this);
+//        selectFile = (Button) view.findViewById(R.id.selectfile);
+//        selectFile.setOnClickListener(this);
+//
+//        file = (TextView) view.findViewById(R.id.file);
+//
+//        uploadFile = (Button) view.findViewById(R.id.uploadcv);
+//        uploadFile.setOnClickListener(this);
 
         editUser = (ImageView) view.findViewById(R.id.editUser);
         editUser.setOnClickListener(this);
@@ -187,98 +192,154 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         ft.commit();
     }
 
-    public void uploadFile() {
-        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage("Uploading, please wait...");
-        progressDialog.show();
+//    public void uploadFile() {
+//        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+//        progressDialog.setMessage("Uploading, please wait...");
+//        progressDialog.show();
+//
+//
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        FileInputStream fis;
+//        try {
+//            String convertedFilePath = getRealPathFromURI(getActivity().getApplicationContext(), selectedFileURI);
+//            fis = new FileInputStream(new File(convertedFilePath));
+//            byte[] buf = new byte[1024];
+//            int n;
+//            while (-1 != (n = fis.read(buf)))
+//                baos.write(buf, 0, n);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        byte[] bbytes = baos.toByteArray();
+//        encodedString = Base64.encodeToString(bbytes, Base64.DEFAULT);
+//
+//        final String encodedBase64 = encodedString;
+//        String URL = "http://10.0.2.2:8080/upload";
+//
+//        //sending image to server
+//        StringRequest request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String s) {
+//                progressDialog.dismiss();
+//                if (s.equals("true")) {
+//                    Toast.makeText(getActivity().getApplicationContext(), "Upload Successful", Toast.LENGTH_LONG).show();
+//                } else {
+//                    Toast.makeText(getActivity().getApplicationContext(), "Some error occurred!", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//                if (volleyError != null && volleyError.getMessage() != null) {
+//                    Toast.makeText(getActivity().getApplicationContext(), "Some error occurred -> " + volleyError, Toast.LENGTH_LONG).show();
+//                } else {
+//                    Toast.makeText(getActivity().getApplicationContext(), "Some error occurred -> ", Toast.LENGTH_LONG).show();
+//                }
+//                ;
+//            }
+//        }) {
+//            //adding parameters to send
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                Map<String, String> parameters = new HashMap<String, String>();
+//                parameters.put("file", encodedBase64);
+//                return parameters;
+//            }
+//        };
+//
+//        RequestQueue rQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+//        rQueue.add(request);
+//    }
+//
+//    public void chooseFile() {
+//        Intent intent = new Intent();
+//        intent.setType("*/*");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        startActivityForResult(Intent.createChooser(intent, "Select File"), PICKFILE_REQUEST_CODE);
+//    }
 
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+////        try {
+////            selectedFileURI = data.getData();
+////            file.setText(getFileName(selectedFileURI));
+////        } catch (Exception e) {
+////            e.printStackTrace();
+////        }
+//
+//
+//    }
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        FileInputStream fis;
-        try {
-            String convertedFilePath = getFilePathFromContentUri(selectedFileURI, getActivity().getContentResolver());
-            fis = new FileInputStream(new File(convertedFilePath));
-            byte[] buf = new byte[1024];
-            int n;
-            while (-1 != (n = fis.read(buf)))
-                baos.write(buf, 0, n);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        byte[] bbytes = baos.toByteArray();
-        encodedString = Base64.encodeToString(bbytes, Base64.DEFAULT);
+//    public static String getRealPathFromURI(Context context, Uri contentUri) {
+//        if (isExternalStorageDocument(contentUri)) {
+//            final String docId = contentUri.getPath();
+//            final String[] split = docId.split(":");
+//            final String type = split[0];
+//
+//            if ("primary".equalsIgnoreCase(type)) {
+//                return Environment.getExternalStorageDirectory() + "/" + split[1];
+//            }
+//        }// DownloadsProvider
+//        else if (isDownloadsDocument(contentUri)) {
+//
+//            final String id = contentUri.getPath();
+//            final Uri uri = ContentUris.withAppendedId(
+//                    Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+//
+//            return getDataColumn(context, uri, null, null);
+//        }
+//        return null;
+//    }
 
-        final String encodedBase64 = encodedString;
-        String URL = "http://10.0.2.2:8080/upload";
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is ExternalStorageProvider.
+     */
+    public static boolean isExternalStorageDocument(Uri uri) {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
 
-        //sending image to server
-        StringRequest request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-                progressDialog.dismiss();
-                if (s.equals("true")) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Upload Successful", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getActivity().getApplicationContext(), "Some error occurred!", Toast.LENGTH_LONG).show();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                if (volleyError != null && volleyError.getMessage() != null) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Some error occurred -> " + volleyError, Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getActivity().getApplicationContext(), "Some error occurred -> ", Toast.LENGTH_LONG).show();
-                }
-                ;
-            }
-        }) {
-            //adding parameters to send
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> parameters = new HashMap<String, String>();
-                parameters.put("file", encodedBase64);
-                return parameters;
-            }
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is DownloadsProvider.
+     */
+    public static boolean isDownloadsDocument(Uri uri) {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * Get the value of the data column for this Uri. This is useful for
+     * MediaStore Uris, and other file-based ContentProviders.
+     *
+     * @param context       The context.
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
+     * @param selectionArgs (Optional) Selection arguments used in the query.
+     * @return The value of the _data column, which is typically a file path.
+     */
+    public static String getDataColumn(Context context, Uri uri, String selection,
+                                       String[] selectionArgs) {
+
+        Cursor cursor = null;
+        final String column = "_data";
+        final String[] projection = {
+                column
         };
 
-        RequestQueue rQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
-        rQueue.add(request);
-    }
-
-    public void chooseFile() {
-        Intent intent = new Intent();
-        intent.setType("*/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select File"), PICKFILE_REQUEST_CODE);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
-            selectedFileURI = data.getData();
-            file.setText(getFileName(selectedFileURI));
-        } catch (Exception e) {
-            e.printStackTrace();
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
+                    null);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int column_index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(column_index);
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close();
         }
-
-
+        return null;
     }
 
-
-    private String getFilePathFromContentUri(Uri selectedUri, ContentResolver contentResolver) {
-        String filePath = null;
-        if (selectedUri != null && "content".equals(selectedUri.getScheme())) {
-            Cursor cursor = contentResolver.query(selectedUri, new String[] { android.provider.MediaStore.Images.ImageColumns.DATA }, null, null, null);
-            cursor.moveToFirst();
-            filePath = cursor.getString(0);
-            cursor.close();
-        } else {
-            filePath = selectedUri.getPath();
-        }
-        Log.d("","Chosen path = "+ filePath);
-        return filePath;
-    }
 
     public String getFileName(Uri uri) {
         String result = null;
@@ -304,12 +365,9 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        if (v == uploadFile) {
-            uploadFile();
-        } else if (v == editUser) {
+
+      if (v == editUser) {
             editUser();
-        } else if (v == selectFile) {
-            chooseFile();
         }
     }
 }
