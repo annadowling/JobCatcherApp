@@ -137,10 +137,10 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
 
         emailIntent.setData(Uri.parse("mailto:"));
         emailIntent.setType("text/plain");
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, email.getText());
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { email.getText().toString() });
         emailIntent.putExtra(Intent.EXTRA_CC, CC);
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, jobTitle.getText());
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "Email message goes here");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "I wish to enquire about this job . . . .");
 
         try {
             startActivity(emailIntent);

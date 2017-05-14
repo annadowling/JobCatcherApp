@@ -73,8 +73,10 @@ public class SearchFragment extends JobListFragment implements AdapterView.OnIte
         if (selected != null) {
             if (selected.equals("All Types")) {
                 jobFilter.setFilter("all");
+            }else if(selected.equals("By Description")){
+                jobFilter.setFilter("by description");
             }
-            jobFilter.filter("");
+            //jobFilter.filter("");
         }
     }
 

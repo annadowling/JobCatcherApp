@@ -73,6 +73,7 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
             mMap.setMyLocationEnabled(true);
             app = (JobCatcherApp) getApplication();
             getAllJobDetails();
+            addJobs(app.jobsList);
         } catch (SecurityException exception) {
 
         }
@@ -119,28 +120,31 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
     public void onConnected(Bundle bundle) {
         try {
             Toast.makeText(this, "onConnected", Toast.LENGTH_SHORT).show();
+            addJobs(app.jobsList);
             Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if (mLastLocation != null) {
                 addJobs(app.jobsList);
             }
-
             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 
                 @Override
                 public boolean onMarkerClick(Marker marker) {
 
                     Log.d("Message", "got here into marker click" + marker.getTag());
-                    String result = marker.getTag().toString();
-                    String jobToken = result.substring(result.indexOf("jobToken ="), result.indexOf(", jobDescription"));
-                    String token = jobToken.split("=")[1];
+                    if(marker.getTag() != null ) {
+                        String result = marker.getTag().toString();
+                        if (result != null) {
+                            String jobToken = result.substring(result.indexOf("jobToken ="), result.indexOf(", jobDescription"));
+                            String token = jobToken.split("=")[1];
 
-                    //TODO findJob to pass jobtoken
-                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-                    String url = "http://10.0.2.2:8080/findEmployerAndJob";
+                            FragmentTransaction ft = getFragmentManager().beginTransaction();
+                            String url = "http://10.0.2.2:8080/findEmployerAndJob";
 
 
-                    request = new VolleyRequest();
-                    request.makeVolleyGetRequestForEmployerAndJob(getApplicationContext(), url, token, ft, R.id.map);
+                            request = new VolleyRequest();
+                            request.makeVolleyGetRequestForEmployerAndJob(getApplicationContext(), url, token, ft, R.id.map);
+                        }
+                    }
                     return true;
                 }
 
@@ -207,6 +211,7 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
             Address address = addressList.get(0);
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
             mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+            addJobs(app.jobsList);
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         }
     }

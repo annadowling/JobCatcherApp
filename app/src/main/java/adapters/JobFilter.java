@@ -31,37 +31,39 @@ public class JobFilter extends Filter {
     @Override
     protected FilterResults performFiltering(CharSequence prefix) {
         FilterResults results = new FilterResults();
+        String prefixString = prefix.toString().toLowerCase();
+        List<Job> newJobs = new ArrayList<Job>();
 
         if (originalJobList == null) {
             originalJobList = new ArrayList<Job>();
         }
         if (prefix == null || prefix.length() == 0) {
-            List<Job> newJobs = new ArrayList<Job>();
             if (filterText.equals("all")) {
                 results.values = originalJobList;
                 results.count = originalJobList.size();
             } else {
-//                if (filterText.equals("favourites")) {
-//                    for (Job j : originalCoffeeList)
-//                        if (c.favourite)
-//                            newCoffees.add(c);
-//                }
+                if (filterText.equals("by description")) {
+                    for (Job j : originalJobList)
+                        if (j.jobDescription.toLowerCase().contains(prefixString))
+                            newJobs.add(j);
+                }
                 results.values = newJobs;
                 results.count = newJobs.size();
             }
         } else {
-            String prefixString = prefix.toString().toLowerCase();
-            final ArrayList<Job> newJobs = new ArrayList<Job>();
 
-            for (Job j : originalJobList) {
-                final String itemName = j.jobName.toLowerCase();
-                if (itemName.contains(prefixString)) {
+            if (prefix.length() > 1) {
+                for (Job j : originalJobList) {
+                    final String itemName = j.jobName.toLowerCase();
                     if (filterText.equals("all")) {
-                        newJobs.add(j);
+                        if (itemName.contains(prefixString)) {
+                            newJobs.add(j);
+                        }
+                    } else if (filterText.equals("by description")) {
+                        if (j.jobDescription.toLowerCase().contains(prefixString)) {
+                            newJobs.add(j);
+                        }
                     }
-//                    else if (c.favourite) {
-//                        newCoffees.add(j);
-//                    }
                 }
             }
             results.values = newJobs;
@@ -69,6 +71,7 @@ public class JobFilter extends Filter {
         }
         return results;
     }
+
 
     @SuppressWarnings("unchecked")
     @Override

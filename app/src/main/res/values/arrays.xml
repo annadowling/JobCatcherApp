@@ -3,7 +3,7 @@
 
     <string-array name="jobTypes">
         <item>All Types</item>
-        <item>Favourites</item>
+        <item>By Description</item>
     </string-array>
 
 </resources>
