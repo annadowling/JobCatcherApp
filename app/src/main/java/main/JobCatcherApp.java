@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import models.Job;
+import models.User;
 
 /**
  * Created by annadowling on 14/02/2017.
@@ -15,6 +16,7 @@ import models.Job;
 public class JobCatcherApp extends Application {
 
     public List <Job>  jobsList = new ArrayList<Job>();
+    public List <User>  userList = new ArrayList<User>();
 
     @Override
     public void onCreate() {

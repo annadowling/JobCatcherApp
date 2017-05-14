@@ -6,4 +6,9 @@
         <item>By Description</item>
     </string-array>
 
+    <string-array name="userTypes">
+        <item>All Types</item>
+        <item>By Bio</item>
+    </string-array>
+
 </resources>

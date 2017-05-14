@@ -25,10 +25,6 @@ public class JobItem {
         view.setId(job.jobId);
 
         updateControls(job);
-
-//        ImageView imgDelete = (ImageView) view.findViewById(R.id.imgDelete2);
-//        imgDelete.setTag(job);
-        //imgDelete.setOnClickListener(deleteListener);
     }
 
     private void updateControls(Job job) {

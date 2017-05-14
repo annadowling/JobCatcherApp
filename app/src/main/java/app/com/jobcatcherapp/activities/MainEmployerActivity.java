@@ -20,6 +20,7 @@ import fragments.ContactFragment;
 import fragments.EditEmployerFragment;
 import fragments.EmployerPortalFragment;
 import fragments.JobFragment;
+import main.JobCatcherApp;
 import requests.VolleyRequest;
 
 import static app.com.jobcatcherapp.R.id.employerProfileFrame;
@@ -151,10 +152,19 @@ public class MainEmployerActivity extends AppCompatActivity
             EmployerPortalFragment loginFragment = EmployerPortalFragment.newInstance();
             ft.replace(R.id.homeFrameEmployer, loginFragment);
             ft.commit();
+        }else if(id == R.id.search_job_seekers){
+            getAllUserDetails();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void getAllUserDetails() {
+        String url = "http://10.0.2.2:8080/getAllUsersList";
+        request = new VolleyRequest();
+        JobCatcherApp app = (JobCatcherApp) getApplication();
+        request.makeVolleyGetRequestForAllUserDetails(app, MainEmployerActivity.this, this.getApplicationContext(), url, true);
     }
 }

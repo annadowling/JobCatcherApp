@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import app.com.jobcatcherapp.activities.SearchBarActivity;
+import app.com.jobcatcherapp.activities.UserSearchBarActivity;
 import fragments.EmployerJobListFragment;
 import fragments.EmployerProfileFragment;
 import fragments.JobDetailsFragment;
@@ -34,6 +35,7 @@ import fragments.UserProfileFragment;
 import main.JobCatcherApp;
 import models.Employer;
 import models.Job;
+import models.User;
 
 
 /**
@@ -315,6 +317,61 @@ public class VolleyRequest {
         RequestQueue requestQueue = Volley.newRequestQueue(applicationContext);
         requestQueue.add(request);
     }
+
+    public void makeVolleyGetRequestForAllUserDetails(final JobCatcherApp app, Activity activityPointer, Context context, String url, final Boolean launchSearchActivity) {
+        final Context applicationContext = context;
+        final Activity activity = activityPointer;
+        final JobCatcherApp application = app;
+
+
+        final ProgressDialog progressDialog = new ProgressDialog(activityPointer);
+        progressDialog.setMessage("Loading page ....");
+        progressDialog.show();
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("JsonArray", response.toString());
+                        JSONArray jsonArray = null;
+                        try {
+                            jsonArray = response.getJSONArray("response");
+
+                            List<User> userList = new ArrayList<User>();
+
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                                User user = new User(jsonObject.getString("firstName"), jsonObject.getString("lastName"),  jsonObject.getString("email"), jsonObject.getString("age"), jsonObject.getString("bio"), jsonObject.getString("profession"));
+                                userList.add(user);
+                            }
+
+
+                            application.userList.clear();
+                            progressDialog.dismiss();
+                            application.userList.addAll(userList);
+
+                            if (launchSearchActivity) {
+                                Intent intent = new Intent(activity, UserSearchBarActivity.class);
+                                activity.startActivity(intent);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String err = (error.getMessage() == null) ? "No Jobs found!" : error.getMessage();
+                Log.d("Error: ", err);
+                Toast.makeText(applicationContext, "No Jobs found!", Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(applicationContext);
+        requestQueue.add(request);
+    }
+
 
     public void makeVolleyDeleteRequest(Context context, String token, String employerToken, String url) {
         final Context applicationContext = context;

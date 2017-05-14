@@ -5,9 +5,9 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    android:id="@+id/fragmentJobListMain"
+    android:id="@+id/fragmentUserListMain"
     android:paddingTop="?android:attr/actionBarSize"
-    tools:context="fragments.JobListFragment">
+    tools:context="fragments.UserListFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:hint="Search Jobs" />
+            android:hint="Search Users" />
 
 
         <Button
