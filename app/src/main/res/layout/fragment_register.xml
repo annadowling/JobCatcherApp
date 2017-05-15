@@ -45,6 +45,23 @@
             android:hint="Last Name" />
 
         <EditText
+            android:id="@+id/userBiography"
+            android:layout_width="440px"
+            android:layout_height="80px"
+            android:layout_margin="5dp"
+            android:layout_gravity="center"
+            android:inputType="textMultiLine"
+            android:hint="Enter a short bio" />
+
+        <EditText
+            android:layout_width="440px"
+            android:layout_height="80px"
+            android:inputType="text"
+            android:layout_gravity="center"
+            android:id="@+id/userProfession"
+            android:hint="Profession" />
+
+        <EditText
             android:id="@+id/password"
             android:layout_gravity="center"
             android:layout_width="440px"
@@ -55,15 +72,6 @@
         <Button
             android:layout_width="440px"
             android:layout_height="80px"
-            android:id="@+id/registerbtn"
-            android:layout_gravity="center"
-            android:background="@drawable/btn_back"
-            android:textColor="#ffffff"
-            android:textAlignment="center"
-            android:text="Register"/>
-        <Button
-            android:layout_width="440px"
-            android:layout_height="80px"
             android:layout_marginTop="10px"
             android:id="@+id/login"
             android:layout_gravity="center"
@@ -71,6 +79,16 @@
             android:textColor="#ffffff"
             android:textAlignment="center"
             android:text="Login Now"/>
+
+        <Button
+            android:layout_width="440px"
+            android:layout_height="80px"
+            android:id="@+id/registerbtn"
+            android:layout_gravity="center"
+            android:background="@drawable/btn_back"
+            android:textColor="#ffffff"
+            android:textAlignment="center"
+            android:text="Register"/>
 
 
 

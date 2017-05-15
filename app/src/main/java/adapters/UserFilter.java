@@ -40,11 +40,11 @@ public class UserFilter extends Filter {
             originalUserList = new ArrayList<User>();
         }
         if (prefix == null || prefix.length() == 0) {
-            if (filterText.equals("all")) {
+            if (filterText.equals("profession")) {
                 results.values = originalUserList;
                 results.count = originalUserList.size();
             } else {
-                if (filterText.equals("profession")) {
+                if (filterText.equals("bio")) {
                     for (User u : originalUserList)
                         if (u.bio.toLowerCase().contains(prefixString))
                             newUsers.add(u);
@@ -57,7 +57,7 @@ public class UserFilter extends Filter {
             if (prefix.length() > 1) {
                 for (User u : originalUserList) {
                     final String itemName = u.profession.toLowerCase();
-                    if (filterText.equals("all")) {
+                    if (filterText.equals("profession")) {
                         if (itemName.contains(prefixString)) {
                             newUsers.add(u);
                         }

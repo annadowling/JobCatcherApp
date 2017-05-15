@@ -21,11 +21,12 @@
 
     <TextView
         android:id="@+id/rowEmail"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:text="email"
+        android:gravity="right"
         android:textColor="#00313C"
         android:textSize="11sp"
         android:textStyle="bold"
@@ -58,15 +59,14 @@
         android:textStyle="bold"
         tools:ignore="HardcodedText,SmallSp" />
 
+
     <TextView
         android:id="@+id/rowProfession"
+        android:text="Profession"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/RowImage2"
-        android:layout_toEndOf="@+id/rowBio"
-        android:layout_toRightOf="@+id/rowUserName"
-        android:gravity="center_vertical"
-        android:text=" Profession"
+        android:layout_alignLeft="@+id/rowEmail"
         android:textColor="#00313C"
         android:textSize="11sp"
         android:textStyle="bold"

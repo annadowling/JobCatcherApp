@@ -30,9 +30,12 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     public static final String KEY_FIRSTNAME = "firstName";
     public static final String KEY_LASTNAME = "lastName";
     public static final String KEY_EMAIL = "email";
-    EditText email, firstName, lastName, password;
+    public static final String KEY_BIO = "bio";
+    public static final String KEY_PROFESSION = "profession";
+
+    EditText email, firstName, lastName, password, bio, profession;
     Button login, register;
-    String emailtxt, passwordtxt, firstNametxt, lastNametxt;
+    String emailtxt, passwordtxt, firstNametxt, lastNametxt, biotxt, professiontxt;
 
 
     private OnFragmentInteractionListener mListener;
@@ -64,6 +67,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         password = (EditText) view.findViewById(R.id.password);
         register = (Button) view.findViewById(R.id.registerbtn);
         login = (Button) view.findViewById(R.id.login);
+        bio = (EditText) view.findViewById(R.id.userBiography);
+        profession = (EditText) view.findViewById(R.id.userProfession);
 
         register.setOnClickListener(this);
         login.setOnClickListener(this);
@@ -114,6 +119,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         firstNametxt = firstName.getText().toString();
         lastNametxt = lastName.getText().toString();
         passwordtxt = password.getText().toString();
+        biotxt = bio.getText().toString();
+        professiontxt = profession.getText().toString();
+
         String url = "http://10.0.2.2:8080/register";
 
         Map<String, String> params = new HashMap<String, String>();
@@ -121,6 +129,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         params.put(KEY_FIRSTNAME, firstNametxt);
         params.put(KEY_LASTNAME, lastNametxt);
         params.put(KEY_EMAIL, emailtxt);
+        params.put(KEY_BIO, biotxt);
+        params.put(KEY_PROFESSION, professiontxt);
 
         VolleyRequest request = new VolleyRequest();
         request.makeVolleyPostRequest(getActivity().getApplicationContext(), params, url);

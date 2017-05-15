@@ -61,7 +61,7 @@ public class UserListFragment extends ListFragment {
         super.onResume();
         JobCatcherApp app = (JobCatcherApp) getActivity().getApplication();
         userAdapter = new UserAdapter(getActivity().getApplicationContext(), app.userList);
-        userFilter = new UserFilter(app.userList, "all", userAdapter);
+        userFilter = new UserFilter(app.userList, "profession", userAdapter);
 
         setListAdapter(userAdapter);
     }

@@ -4,8 +4,6 @@ package fragments;
  * Created by annadowling on 11/05/2017.
  */
 
-import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -71,10 +69,10 @@ public class SearchUserFragment extends UserListFragment implements AdapterView.
         String selected = parent.getItemAtPosition(position).toString();
 
         if (selected != null) {
-            if (selected.equals("All Types")) {
-                userFilter.setFilter("all");
-            }else if(selected.equals("By Description")){
-                userFilter.setFilter("by description");
+            if (selected.equals("By Profession")) {
+                userFilter.setFilter("profession");
+            }else if(selected.equals("By Bio")){
+                userFilter.setFilter("bio");
             }
         }
     }

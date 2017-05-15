@@ -13,7 +13,6 @@ public class User implements Serializable {
     public String email;
     public String firstName;
     public String lastName;
-    public String age;
     public String bio;
     public String profession;
 
@@ -21,12 +20,11 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String firstName, String lastName, String email, String age, String bio, String profession) {
+    public User(String firstName, String lastName, String email, String bio, String profession) {
         this.userId = autoid++;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.age = age;
         this.bio = bio;
         this.profession = profession;
     }

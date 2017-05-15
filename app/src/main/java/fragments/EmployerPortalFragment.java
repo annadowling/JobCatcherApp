@@ -49,7 +49,7 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
     private OnFragmentInteractionListener mListener;
 
     EditText email, password;
-    Button login, register;
+    Button login, register, jobseekerPortalButton;
     String emailtxt, passwordtxt;
     VolleyRequest request;
     SharedPreferences pref;
@@ -82,11 +82,13 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
         password = (EditText) view.findViewById(R.id.employer_password);
         login = (Button) view.findViewById(R.id.employer_loginbtn);
         register = (Button) view.findViewById(R.id.registerEmployerBtn);
+        jobseekerPortalButton = (Button) view.findViewById(R.id.jobseekerPortalButton);
 
         pref = getActivity().getSharedPreferences("AppPref", MODE_PRIVATE);
 
         login.setOnClickListener(this);
         register.setOnClickListener(this);
+        jobseekerPortalButton.setOnClickListener(this);
 
         return view;
     }
@@ -193,12 +195,23 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
         getActivity().startActivity(intent);
     }
 
+    public void launchUserLogin(){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+        LoginFragment loginFragment = LoginFragment.newInstance();
+        ft.replace(R.id.employerPortalFrame, loginFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
     @Override
     public void onClick(View v) {
         if (v == login) {
             loginToPortal();
         } else if (v == register) {
             launchRegisterPage();
+        }else if(v == jobseekerPortalButton){
+            launchUserLogin();
         }
     }
 }

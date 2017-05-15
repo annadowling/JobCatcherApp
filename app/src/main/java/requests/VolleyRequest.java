@@ -341,7 +341,11 @@ public class VolleyRequest {
 
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                                User user = new User(jsonObject.getString("firstName"), jsonObject.getString("lastName"),  jsonObject.getString("email"), jsonObject.getString("age"), jsonObject.getString("bio"), jsonObject.getString("profession"));
+                                String biography = null;
+                                if(jsonObject.getString("bio") != null){
+                                    biography = jsonObject.getString("bio");
+                                }
+                                User user = new User(jsonObject.getString("firstName"), jsonObject.getString("lastName"),  jsonObject.getString("email"), biography, jsonObject.getString("profession"));
                                 userList.add(user);
                             }
 
