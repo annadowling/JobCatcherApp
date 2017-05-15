@@ -76,7 +76,6 @@ public class SearchFragment extends JobListFragment implements AdapterView.OnIte
             }else if(selected.equals("By Description")){
                 jobFilter.setFilter("by description");
             }
-            //jobFilter.filter("");
         }
     }
 

@@ -1,76 +1,80 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/RelativeLayout3"
-    android:layout_width="fill_parent"
-    android:layout_height="46dp"
-    android:layout_below="@+id/fragmentUserListMain"
-    android:padding="8dp"
-    android:paddingTop="?android:attr/actionBarSize">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/RelativeLayout3"
+        android:layout_width="fill_parent"
+        android:layout_height="46dp"
+        android:layout_below="@+id/fragmentUserListMain"
+        android:padding="8dp"
+        android:paddingTop="?android:attr/actionBarSize">
 
 
-    <ImageView
-        android:id="@+id/RowImage2"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="14dp"
-        android:contentDescription="fav"
-        android:gravity="center_vertical"
-        android:src="@drawable/ic_briefcase"
-        tools:ignore="HardcodedText" />
+        <ImageView
+            android:id="@+id/RowImage2"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="14dp"
+            android:contentDescription="fav"
+            android:gravity="center_vertical"
+            android:src="@drawable/ic_briefcase"
+            tools:ignore="HardcodedText" />
 
-    <TextView
-        android:id="@+id/rowEmail"
-        android:layout_width="120dp"
-        android:layout_height="50dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="email"
-        android:gravity="right"
-        android:textColor="#00313C"
-        android:textSize="11sp"
-        android:textStyle="bold"
-        tools:ignore="HardcodedText,SmallSp" />
+        <TextView
+            android:id="@+id/rowEmail"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:gravity="right"
+            android:text="email"
+            android:textColor="#00313C"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText,SmallSp" />
 
-    <TextView
-        android:id="@+id/rowUserName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/RowImage2"
-        android:layout_marginLeft="26dp"
-        android:layout_toRightOf="@+id/RowImage2"
-        android:gravity="center_vertical"
-        android:text="User Name"
-        android:textColor="#008080"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        tools:ignore="HardcodedText" />
+        <TextView
+            android:id="@+id/rowUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/RowImage2"
+            android:layout_marginLeft="26dp"
+            android:layout_toRightOf="@+id/RowImage2"
+            android:gravity="center_vertical"
+            android:text="User Name"
+            android:textColor="#008080"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
 
-    <TextView
-        android:id="@+id/rowBio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/RowImage2"
-        android:layout_alignLeft="@+id/rowUserName"
-        android:gravity="center_vertical"
-        android:text="Bio"
-        android:textColor="#00313C"
-        android:textSize="11sp"
-        android:textStyle="bold"
-        tools:ignore="HardcodedText,SmallSp" />
+        <TextView
+            android:id="@+id/rowProfession"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/RowImage2"
+            android:layout_alignLeft="@+id/rowUserName"
+            android:gravity="center_vertical"
+            android:text="Profession"
+            android:textColor="#00313C"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText,SmallSp" />
 
+        <TextView
+            android:id="@+id/rowBio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/RowImage2"
+            android:layout_alignLeft="@+id/RowImage2"
+            android:text="Bio"
+            android:textColor="#00313C"
+            android:textSize="11sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/rowProfession"
-        android:text="Profession"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/RowImage2"
-        android:layout_alignLeft="@+id/rowEmail"
-        android:textColor="#00313C"
-        android:textSize="11sp"
-        android:textStyle="bold"
-        tools:ignore="HardcodedText,SmallSp" />
+    </RelativeLayout>
 
-</RelativeLayout>
+</ScrollView>
 
