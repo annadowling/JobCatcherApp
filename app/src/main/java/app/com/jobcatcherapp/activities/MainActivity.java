@@ -2,10 +2,12 @@ package app.com.jobcatcherapp.activities;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +17,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -92,8 +95,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (imageUrl != null && imageUrl != "") {
             try {
                 URL url = new URL(imageUrl);
-                Bitmap bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                profileimage.setImageBitmap(bitmap);
+                new DownloadImageTask(profileimage).execute(imageUrl);
             } catch (IOException e) {
             }
         }
@@ -227,4 +229,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             clickOnPhoto(v);
         }
     }
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+
+        private ProgressDialog mDialog;
+        private ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected void onPreExecute() {
+
+            mDialog = ProgressDialog.show(MainActivity.this,"Please wait...", "Retrieving data ...", true);
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", "image download error");
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            //set image of your imageview
+            bmImage.setImageBitmap(result);
+            //close
+            mDialog.dismiss();
+        }
+    }
 }
+
+

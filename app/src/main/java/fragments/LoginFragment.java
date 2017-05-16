@@ -275,6 +275,7 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
                                 edit.putString("firstName", josnOBJ.getString("firstName"));
                                 edit.putString("lastName", josnOBJ.getString("lastName"));
                                 edit.putString("email", josnOBJ.getString("email"));
+                                edit.remove("imagepath");
                                 edit.commit();
                                 Toast.makeText(getActivity().getApplicationContext(), "You are logged in!", Toast.LENGTH_LONG).show();
 

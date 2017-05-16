@@ -153,6 +153,7 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
                                 edit.putString("grav", grav);
                                 edit.putString("companyName", josnOBJ.getString("companyName"));
                                 edit.putString("companyEmail", josnOBJ.getString("email"));
+                                edit.remove("imagepath");
                                 edit.commit();
                                 edit.commit();
 
