@@ -1,8 +1,13 @@
 package app.com.jobcatcherapp.activities;
 
+import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -14,7 +19,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import app.com.jobcatcherapp.R;
 import fragments.ContactFragment;
@@ -28,11 +37,13 @@ import static app.com.jobcatcherapp.R.id.employerProfileFrame;
 import static app.com.jobcatcherapp.R.id.homeFrameEmployer;
 
 public class MainEmployerActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     SharedPreferences pref;
     VolleyRequest request;
     public static TextView emailText, userNameText;
+    ImageView profileimage;
+    private static final int REQUEST_CODE_PICTURE= 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +82,10 @@ public class MainEmployerActivity extends AppCompatActivity
         emailText = (TextView) header.findViewById(R.id.navUserEmailEmployer);
         emailText.setText(email);
         userNameText = (TextView) header.findViewById(R.id.navUserNameEmployer);
+
+        profileimage = (ImageView) header.findViewById(R.id.imageViewEmployer);
+
+        profileimage.setOnClickListener(this);
         userNameText.setText(companyName);
 
         String url = "http://10.0.2.2:8080/getEmployerDetails";
@@ -177,4 +192,44 @@ public class MainEmployerActivity extends AppCompatActivity
         JobCatcherApp app = (JobCatcherApp) getApplication();
         request.makeVolleyGetRequestForAllUserDetails(app, MainEmployerActivity.this, this.getApplicationContext(), url, true);
     }
+
+    /**
+     * Click on View to change photo. Sets into View of your layout, android:onClick="clickOnPhoto"
+     * @param view View
+     */
+    public void clickOnPhoto(View view) {
+        Intent pickIntent = new Intent();
+        pickIntent.setType("image/*");
+        pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        String pickTitle = "Take or select a photo";
+        Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] { takePhotoIntent });
+        startActivityForResult(chooserIntent, REQUEST_CODE_PICTURE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_PICTURE && resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                return;
+            }
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(data.getData());
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                profileimage.setImageBitmap(bitmap);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == profileimage) {
+            clickOnPhoto(v);
+        }
+    }
+
 }
