@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,7 +30,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.maps.SupportMapFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,7 +38,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import app.com.jobcatcherapp.R;
-import app.com.jobcatcherapp.activities.GoogleSignInActivity;
 import app.com.jobcatcherapp.activities.MainActivity;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -51,7 +50,7 @@ import static android.content.Context.MODE_PRIVATE;
  * Use the {@link LoginFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LoginFragment extends android.app.Fragment implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
+public class LoginFragment extends android.app.Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
     EditText email, password, res_email, code, newpass;
     Button login, cont, cont_code, cancel, cancel1, register, employerPortal;
     String emailtxt, passwordtxt, email_res_txt, code_txt, npass_txt;
@@ -61,10 +60,24 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_EMAIL = "email";
     private static final String TAG = "SignInActivity";
-    private static final int RC_SIGN_IN = 9001;
+    Intent intentData;
 
+    /* Request code used to invoke sign in user interactions. */
+    public static final int RC_SIGN_IN = 0;
+
+    /* Client used to interact with Google APIs. */
     private GoogleApiClient mGoogleApiClient;
 
+    /* A flag indicating that a PendingIntent is in progress and prevents
+     * us from starting further intents.
+     */
+    private boolean mIntentInProgress;
+
+    /**
+     * True if the sign-in button was clicked.  When true, we know to resolve all
+     * issues preventing sign-in without waiting.
+     */
+    private boolean mSignInClicked;
 
     private OnFragmentInteractionListener mListener;
 
@@ -105,8 +118,10 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
 
         employerPortal.setOnClickListener(this);
 
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+
+        googleSignInButton = (SignInButton) view.findViewById(R.id.sign_in_button);
+        googleSignInButton.setOnClickListener(this);
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -114,13 +129,14 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
         // Build a GoogleApiClient with access to the Google Sign-In API and the
         // options specified by gso.
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity().getApplicationContext())
-                //.enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
 
-        googleSignInButton = (SignInButton) view.findViewById(R.id.sign_in_button);
-        googleSignInButton.setOnClickListener(this);
         return view;
     }
 
@@ -147,6 +163,72 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
         mListener = null;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect(GoogleApiClient.SIGN_IN_MODE_OPTIONAL);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setTitle("Login");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        mSignInClicked = false;
+        Toast.makeText(getActivity(), "User is connected!", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        mGoogleApiClient.connect(GoogleApiClient.SIGN_IN_MODE_OPTIONAL);
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        if (!mIntentInProgress) {
+            if (mSignInClicked && connectionResult.hasResolution()) {
+                // The user has already clicked 'sign-in' so we attempt to resolve all
+                // errors until the user is signed in, or they cancel.
+                try {
+                    connectionResult.startResolutionForResult(((MainActivity) getActivity()), RC_SIGN_IN);
+                    mIntentInProgress = true;
+                } catch (IntentSender.SendIntentException e) {
+                    // The intent was canceled before it was sent.  Return to the default
+                    // state and attempt to connect to get an updated ConnectionResult.
+                    mIntentInProgress = false;
+                    mGoogleApiClient.connect(GoogleApiClient.SIGN_IN_MODE_OPTIONAL);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RC_SIGN_IN) {
+            if (resultCode != MainActivity.RESULT_OK) {
+                mSignInClicked = false;
+            }
+
+            intentData = data;
+            mIntentInProgress = false;
+
+            if (!mGoogleApiClient.isConnected()) {
+                mGoogleApiClient.reconnect();
+            }
+        }
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -160,11 +242,6 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    private void googleSignIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     public void register() {
@@ -203,7 +280,7 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
 
                                 Intent intent = new Intent(getActivity(), MainActivity.class);
                                 getActivity().startActivity(intent);
-                            }else{
+                            } else {
                                 Toast.makeText(getActivity().getApplicationContext(), "Password is incorrect!", Toast.LENGTH_LONG).show();
                             }
 
@@ -330,41 +407,6 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
         };
     }
 
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Toast.makeText(getActivity().getApplicationContext(), "onConnectionFailed", Toast.LENGTH_SHORT).show();
-    }
-
-    private void handleSignInResult(GoogleSignInResult result) {
-        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
-        if (result.isSuccess()) {
-            // Signed in successfully, show authenticated UI.
-            //GoogleSignInAccount acct = result.getSignInAccount();
-            //mStatusTextView.setText(getString("0x7f1000ec", acct.getDisplayName()));
-            updateUI(true);
-        } else {
-            // Signed out, show unauthenticated UI.
-            updateUI(true);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
-        }
-    }
-
-    public void updateUI(Boolean updateUI) {
-        if (updateUI) {
-            Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
-            LoginFragment.this.startActivity(intent);
-        }
-    }
 
     public void launchEmployerPortal() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -391,8 +433,44 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
             cancel();
         } else if (v == cont_code) {
             setCode();
-        } else if (v == googleSignInButton) {
-            googleSignIn();
+        } else if (v == googleSignInButton && !mGoogleApiClient.isConnecting()) {
+            mSignInClicked = true;
+            mGoogleApiClient.connect(GoogleApiClient.SIGN_IN_MODE_OPTIONAL);
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(intentData);
+            handleSignInResult(result);
         }
     }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+        if (result.isSuccess()) {
+            // Signed in successfully, show authenticated UI.
+            GoogleSignInAccount acct = result.getSignInAccount();
+            Log.d("accountTag", "account is " + acct.getDisplayName());
+            SharedPreferences.Editor edit = pref.edit();
+            edit.clear();
+            edit.putString("firstName", acct.getDisplayName().split(" ")[0]);
+            edit.putString("lastName", acct.getDisplayName().split(" ")[1]);
+            edit.putString("email", acct.getEmail());
+            if(acct.getPhotoUrl() != null){
+                edit.putString("imagepath", acct.getPhotoUrl().toString());
+            }
+            edit.commit();
+
+            updateUI(true);
+        } else {
+            // Signed out, show unauthenticated UI.
+            updateUI(false);
+        }
+    }
+
+    public void updateUI(boolean signedIn) {
+        if (signedIn) {
+            //getProfileInformation();
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            startActivity(intent);
+        }
+    }
+
+
 }

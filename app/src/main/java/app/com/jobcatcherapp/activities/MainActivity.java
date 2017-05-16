@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -13,18 +14,17 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 import app.com.jobcatcherapp.R;
 import fragments.ContactFragment;
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static TextView emailText, userNameText;
     ImageView profileimage;
-    private static final int REQUEST_CODE_PICTURE= 1;
+    private static final int REQUEST_CODE_PICTURE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String email = pref.getString("email", "default");
         String firstName = pref.getString("firstName", "default");
         String lastName = pref.getString("lastName", "default");
+        String imageUrl = pref.getString("imagepath", "default");
 
 
         super.onCreate(savedInstanceState);
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        View header=navigationView.getHeaderView(0);
+        View header = navigationView.getHeaderView(0);
 
         emailText = (TextView) header.findViewById(R.id.navUserEmail);
         emailText.setText(email);
@@ -88,6 +89,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         userNameText.setText(firstName + " " + lastName);
 
         profileimage = (ImageView) header.findViewById(R.id.imageViewUser);
+        if (imageUrl != null && imageUrl != "") {
+            try {
+                URL url = new URL(imageUrl);
+                Bitmap bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                profileimage.setImageBitmap(bitmap);
+            } catch (IOException e) {
+            }
+        }
 
         profileimage.setOnClickListener(this);
 
@@ -163,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getAllJobDetails();
         } else if (id == R.id.logout_menu) {
             LoginFragment loginFragment = LoginFragment.newInstance();
-            ft.replace(R.id.profileFrame, loginFragment);
+            ft.replace(R.id.homeFrame, loginFragment);
             ft.commit();
         }
 
@@ -181,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * Click on View to change photo. Sets into View of your layout, android:onClick="clickOnPhoto"
+     *
      * @param view View
      */
     public void clickOnPhoto(View view) {
@@ -190,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         String pickTitle = "Take or select a photo";
         Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] { takePhotoIntent });
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{takePhotoIntent});
         startActivityForResult(chooserIntent, REQUEST_CODE_PICTURE);
     }
 

@@ -16,6 +16,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
@@ -63,10 +65,6 @@
             android:name=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.Base" />
-        <activity
-            android:name=".activities.GoogleSignInActivity"
-            android:label="@string/title_activity_google_sign_in"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.MainEmployerActivity"
             android:label="@string/title_activity_main_employer"
