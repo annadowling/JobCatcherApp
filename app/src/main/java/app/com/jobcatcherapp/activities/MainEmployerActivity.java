@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import app.com.jobcatcherapp.R;
 import fragments.ContactFragment;
@@ -31,6 +32,7 @@ public class MainEmployerActivity extends AppCompatActivity
 
     SharedPreferences pref;
     VolleyRequest request;
+    public static TextView emailText, userNameText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,8 @@ public class MainEmployerActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        String email = pref.getString("companyEmail", "default");
+        String companyName = pref.getString("companyName", "default");
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,8 +64,14 @@ public class MainEmployerActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_employer);
         navigationView.setNavigationItemSelectedListener(this);
+        View header=navigationView.getHeaderView(0);
+
+        emailText = (TextView) header.findViewById(R.id.navUserEmailEmployer);
+        emailText.setText(email);
+        userNameText = (TextView) header.findViewById(R.id.navUserNameEmployer);
+        userNameText.setText(companyName);
 
         String url = "http://10.0.2.2:8080/getEmployerDetails";
         String token = pref.getString("token", "default");

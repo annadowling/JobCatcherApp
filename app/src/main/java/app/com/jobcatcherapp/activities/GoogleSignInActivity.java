@@ -32,8 +32,6 @@ public class GoogleSignInActivity extends AppCompatActivity implements GoogleApi
     private static final int RC_SIGN_IN = 9001;
 
     private GoogleApiClient mGoogleApiClient;
-    private TextView mStatusTextView;
-    private ProgressDialog mProgressDialog;
     SignInButton googleSignInButton;
 
     @Override

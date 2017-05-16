@@ -199,15 +199,17 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
                                 edit.putString("lastName", josnOBJ.getString("lastName"));
                                 edit.putString("email", josnOBJ.getString("email"));
                                 edit.commit();
+                                Toast.makeText(getActivity().getApplicationContext(), "You are logged in!", Toast.LENGTH_LONG).show();
 
                                 Intent intent = new Intent(getActivity(), MainActivity.class);
                                 getActivity().startActivity(intent);
+                            }else{
+                                Toast.makeText(getActivity().getApplicationContext(), "Password is incorrect!", Toast.LENGTH_LONG).show();
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(getActivity().getApplicationContext(), "You are logged in!", Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {
@@ -228,19 +230,6 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
         requestQueue.add(stringRequest);
     }
-
-//    public void forgotPassword() {
-//        reset = new Dialog(getActivity());
-//        reset.setTitle("Reset Password");
-//        reset.setContentView(R.layout.reset_password);
-//        cont = (Button) reset.findViewById(R.id.resbtn);
-//        cancel = (Button) reset.findViewById(R.id.cancelbtn);
-//        res_email = (EditText) reset.findViewById(R.id.email);
-//
-//        cancel.setOnClickListener(this);
-//        cont.setOnClickListener(this);
-//        reset.show();
-//    }
 
     public void cancel() {
         reset.dismiss();

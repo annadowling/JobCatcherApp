@@ -151,15 +151,20 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
                                 //Storing Data using SharedPreferences
                                 edit.putString("token", token);
                                 edit.putString("grav", grav);
+                                edit.putString("companyName", josnOBJ.getString("companyName"));
+                                edit.putString("companyEmail", josnOBJ.getString("email"));
+                                edit.commit();
                                 edit.commit();
 
                                 configureEmployerProfile();
+                                Toast.makeText(getActivity().getApplicationContext(), "You are logged in!", Toast.LENGTH_LONG).show();
+                            }else{
+                                Toast.makeText(getActivity().getApplicationContext(), "Password is incorrect!", Toast.LENGTH_LONG).show();
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(getActivity().getApplicationContext(), "You are logged in!", Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {

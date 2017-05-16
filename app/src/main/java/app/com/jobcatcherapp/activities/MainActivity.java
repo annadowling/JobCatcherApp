@@ -71,14 +71,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View header=navigationView.getHeaderView(0);
 
-        LayoutInflater factory = getLayoutInflater();
-
-        View view = factory.inflate(R.layout.nav_header_navigation, null);
-
-        emailText = (TextView) view.findViewById(R.id.navUserEmail);
+        emailText = (TextView) header.findViewById(R.id.navUserEmail);
         emailText.setText(email);
-        userNameText = (TextView) view.findViewById(R.id.navUserName);
+        userNameText = (TextView) header.findViewById(R.id.navUserName);
         userNameText.setText(firstName + " " + lastName);
 
 

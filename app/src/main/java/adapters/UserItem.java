@@ -4,7 +4,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import app.com.jobcatcherapp.R;
 import models.User;
@@ -15,10 +17,12 @@ import models.User;
 
 public class UserItem {
     View view;
+    Context viewContext;
 
     public UserItem(Context context, ViewGroup parent, User user) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        viewContext = context;
         view = inflater.inflate(R.layout.fragment_user_list, parent, false);
         view.setId(user.userId);
 
