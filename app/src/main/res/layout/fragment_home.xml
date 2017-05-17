@@ -2,15 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="8dp"
+    android:background="@color/white"
+    android:id="@+id/EmployerJobListFragmentParent"
+    android:paddingTop="?android:attr/actionBarSize"
     tools:context="fragments.EmployerJobListFragment">
 
-    <TextView
-        android:id="@+id/empty_list_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:gravity="center"
-        android:text="You have no Job\'s listed, go add some Jobs!" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/job_swipe_refresh_layout"
@@ -29,5 +26,13 @@
         </ListView>
 
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <TextView
+        android:id="@+id/empty_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:text="You have no Job\'s listed, go add some Jobs!" />
 
 </FrameLayout>

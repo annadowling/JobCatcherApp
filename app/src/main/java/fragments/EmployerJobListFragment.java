@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -71,6 +72,7 @@ public class EmployerJobListFragment extends Fragment implements AdapterView.OnI
         mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.job_swipe_refresh_layout);
         setSwipeRefreshLayout();
 
+
         return v;
     }
 
@@ -104,7 +106,8 @@ public class EmployerJobListFragment extends Fragment implements AdapterView.OnI
     }
 
     @Override
-    public void setJob(Job j) {}
+    public void setJob(Job j) {
+    }
 
     @Override
     public void setList(List<Job> list) {
@@ -116,7 +119,7 @@ public class EmployerJobListFragment extends Fragment implements AdapterView.OnI
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Bundle activityInfo = new Bundle();
-        activityInfo.putString("jobID", (String)view.getTag());
+        activityInfo.putString("jobID", (String) view.getTag());
     }
 
     public void refreshJobDetails() {
@@ -165,7 +168,7 @@ public class EmployerJobListFragment extends Fragment implements AdapterView.OnI
 
     public void updateUI() {
 
-        listAdapter = new EmployerJobAdapter(getActivity().getApplicationContext(), this, app.employerJobList);
+        listAdapter = new EmployerJobAdapter(getActivity(), this, app.employerJobList);
         listView.setAdapter(listAdapter);
 
         listView.setOnItemClickListener(this);

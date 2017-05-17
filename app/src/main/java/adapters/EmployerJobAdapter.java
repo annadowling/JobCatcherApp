@@ -36,8 +36,8 @@ public class EmployerJobAdapter extends ArrayAdapter<Job> {
 
 
     @Override
-    public int getCount() {
-        return employerJobList.size();
+    public int getCount(){
+        return employerJobList != null ? employerJobList.size() : 0;
     }
 
     public List<Job> getEmployerJobList() {

@@ -1,12 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/RelativeLayout2"
+    android:id="@+id/RelativeLayoutJob"
     android:layout_width="fill_parent"
-    android:layout_below="@+id/fragmentJobListMain"
-    android:paddingTop="?android:attr/actionBarSize"
     android:layout_height="46dp"
-    android:padding="8dp">
-
+    android:padding="8dp" >
 
     <ImageView
         android:id="@+id/RowImage2"
@@ -64,7 +62,6 @@
         android:layout_height="wrap_content"
         android:text="hidden value"
         android:visibility="gone"/>
-
 
 
 </RelativeLayout>
