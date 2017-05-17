@@ -78,7 +78,7 @@ public class EmployerJobListFragment extends Fragment implements AdapterView.OnI
     public void onResume() {
         super.onResume();
         VolleyRequest.attachListener(this);
-        updateUI();
+        refreshJobDetails();
 
     }
 
@@ -99,7 +99,6 @@ public class EmployerJobListFragment extends Fragment implements AdapterView.OnI
             @Override
             public void onRefresh() {
                 refreshJobDetails();
-                updateUI();
             }
         });
     }
@@ -108,7 +107,7 @@ public class EmployerJobListFragment extends Fragment implements AdapterView.OnI
     public void setJob(Job j) {}
 
     @Override
-    public void setList(List list) {
+    public void setList(List<Job> list) {
         app.employerJobList = list;
         updateUI();
     }
@@ -125,7 +124,7 @@ public class EmployerJobListFragment extends Fragment implements AdapterView.OnI
         String token = pref.getString("token", "default");
 
         request = new VolleyRequest();
-        request.makeVolleyGetRequestForEmployerJobDetails(app, getActivity(), getActivity().getApplicationContext(), url, token);
+        request.makeVolleyGetRequestForEmployerJobDetails(app, getActivity(), getActivity().getApplicationContext(), url, token, mSwipeRefreshLayout);
     }
 
     public void deleteJob(String jobToken) {

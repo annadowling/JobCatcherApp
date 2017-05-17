@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -168,9 +169,8 @@ public class VolleyRequest {
         requestQueue.add(request);
     }
 
-    public void makeVolleyGetRequestForEmployerJobDetails(final JobCatcherApp app, Activity activityPointer, Context context, String url, String token) {
+    public void makeVolleyGetRequestForEmployerJobDetails(final JobCatcherApp app, Activity activityPointer, Context context, String url, String token, final SwipeRefreshLayout mSwipeRefreshLayout) {
         final Context applicationContext = context;
-        final JobCatcherApp application = app;
 
         String getUrl = url + "/token=" + token;
 
@@ -203,12 +203,12 @@ public class VolleyRequest {
                                 jobsList.add(job);
                             }
 
-                            application.employerJobList.clear();
-                            progressDialog.dismiss();
-                            application.employerJobList.addAll(jobsList);
                             vListener.setList(jobsList);
+                            if(mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(false);
+                            progressDialog.dismiss();
 
                         } catch (JSONException e) {
+                            if(mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(false);
                             e.printStackTrace();
                         }
                     }

@@ -193,14 +193,6 @@ public class MainEmployerActivity extends AppCompatActivity
         request.makeVolleyGetRequestForAllUserDetails(app, MainEmployerActivity.this, this.getApplicationContext(), url, true);
     }
 
-    public void refreshJobDetails() {
-        String url = "http://10.0.2.2:8080/getEmployerJobsList";
-        String token = pref.getString("token", "default");
-
-        request = new VolleyRequest();
-        request.makeVolleyGetRequestForEmployerJobDetails(app, this, this.getApplicationContext(), url, token);
-    }
-
     /**
      * Click on View to change photo. Sets into View of your layout, android:onClick="clickOnPhoto"
      * @param view View

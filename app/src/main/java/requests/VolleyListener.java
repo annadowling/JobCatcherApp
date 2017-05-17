@@ -9,6 +9,6 @@ import models.Job;
  */
 
 public interface VolleyListener {
-    void setList(List list);
+    void setList(List<Job> list);
     void setJob(Job j);
 }

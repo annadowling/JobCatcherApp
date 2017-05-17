@@ -182,17 +182,9 @@ public class EmployerProfileFragment extends Fragment implements View.OnClickLis
     public void getEmployerJobDetails() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         EmployerJobListFragment jobFragment = EmployerJobListFragment.newInstance();
-        ft.replace(homeFrameEmployer, jobFragment);
+        ft.replace(employerProfileFrame, jobFragment);
         ft.addToBackStack(null);
         ft.commit();
-    }
-
-    public void refreshJobDetails() {
-        String url = "http://10.0.2.2:8080/getEmployerJobsList";
-        String token = pref.getString("token", "default");
-
-        request = new VolleyRequest();
-        request.makeVolleyGetRequestForEmployerJobDetails(app, getActivity(), getActivity().getApplicationContext(), url, token);
     }
 
     @Override
