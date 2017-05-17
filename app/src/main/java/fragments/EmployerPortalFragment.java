@@ -155,7 +155,6 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
                                 edit.putString("companyEmail", josnOBJ.getString("email"));
                                 edit.remove("imagepath");
                                 edit.commit();
-                                edit.commit();
 
                                 configureEmployerProfile();
                                 Toast.makeText(getActivity().getApplicationContext(), "You are logged in!", Toast.LENGTH_LONG).show();

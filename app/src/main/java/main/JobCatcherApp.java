@@ -17,10 +17,17 @@ public class JobCatcherApp extends Application {
 
     public List <Job>  jobsList = new ArrayList<Job>();
     public List <User>  userList = new ArrayList<User>();
+    public List <Job> employerJobList = new ArrayList<Job>();
+    private static JobCatcherApp mInstance;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        mInstance = this;
         Log.v("jobCatcherApp", "JobCatcher App Started");
+    }
+
+    public static synchronized JobCatcherApp getInstance() {
+        return mInstance;
     }
 }

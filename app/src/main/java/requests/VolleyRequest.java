@@ -28,7 +28,6 @@ import java.util.Map;
 
 import app.com.jobcatcherapp.activities.SearchBarActivity;
 import app.com.jobcatcherapp.activities.UserSearchBarActivity;
-import fragments.EmployerJobListFragment;
 import fragments.EmployerProfileFragment;
 import fragments.JobDetailsFragment;
 import fragments.UserProfileFragment;
@@ -44,6 +43,16 @@ import models.User;
 
 public class VolleyRequest {
     public JobCatcherApp app;
+    private static       VolleyListener vListener;
+
+    public static void attachListener(VolleyListener fragment)
+    {
+        vListener = fragment;
+    }
+    public static void detachListener()
+    {
+        vListener  = null;
+    }
 
 
     public void makeVolleyPostRequest(Context context, Map<String, String> requestParameters, String url) {
@@ -159,10 +168,9 @@ public class VolleyRequest {
         requestQueue.add(request);
     }
 
-    public void makeVolleyGetRequestForEmployerJobDetails(Activity activityPointer, Context context, String url, String token, FragmentTransaction ft, int i) {
+    public void makeVolleyGetRequestForEmployerJobDetails(final JobCatcherApp app, Activity activityPointer, Context context, String url, String token) {
         final Context applicationContext = context;
-        final FragmentTransaction fragmentTransaction = ft;
-        final int frameId = i;
+        final JobCatcherApp application = app;
 
         String getUrl = url + "/token=" + token;
 
@@ -195,11 +203,11 @@ public class VolleyRequest {
                                 jobsList.add(job);
                             }
 
+                            application.employerJobList.clear();
                             progressDialog.dismiss();
-                            EmployerJobListFragment jobListFragment = EmployerJobListFragment.newInstance(jobsList);
-                            fragmentTransaction.replace(frameId, jobListFragment);
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
+                            application.employerJobList.addAll(jobsList);
+                            vListener.setList(jobsList);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

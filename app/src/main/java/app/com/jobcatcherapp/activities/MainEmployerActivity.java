@@ -28,6 +28,7 @@ import java.io.InputStream;
 import app.com.jobcatcherapp.R;
 import fragments.ContactFragment;
 import fragments.EditEmployerFragment;
+import fragments.EmployerJobListFragment;
 import fragments.EmployerPortalFragment;
 import fragments.JobFragment;
 import main.JobCatcherApp;
@@ -44,6 +45,7 @@ public class MainEmployerActivity extends AppCompatActivity
     public static TextView emailText, userNameText;
     ImageView profileimage;
     private static final int REQUEST_CODE_PICTURE= 1;
+    public JobCatcherApp app = JobCatcherApp.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,12 +157,10 @@ public class MainEmployerActivity extends AppCompatActivity
             ft.commit();
 
         } else if (id == R.id.employer_jobs_list) {
-            String url = "http://10.0.2.2:8080/getEmployerJobsList";
-            String token = pref.getString("token", "default");
-
-
-            request = new VolleyRequest();
-            request.makeVolleyGetRequestForEmployerJobDetails(this, getApplicationContext(), url, token, ft, R.id.homeFrameEmployer);
+            EmployerJobListFragment jobFragment = EmployerJobListFragment.newInstance();
+            ft.replace(homeFrameEmployer, jobFragment);
+            ft.addToBackStack(null);
+            ft.commit();
 
         } else if (id == R.id.add_job) {
             JobFragment jobFragment = JobFragment.newInstance();
@@ -191,6 +191,14 @@ public class MainEmployerActivity extends AppCompatActivity
         request = new VolleyRequest();
         JobCatcherApp app = (JobCatcherApp) getApplication();
         request.makeVolleyGetRequestForAllUserDetails(app, MainEmployerActivity.this, this.getApplicationContext(), url, true);
+    }
+
+    public void refreshJobDetails() {
+        String url = "http://10.0.2.2:8080/getEmployerJobsList";
+        String token = pref.getString("token", "default");
+
+        request = new VolleyRequest();
+        request.makeVolleyGetRequestForEmployerJobDetails(app, this, this.getApplicationContext(), url, token);
     }
 
     /**

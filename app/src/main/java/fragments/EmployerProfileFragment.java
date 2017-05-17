@@ -24,11 +24,13 @@ import java.util.Map;
 
 import app.com.jobcatcherapp.R;
 import app.com.jobcatcherapp.activities.MainActivity;
+import main.JobCatcherApp;
 import models.Job;
 import requests.VolleyRequest;
 
 import static android.content.Context.MODE_PRIVATE;
 import static app.com.jobcatcherapp.R.id.employerProfileFrame;
+import static app.com.jobcatcherapp.R.id.homeFrameEmployer;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,6 +56,7 @@ public class EmployerProfileFragment extends Fragment implements View.OnClickLis
 
     VolleyRequest request;
     SharedPreferences pref;
+    public JobCatcherApp app = JobCatcherApp.getInstance();
 
     public EmployerProfileFragment() {
         // Required empty public constructor
@@ -177,13 +180,19 @@ public class EmployerProfileFragment extends Fragment implements View.OnClickLis
     }
 
     public void getEmployerJobDetails() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        EmployerJobListFragment jobFragment = EmployerJobListFragment.newInstance();
+        ft.replace(homeFrameEmployer, jobFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    public void refreshJobDetails() {
         String url = "http://10.0.2.2:8080/getEmployerJobsList";
         String token = pref.getString("token", "default");
 
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-
         request = new VolleyRequest();
-        request.makeVolleyGetRequestForEmployerJobDetails(getActivity(), getActivity().getApplicationContext(), url, token, fragmentTransaction, R.id.employerProfileFrame);
+        request.makeVolleyGetRequestForEmployerJobDetails(app, getActivity(), getActivity().getApplicationContext(), url, token);
     }
 
     @Override

@@ -1,27 +1,24 @@
 package fragments;
 
-import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.Bundle;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
+import adapters.EmployerJobAdapter;
 import app.com.jobcatcherapp.R;
+import main.JobCatcherApp;
 import models.Job;
+import requests.VolleyListener;
 import requests.VolleyRequest;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -29,142 +26,152 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link EmployerJobListFragment.OnFragmentInteractionListener} interface
+ * {@link EmployerJobListFragment} interface
  * to handle interaction events.
  * Use the {@link EmployerJobListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EmployerJobListFragment extends Fragment implements View.OnClickListener {
 
 
-    private OnFragmentInteractionListener mListener;
-
-    ImageView delete;
-    TextView jobName, jobDescription, contactNumber, hiddenValue;
-    public static List<Job> employerJobsList;
+public class EmployerJobListFragment extends Fragment implements AdapterView.OnItemClickListener,
+        View.OnClickListener, VolleyListener {
+    protected static EmployerJobAdapter listAdapter;
+    protected ListView listView;
+    protected SwipeRefreshLayout mSwipeRefreshLayout;
     VolleyRequest request;
     SharedPreferences pref;
+
+    public JobCatcherApp app = JobCatcherApp.getInstance();
 
     public EmployerJobListFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment EmployerJobListFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static EmployerJobListFragment newInstance(List<Job> jobsList) {
+    public static EmployerJobListFragment newInstance() {
         EmployerJobListFragment fragment = new EmployerJobListFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        employerJobsList = new ArrayList<Job>();
-        employerJobsList.addAll(jobsList);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_employer_job_list_main, container, false);
+        // Inflate the layout for this fragment
+        View v = null;
+
+        v = inflater.inflate(R.layout.fragment_home, container, false);
         pref = getActivity().getSharedPreferences("AppPref", MODE_PRIVATE);
-        if(employerJobsList != null){
-            initView(view);
-        }
-        return view;
-    }
 
-    public void initView(View rootView) {
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        LinearLayout parentPanel = (LinearLayout) rootView.findViewById(R.id.fragmentEmployerJobListMain);
-        for (Job job : employerJobsList) {
-            View listView = inflater.inflate(R.layout.fragment_employer_job_list, null);
-            jobName = (TextView) listView.findViewById(R.id.rowJobName);
-            jobDescription = (TextView) listView.findViewById(R.id.rowJobDescription);
-            contactNumber = (TextView) listView.findViewById(R.id.rowContactNumber);
-            hiddenValue = (TextView) listView.findViewById(R.id.hidden_value);
+        listView = (ListView) v.findViewById(R.id.jobList);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.job_swipe_refresh_layout);
+        setSwipeRefreshLayout();
 
-            jobName.setText(job.jobName);
-            jobDescription.setText(job.jobDescription);
-            contactNumber.setText(job.contactNumber);
-            hiddenValue.setText(job.jobToken);
-            delete = (ImageView) listView.findViewById(R.id.imgDelete);
-            delete.setOnClickListener(this);
-            parentPanel.addView(listView);
-        }
-
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        return v;
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+    public void onResume() {
+        super.onResume();
+        VolleyRequest.attachListener(this);
+        updateUI();
+
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    public void onStop() {
+        super.onStop();
+        VolleyRequest.detachListener();
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public void onPause() {
+        super.onPause();
+        VolleyRequest.detachListener();
     }
 
-    public void deleteJob() {
-        String url = "http://10.0.2.2:8080/deleteJob";
-        String token = hiddenValue.getText().toString();
-        String employerToken = pref.getString("token", "default");
+    protected void setSwipeRefreshLayout() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshJobDetails();
+                updateUI();
+            }
+        });
+    }
 
-        request = new VolleyRequest();
-        request.makeVolleyDeleteRequest(getActivity().getApplicationContext(), token, employerToken, url);
-        refreshJobDetails();
+    @Override
+    public void setJob(Job j) {}
+
+    @Override
+    public void setList(List list) {
+        app.employerJobList = list;
+        updateUI();
+    }
+
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Bundle activityInfo = new Bundle();
+        activityInfo.putString("jobID", (String)view.getTag());
     }
 
     public void refreshJobDetails() {
         String url = "http://10.0.2.2:8080/getEmployerJobsList";
         String token = pref.getString("token", "default");
 
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        request = new VolleyRequest();
+        request.makeVolleyGetRequestForEmployerJobDetails(app, getActivity(), getActivity().getApplicationContext(), url, token);
+    }
+
+    public void deleteJob(String jobToken) {
+        String url = "http://10.0.2.2:8080/deleteJob";
+        String employerToken = pref.getString("token", "default");
 
         request = new VolleyRequest();
-        request.makeVolleyGetRequestForEmployerJobDetails(getActivity(), getActivity().getApplicationContext(), url, token, fragmentTransaction, R.id.RelativeLayout1);
+        request.makeVolleyDeleteRequest(getActivity().getApplicationContext(), jobToken, employerToken, url);
     }
 
     @Override
-    public void onClick(View v) {
-        if (v == delete) {
-            deleteJob();
+    public void onClick(View view) {
+        if (view.getTag() instanceof Job) {
+            onJobDelete((Job) view.getTag());
         }
     }
+
+    public void onJobDelete(final Job job) {
+        String stringName = job.jobName;
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Are you sure you want to Delete the \'Job\' " + stringName + "?");
+        builder.setCancelable(false);
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                deleteJob(job.jobToken);
+                listAdapter.employerJobList.remove(job); // update adapters data
+                listAdapter.notifyDataSetChanged(); // refresh adapter
+            }
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public void updateUI() {
+
+        listAdapter = new EmployerJobAdapter(getActivity().getApplicationContext(), this, app.employerJobList);
+        listView.setAdapter(listAdapter);
+
+        listView.setOnItemClickListener(this);
+        listView.setEmptyView(getActivity().findViewById(R.id.empty_list_view));
+        listAdapter.notifyDataSetChanged(); // Update the adapter
+    }
 }
+
