@@ -3,12 +3,10 @@ package adapters;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,12 +19,18 @@ import models.User;
 
 /**
  * Created by annadowling on 11/05/2017.
+ * List Adapter for User list
  */
 
 public class UserAdapter extends ArrayAdapter<User>  {
     private Context context;
     public List<User> userList;
 
+    /**
+     * Overloaded UserAdapter constructor
+     * @param context
+     * @param userList
+     */
     public UserAdapter(Context context, List<User> userList) {
         super(context, R.layout.fragment_user_list_main, userList);
 
@@ -34,7 +38,13 @@ public class UserAdapter extends ArrayAdapter<User>  {
         this.userList = userList;
     }
 
-
+    /**
+     * get the user row view for each job entry in the list
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @Override
     public View getView(int position, final View convertView, ViewGroup parent) {
         UserItem item = new UserItem(context, parent, userList.get(position));
@@ -65,26 +75,48 @@ public class UserAdapter extends ArrayAdapter<User>  {
         return item.view;
     }
 
-
+    /**
+     *
+     * @return int
+     */
     @Override
     public int getCount() {
         return userList.size();
     }
 
+    /**
+     *
+     * @return userList
+     */
     public List<User> getUserList() {
         return this.userList;
     }
 
+    /**
+     * get view item int posiiton in list
+     * @param position
+     * @return
+     */
     @Override
     public User getItem(int position) {
         return userList.get(position);
     }
 
+    /**
+     * get view item id
+     * @param position
+     * @return
+     */
     @Override
     public long getItemId(int position) {
         return position;
     }
 
+    /**
+     * get current job position in list using index
+     * @param u
+     * @return
+     */
     @Override
     public int getPosition(User u) {
         return userList.indexOf(u);

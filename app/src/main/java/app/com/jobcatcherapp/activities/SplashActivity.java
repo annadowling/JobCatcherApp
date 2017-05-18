@@ -7,6 +7,10 @@ import android.os.Bundle;
 
 import app.com.jobcatcherapp.R;
 
+/**
+ * Created by annadowling on 11/05/2017.
+ * Instantiates the splash view on app creation
+ */
 public class SplashActivity extends Activity {
     // used to know if the back button was pressed in the splash screen activity
     // and avoid opening the next activity

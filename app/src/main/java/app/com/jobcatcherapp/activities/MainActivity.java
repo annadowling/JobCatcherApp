@@ -39,6 +39,11 @@ import fragments.ProfileFragment;
 import main.JobCatcherApp;
 import requests.VolleyRequest;
 
+
+/**
+ * Created by annadowling on 11/05/2017.
+ * Sets the navigation drawer, creates the profile fragment and handles numerous button on click events
+ */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     SharedPreferences pref;
@@ -48,6 +53,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ImageView profileimage;
     private static final int REQUEST_CODE_PICTURE = 1;
 
+    /**
+     * Handles view creation launching the ProfileFragment and populating layout data values.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         pref = this.getSharedPreferences("AppPref", MODE_PRIVATE);
@@ -111,6 +120,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ft.commit();
     }
 
+    /**
+     * control drawer open and closed with back button press
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -121,6 +133,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * Inflate the navigation menu
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -128,11 +145,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    /**
+     * Handle action bar item clicks here. The action bar will automatically handle clicks on the Base/Up button, so longas you specify a parent activity in AndroidManifest.xml.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Base/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -143,10 +162,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Handle navigation view item clicks here.
+     * @param item
+     * @return
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
 
@@ -183,6 +206,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    /**
+     * Use Volley get request to refresh the jobsList
+     */
     public void getAllJobDetails() {
         String url = "http://10.0.2.2:8080/getAllJobsList";
         request = new VolleyRequest();
@@ -206,6 +232,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivityForResult(chooserIntent, REQUEST_CODE_PICTURE);
     }
 
+    /**
+     * Listens for intent results and actions them
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -223,6 +255,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * Handles onClick events
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         if (v == profileimage) {
@@ -230,6 +266,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * Retreve the image from the device and parse the bitmap url value
+     */
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
         private ProgressDialog mDialog;
@@ -244,6 +283,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mDialog = ProgressDialog.show(MainActivity.this,"Please wait...", "Retrieving data ...", true);
         }
 
+        /**
+         *
+         * @param urls
+         * @return
+         */
         protected Bitmap doInBackground(String... urls) {
             String urldisplay = urls[0];
             Bitmap mIcon11 = null;
@@ -258,6 +302,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return mIcon11;
         }
 
+        /**
+         *
+         * @param result
+         */
         protected void onPostExecute(Bitmap result) {
             //set image of your imageview
             bmImage.setImageBitmap(result);

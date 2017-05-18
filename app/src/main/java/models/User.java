@@ -3,7 +3,8 @@ package models;
 import java.io.Serializable;
 
 /**
- * Created by annadowling on 14/05/2017.
+ * Created by annadowling on 13/05/2017.
+ * User model for mapping to Volley data sent from node server.
  */
 
 public class User implements Serializable {

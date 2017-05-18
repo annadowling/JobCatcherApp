@@ -40,22 +40,28 @@ import models.User;
 
 /**
  * Created by annadowling on 23/02/2017.
+ * VolleyRequest class controls all HTPP reuqests for the applciation including GET, POST and DELETE
  */
 
 public class VolleyRequest {
     public JobCatcherApp app;
-    private static       VolleyListener vListener;
+    private static VolleyListener vListener;
 
-    public static void attachListener(VolleyListener fragment)
-    {
+    public static void attachListener(VolleyListener fragment) {
         vListener = fragment;
     }
-    public static void detachListener()
-    {
-        vListener  = null;
+
+    public static void detachListener() {
+        vListener = null;
     }
 
-
+    /**
+     * Genral post request method
+     *
+     * @param context
+     * @param requestParameters
+     * @param url
+     */
     public void makeVolleyPostRequest(Context context, Map<String, String> requestParameters, String url) {
         final Context applicationContext = context;
         final Map<String, String> mapParameters = requestParameters;
@@ -86,6 +92,15 @@ public class VolleyRequest {
         requestQueue.add(stringRequest);
     }
 
+    /**
+     * GET request for user details
+     *
+     * @param context
+     * @param url
+     * @param token
+     * @param ft
+     * @param i
+     */
     public void makeVolleyGetRequestForUserDetails(Context context, String url, String token, FragmentTransaction ft, int i) {
         final Context applicationContext = context;
         final FragmentTransaction fragmentTransaction = ft;
@@ -128,6 +143,15 @@ public class VolleyRequest {
         requestQueue.add(request);
     }
 
+    /**
+     * GET request for employer details
+     *
+     * @param context
+     * @param url
+     * @param token
+     * @param ft
+     * @param i
+     */
     public void makeVolleyGetRequestForEmployerDetails(Context context, String url, String token, FragmentTransaction ft, int i) {
         final Context applicationContext = context;
         final FragmentTransaction fragmentTransaction = ft;
@@ -169,6 +193,16 @@ public class VolleyRequest {
         requestQueue.add(request);
     }
 
+    /**
+     * get request for employer job details
+     *
+     * @param app
+     * @param activityPointer
+     * @param context
+     * @param url
+     * @param token
+     * @param mSwipeRefreshLayout
+     */
     public void makeVolleyGetRequestForEmployerJobDetails(final JobCatcherApp app, Activity activityPointer, Context context, String url, String token, final SwipeRefreshLayout mSwipeRefreshLayout) {
         final Context applicationContext = context;
 
@@ -204,11 +238,13 @@ public class VolleyRequest {
                             }
 
                             vListener.setList(jobsList);
-                            if(mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(false);
+                            if (mSwipeRefreshLayout != null)
+                                mSwipeRefreshLayout.setRefreshing(false);
                             progressDialog.dismiss();
 
                         } catch (JSONException e) {
-                            if(mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(false);
+                            if (mSwipeRefreshLayout != null)
+                                mSwipeRefreshLayout.setRefreshing(false);
                             e.printStackTrace();
                         }
                     }
@@ -226,6 +262,15 @@ public class VolleyRequest {
         requestQueue.add(request);
     }
 
+    /**
+     * GET reguest for employer and spefcific job data
+     *
+     * @param context
+     * @param url
+     * @param token
+     * @param ft
+     * @param i
+     */
     public void makeVolleyGetRequestForEmployerAndJob(Context context, String url, String token, FragmentTransaction ft, int i) {
         final Context applicationContext = context;
         final FragmentTransaction fragmentTransaction = ft;
@@ -238,9 +283,9 @@ public class VolleyRequest {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                                Job returnedJob = new Job(response.getString("id"), response.getString("jobTitle"), response.getString("jobDescription"), response.getString("contactNumber"), response.getString("latitude"), response.getString("longitude"));
+                            Job returnedJob = new Job(response.getString("id"), response.getString("jobTitle"), response.getString("jobDescription"), response.getString("contactNumber"), response.getString("latitude"), response.getString("longitude"));
 
-                                Employer returnedEmployer = new Employer(response.getString("companyName"), response.getString("email"), response.getString("contactNumber"));
+                            Employer returnedEmployer = new Employer(response.getString("companyName"), response.getString("email"), response.getString("contactNumber"));
 
                             JobDetailsFragment jobDetailsFragment = JobDetailsFragment.newInstance(returnedJob, returnedEmployer);
                             fragmentTransaction.replace(frameId, jobDetailsFragment);
@@ -263,7 +308,15 @@ public class VolleyRequest {
         requestQueue.add(request);
     }
 
-
+    /**
+     * GET request for all job details
+     *
+     * @param app
+     * @param activityPointer
+     * @param context
+     * @param url
+     * @param launchSearchActivity
+     */
     public void makeVolleyGetRequestForAllJobDetails(final JobCatcherApp app, Activity activityPointer, Context context, String url, final Boolean launchSearchActivity) {
         final Context applicationContext = context;
         final Activity activity = activityPointer;
@@ -326,6 +379,15 @@ public class VolleyRequest {
         requestQueue.add(request);
     }
 
+    /**
+     * GET request for all user details
+     *
+     * @param app
+     * @param activityPointer
+     * @param context
+     * @param url
+     * @param launchSearchActivity
+     */
     public void makeVolleyGetRequestForAllUserDetails(final JobCatcherApp app, Activity activityPointer, Context context, String url, final Boolean launchSearchActivity) {
         final Context applicationContext = context;
         final Activity activity = activityPointer;
@@ -350,10 +412,10 @@ public class VolleyRequest {
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = (JSONObject) jsonArray.get(i);
                                 String biography = null;
-                                if(jsonObject.getString("bio") != null){
+                                if (jsonObject.getString("bio") != null) {
                                     biography = jsonObject.getString("bio");
                                 }
-                                User user = new User(jsonObject.getString("firstName"), jsonObject.getString("lastName"),  jsonObject.getString("email"), biography, jsonObject.getString("profession"));
+                                User user = new User(jsonObject.getString("firstName"), jsonObject.getString("lastName"), jsonObject.getString("email"), biography, jsonObject.getString("profession"));
                                 userList.add(user);
                             }
 
@@ -384,7 +446,14 @@ public class VolleyRequest {
         requestQueue.add(request);
     }
 
-
+    /**
+     * DELETE request for deleting jobs from employer
+     *
+     * @param context
+     * @param token
+     * @param employerToken
+     * @param url
+     */
     public void makeVolleyDeleteRequest(Context context, String token, String employerToken, String url) {
         final Context applicationContext = context;
         final String requestToken = token;

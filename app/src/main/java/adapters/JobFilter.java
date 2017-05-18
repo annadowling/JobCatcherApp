@@ -9,6 +9,7 @@ import models.Job;
 
 /**
  * Created by annadowling on 11/05/2017.
+ * Filters search input results and updates the list adapter
  */
 
 public class JobFilter extends Filter {
@@ -16,6 +17,12 @@ public class JobFilter extends Filter {
     private String filterText;
     private JobAdapter adapter;
 
+    /**
+     * Overloaded contructor
+     * @param originalJobList
+     * @param filterText
+     * @param adapter
+     */
     public JobFilter(List<Job> originalJobList, String filterText,
                      JobAdapter adapter) {
         super();
@@ -24,10 +31,19 @@ public class JobFilter extends Filter {
         this.adapter = adapter;
     }
 
+    /**
+     * Filtertext string assignment
+     * @param filterText
+     */
     public void setFilter(String filterText) {
         this.filterText = filterText;
     }
 
+    /**
+     * Performs the filtering based on the CharSequence passed in.
+     * @param prefix
+     * @return
+     */
     @Override
     protected FilterResults performFiltering(CharSequence prefix) {
         FilterResults results = new FilterResults();
@@ -72,7 +88,11 @@ public class JobFilter extends Filter {
         return results;
     }
 
-
+    /**
+     * Publishes the resulting filtered data to the adapter.
+     * @param prefix
+     * @param results
+     */
     @SuppressWarnings("unchecked")
     @Override
     protected void publishResults(CharSequence prefix, FilterResults results) {

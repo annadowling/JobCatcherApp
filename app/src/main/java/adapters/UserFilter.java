@@ -10,6 +10,7 @@ import models.User;
 
 /**
  * Created by annadowling on 14/05/2017.
+ * Filters search input results and updates the list adapter
  */
 
 public class UserFilter extends Filter {
@@ -18,6 +19,12 @@ public class UserFilter extends Filter {
     private String filterText;
     private UserAdapter adapter;
 
+    /**
+     * Overloaded contructor
+     * @param originalUserList
+     * @param filterText
+     * @param adapter
+     */
     public UserFilter(List<User> originalUserList, String filterText,
                      UserAdapter adapter) {
         super();
@@ -26,10 +33,19 @@ public class UserFilter extends Filter {
         this.adapter = adapter;
     }
 
+    /**
+     * Filtertext string assignment
+     * @param filterText
+     */
     public void setFilter(String filterText) {
         this.filterText = filterText;
     }
 
+    /**
+     *  Performs the filtering based on the CharSequence passed in.
+     * @param prefix
+     * @return
+     */
     @Override
     protected FilterResults performFiltering(CharSequence prefix) {
         FilterResults results = new FilterResults();
@@ -74,7 +90,11 @@ public class UserFilter extends Filter {
         return results;
     }
 
-
+    /**
+     * Publishes the resulting filtered data to the adapter.
+     * @param prefix
+     * @param results
+     */
     @SuppressWarnings("unchecked")
     @Override
     protected void publishResults(CharSequence prefix, FilterResults results) {

@@ -11,6 +11,7 @@ import models.User;
 
 /**
  * Created by annadowling on 14/02/2017.
+ * Sets the application instance and stores various data lists
  */
 
 public class JobCatcherApp extends Application {

@@ -9,8 +9,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,9 +33,12 @@ import fragments.JobFragment;
 import main.JobCatcherApp;
 import requests.VolleyRequest;
 
-import static app.com.jobcatcherapp.R.id.employerProfileFrame;
 import static app.com.jobcatcherapp.R.id.homeFrameEmployer;
 
+/**
+ * Created by annadowling on 11/05/2017.
+ * Sets the navigation drawer, creates the employer profile fragment and handles numerous button on click events
+ */
 public class MainEmployerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
@@ -47,6 +49,10 @@ public class MainEmployerActivity extends AppCompatActivity
     private static final int REQUEST_CODE_PICTURE= 1;
     public JobCatcherApp app = JobCatcherApp.getInstance();
 
+    /**
+     * Handles view creation launching the EmployerProfileFragment and populating layout data values.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +104,9 @@ public class MainEmployerActivity extends AppCompatActivity
         request.makeVolleyGetRequestForEmployerDetails(getApplicationContext(), url, token, ft, homeFrameEmployer);
     }
 
+    /**
+     * control drawer open and closed with back button press
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -108,6 +117,11 @@ public class MainEmployerActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Inflate the navigation menu
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -115,11 +129,13 @@ public class MainEmployerActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * Handle action bar item clicks here. The action bar will automatically handle clicks on the Base/Up button, so longas you specify a parent activity in AndroidManifest.xml.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -130,6 +146,11 @@ public class MainEmployerActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     *  Handle navigation view item clicks here.
+     * @param item
+     * @return
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -186,6 +207,9 @@ public class MainEmployerActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * Use Volley get request to refresh the user profile details
+     */
     public void getAllUserDetails() {
         String url = "http://10.0.2.2:8080/getAllUsersList";
         request = new VolleyRequest();
@@ -208,6 +232,12 @@ public class MainEmployerActivity extends AppCompatActivity
         startActivityForResult(chooserIntent, REQUEST_CODE_PICTURE);
     }
 
+    /**
+     * Listens for intent results and actions them
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -225,6 +255,10 @@ public class MainEmployerActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Handles onClick events
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         if (v == profileimage) {

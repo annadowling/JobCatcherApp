@@ -12,11 +12,19 @@ import models.Job;
 
 /**
  * Created by annadowling on 17/05/2017.
+ * EmployerJobItem class provides a row entry view layout for each employer job
  */
 
 public class EmployerJobItem {
     View view;
 
+    /**
+     * Overloaded EmployerJobItem constructor
+     * @param context
+     * @param parent
+     * @param deleteListener
+     * @param job
+     */
     public EmployerJobItem(Context context, ViewGroup parent, View.OnClickListener deleteListener, Job job)
     {
         LayoutInflater inflater = (LayoutInflater) context
@@ -31,6 +39,10 @@ public class EmployerJobItem {
         imgDelete.setOnClickListener(deleteListener);
     }
 
+    /**
+     * Sets the row data values
+     * @param job
+     */
     private void updateControls(Job job) {
         TextView jobName = (TextView) view.findViewById(R.id.rowJobName);
         TextView jobDescription = (TextView) view.findViewById(R.id.rowJobDescription);

@@ -3,6 +3,7 @@ import java.io.Serializable;
 
 /**
  * Created by annadowling on 13/05/2017.
+ * Employer model for mapping to Volley data sent from node server.
  */
 
 public class Employer implements Serializable {

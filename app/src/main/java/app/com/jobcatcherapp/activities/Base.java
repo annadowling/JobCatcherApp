@@ -1,17 +1,23 @@
 package app.com.jobcatcherapp.activities;
 
 import android.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import app.com.jobcatcherapp.R;
-import fragments.JobFragment;
-import fragments.JobListFragment;
 import fragments.LoginFragment;
-import main.JobCatcherApp;
 
+/**
+ * Created by annadowling on 11/05/2017.
+ * Sets the splash activity and launches the login fragment as the landing page
+ */
 public class Base extends AppCompatActivity {
 
+
+    /**
+     * Create the login fragment view
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
