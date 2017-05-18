@@ -8,7 +8,6 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,12 +42,8 @@ import app.com.jobcatcherapp.activities.MainActivity;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link LoginFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link LoginFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Created by annadowling on 11/05/2017.
+ * Create the LoginFragment view and attach all event handling to that fragment
  */
 public class LoginFragment extends android.app.Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
     EditText email, password, res_email, code, newpass;
@@ -86,6 +81,9 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
         // Required empty public constructor
     }
 
+    /**
+     * @return newInstance
+     */
     public static LoginFragment newInstance() {
         LoginFragment fragment = new LoginFragment();
         Bundle args = new Bundle();
@@ -93,11 +91,22 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
         return fragment;
     }
 
+    /**
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Create and populate view data associated with the fragment.
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -140,12 +149,18 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
         return view;
     }
 
+    /**
+     * @param uri
+     */
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
 
+    /**
+     * @param context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -183,17 +198,26 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
         }
     }
 
+    /**
+     * @param bundle
+     */
     @Override
     public void onConnected(Bundle bundle) {
         mSignInClicked = false;
         Toast.makeText(getActivity(), "User is connected!", Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * @param i
+     */
     @Override
     public void onConnectionSuspended(int i) {
         mGoogleApiClient.connect(GoogleApiClient.SIGN_IN_MODE_OPTIONAL);
     }
 
+    /**
+     * @param connectionResult
+     */
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         if (!mIntentInProgress) {
@@ -213,6 +237,13 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
         }
     }
 
+    /**
+     * Set the goolesign in connection data
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RC_SIGN_IN) {
@@ -229,21 +260,13 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
         }
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
+    /**
+     * Launch the RegisterFragment
+     */
     public void register() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
 
@@ -253,6 +276,9 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
         ft.commit();
     }
 
+    /**
+     * Authenticate using Volley POST request
+     */
     public void login() {
         emailtxt = email.getText().toString();
         passwordtxt = password.getText().toString();
@@ -318,6 +344,9 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
         cont_code.setOnClickListener(this);
     }
 
+    /**
+     * Change password using Volley POST request
+     */
     public void changePassword() {
         email_res_txt = res_email.getText().toString();
 
@@ -365,6 +394,9 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
 
     }
 
+    /**
+     * Set new password using Volley POST request
+     */
     public void setCode() {
         code_txt = code.getText().toString();
         npass_txt = newpass.getText().toString();
@@ -408,7 +440,9 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
         };
     }
 
-
+    /**
+     * Launch EmployerPortalFragment
+     */
     public void launchEmployerPortal() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
 
@@ -418,6 +452,11 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
         ft.commit();
     }
 
+    /**
+     * Handle on click events
+     *
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         if (v == register) {
@@ -442,6 +481,11 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
         }
     }
 
+    /**
+     * Handles googlesignin results
+     *
+     * @param result
+     */
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
@@ -453,7 +497,7 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
             edit.putString("firstName", acct.getDisplayName().split(" ")[0]);
             edit.putString("lastName", acct.getDisplayName().split(" ")[1]);
             edit.putString("email", acct.getEmail());
-            if(acct.getPhotoUrl() != null){
+            if (acct.getPhotoUrl() != null) {
                 edit.putString("imagepath", acct.getPhotoUrl().toString());
             }
             edit.commit();
@@ -465,9 +509,13 @@ public class LoginFragment extends android.app.Fragment implements GoogleApiClie
         }
     }
 
+    /**
+     * Determines whether to launch MainActivity using sign in boolean
+     *
+     * @param signedIn
+     */
     public void updateUI(boolean signedIn) {
         if (signedIn) {
-            //getProfileInformation();
             Intent intent = new Intent(getActivity(), MainActivity.class);
             startActivity(intent);
         }

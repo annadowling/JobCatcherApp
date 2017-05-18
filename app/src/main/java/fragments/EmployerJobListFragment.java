@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -25,15 +24,9 @@ import requests.VolleyRequest;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link EmployerJobListFragment} interface
- * to handle interaction events.
- * Use the {@link EmployerJobListFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Created by annadowling on 11/05/2017.
+ * Create the EmployerJobListFragment view and attach all event handling to that fragment
  */
-
-
 public class EmployerJobListFragment extends Fragment implements AdapterView.OnItemClickListener,
         View.OnClickListener, VolleyListener {
     protected static EmployerJobAdapter listAdapter;
@@ -48,17 +41,32 @@ public class EmployerJobListFragment extends Fragment implements AdapterView.OnI
         // Required empty public constructor
     }
 
+    /**
+     *
+     * @return newInstance
+     */
     public static EmployerJobListFragment newInstance() {
         EmployerJobListFragment fragment = new EmployerJobListFragment();
         return fragment;
     }
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
 
+    /**
+     * Create and populate view data associated with the fragment.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -115,13 +123,22 @@ public class EmployerJobListFragment extends Fragment implements AdapterView.OnI
         updateUI();
     }
 
-
+    /**
+     *
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Bundle activityInfo = new Bundle();
         activityInfo.putString("jobID", (String) view.getTag());
     }
 
+    /**
+     * Refresh current job details displayed using Volley GET request
+     */
     public void refreshJobDetails() {
         String url = "http://10.0.2.2:8080/getEmployerJobsList";
         String token = pref.getString("token", "default");
@@ -130,6 +147,10 @@ public class EmployerJobListFragment extends Fragment implements AdapterView.OnI
         request.makeVolleyGetRequestForEmployerJobDetails(app, getActivity(), getActivity().getApplicationContext(), url, token, mSwipeRefreshLayout);
     }
 
+    /**
+     * Delete job using Volley DELETE request
+     * @param jobToken
+     */
     public void deleteJob(String jobToken) {
         String url = "http://10.0.2.2:8080/deleteJob";
         String employerToken = pref.getString("token", "default");
@@ -138,6 +159,10 @@ public class EmployerJobListFragment extends Fragment implements AdapterView.OnI
         request.makeVolleyDeleteRequest(getActivity().getApplicationContext(), jobToken, employerToken, url);
     }
 
+    /**
+     *  Handles on click events
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         if (view.getTag() instanceof Job) {
@@ -145,6 +170,10 @@ public class EmployerJobListFragment extends Fragment implements AdapterView.OnI
         }
     }
 
+    /**
+     * Creates the pop up delete alert
+     * @param job
+     */
     public void onJobDelete(final Job job) {
         String stringName = job.jobName;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -166,6 +195,9 @@ public class EmployerJobListFragment extends Fragment implements AdapterView.OnI
         alert.show();
     }
 
+    /**
+     * Refresh the adapter listView
+     */
     public void updateUI() {
 
         listAdapter = new EmployerJobAdapter(getActivity(), this, app.employerJobList);

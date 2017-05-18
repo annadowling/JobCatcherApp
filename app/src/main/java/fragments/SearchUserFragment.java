@@ -1,9 +1,5 @@
 package fragments;
 
-/**
- * Created by annadowling on 11/05/2017.
- */
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,7 +15,10 @@ import android.widget.Spinner;
 import app.com.jobcatcherapp.R;
 import app.com.jobcatcherapp.activities.MainEmployerActivity;
 
-
+/**
+ * Created by annadowling on 11/05/2017.
+ * Create the SearchUserFragment view and attach all event handling to that fragment
+ */
 public class SearchUserFragment extends UserListFragment implements AdapterView.OnItemSelectedListener, TextWatcher, View.OnClickListener {
 
     ImageView backToProfile;
@@ -32,11 +31,16 @@ public class SearchUserFragment extends UserListFragment implements AdapterView.
         SearchUserFragment fragment = new SearchUserFragment();
         return fragment;
     }
+
     @Override
     public void onAttach(Context c) {
         super.onAttach(c);
     }
 
+    /**
+     * Creates the search spinner view when loading search results.
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +68,13 @@ public class SearchUserFragment extends UserListFragment implements AdapterView.
         super.onStart();
     }
 
+    /**
+     * Sets the filter text
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String selected = parent.getItemAtPosition(position).toString();
@@ -71,7 +82,7 @@ public class SearchUserFragment extends UserListFragment implements AdapterView.
         if (selected != null) {
             if (selected.equals("By Profession")) {
                 userFilter.setFilter("profession");
-            }else if(selected.equals("By Bio")){
+            } else if (selected.equals("By Bio")) {
                 userFilter.setFilter("bio");
             }
         }
@@ -97,6 +108,11 @@ public class SearchUserFragment extends UserListFragment implements AdapterView.
 
     }
 
+
+    /**
+     * Handles on click event
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         if (v == backToProfile) {

@@ -1,44 +1,30 @@
 package fragments;
 
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import app.com.jobcatcherapp.R;
-import app.com.jobcatcherapp.activities.MainActivity;
 import main.JobCatcherApp;
-import models.Job;
 import requests.VolleyRequest;
 
 import static android.content.Context.MODE_PRIVATE;
 import static app.com.jobcatcherapp.R.id.employerProfileFrame;
-import static app.com.jobcatcherapp.R.id.homeFrameEmployer;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link EmployerProfileFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link EmployerProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Created by annadowling on 11/05/2017.
+ * Create the EmployerProfileFragment view and attach all event handling to that fragment
  */
 public class EmployerProfileFragment extends Fragment implements View.OnClickListener {
 
@@ -63,12 +49,10 @@ public class EmployerProfileFragment extends Fragment implements View.OnClickLis
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment EmployerProfileFragment.
+     * @param mapEntries
+     * @return
      */
-    // TODO: Rename and change types and number of parameters
     public static EmployerProfileFragment newInstance(Map<String, String> mapEntries) {
         EmployerProfileFragment fragment = new EmployerProfileFragment();
         companyNameText = mapEntries.get("companyName");
@@ -82,11 +66,22 @@ public class EmployerProfileFragment extends Fragment implements View.OnClickLis
         return fragment;
     }
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Create and populate view data associated with the fragment.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -122,13 +117,20 @@ public class EmployerProfileFragment extends Fragment implements View.OnClickLis
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    /**
+     *
+     * @param uri
+     */
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
 
+    /**
+     *
+     * @param context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -146,21 +148,13 @@ public class EmployerProfileFragment extends Fragment implements View.OnClickLis
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
+    /**
+     * Launch the JobFragment
+     */
     public void launchAddJob() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
 
@@ -170,6 +164,9 @@ public class EmployerProfileFragment extends Fragment implements View.OnClickLis
         ft.commit();
     }
 
+    /**
+     * Launch the EditEmployerFragment
+     */
     public void launchEditEmployerProfile() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
 
@@ -179,6 +176,9 @@ public class EmployerProfileFragment extends Fragment implements View.OnClickLis
         ft.commit();
     }
 
+    /**
+     * Launch the EmployerJobListFragment
+     */
     public void getEmployerJobDetails() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         EmployerJobListFragment jobFragment = EmployerJobListFragment.newInstance();
@@ -187,6 +187,10 @@ public class EmployerProfileFragment extends Fragment implements View.OnClickLis
         ft.commit();
     }
 
+    /**
+     *  Handles on click events
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         if (v == addJobIcon) {

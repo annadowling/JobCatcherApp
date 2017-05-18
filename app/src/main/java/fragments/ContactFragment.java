@@ -15,12 +15,8 @@ import android.widget.Toast;
 import app.com.jobcatcherapp.R;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ContactFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ContactFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Created by annadowling on 11/05/2017.
+ * Create the ContactFragment view and attach all event handling to that fragment
  */
 public class ContactFragment extends Fragment implements View.OnClickListener {
 
@@ -28,20 +24,36 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
     Button composeEmail;
     Button placeCall;
 
+
     public ContactFragment() {
         // Required empty public constructor
     }
 
+    /**
+     *
+     * @return
+     */
     public static ContactFragment newInstance() {
         ContactFragment fragment = new ContactFragment();
         return fragment;
     }
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -55,13 +67,20 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    /**
+     *
+     * @param uri
+     */
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
 
+    /**
+     *
+     * @param context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -73,6 +92,9 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     *
+     */
     @Override
     public void onDetach() {
         super.onDetach();
@@ -90,10 +112,12 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
+    /**
+     * Create a diall pad call intent
+     */
     protected void makeCall() {
         Intent callIntent = new Intent(Intent.ACTION_DIAL);
 
@@ -105,7 +129,9 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-
+    /**
+     * Create a mailbox email intent
+     */
     protected void sendEmail() {
         Log.i("Send email", "");
         String[] TO = {""};
@@ -127,6 +153,10 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Handle on click events
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         if (v == composeEmail) {

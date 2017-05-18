@@ -1,13 +1,12 @@
 package fragments;
 
-import android.app.Dialog;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,19 +28,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import app.com.jobcatcherapp.R;
-import app.com.jobcatcherapp.activities.MainActivity;
 import app.com.jobcatcherapp.activities.MainEmployerActivity;
 import requests.VolleyRequest;
 
 import static android.content.Context.MODE_PRIVATE;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link EmployerPortalFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link EmployerPortalFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Created by annadowling on 11/05/2017.
+ * Create the EmployerPortalFragment view and attach all event handling to that fragment
  */
 public class EmployerPortalFragment extends Fragment implements View.OnClickListener {
 
@@ -60,7 +54,10 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
+    /**
+     *
+     * @return newInstance
+     */
     public static EmployerPortalFragment newInstance() {
         EmployerPortalFragment fragment = new EmployerPortalFragment();
         Bundle args = new Bundle();
@@ -68,11 +65,22 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
         return fragment;
     }
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Create and populate view data associated with the fragment.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -93,13 +101,20 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    /**
+     *
+     * @param uri
+     */
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
 
+    /**
+     *
+     * @param context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -117,21 +132,13 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
+    /**
+     * Volley POST request for employer login to employer portal
+     */
     public void loginToPortal() {
         emailtxt = email.getText().toString();
         passwordtxt = password.getText().toString();
@@ -186,6 +193,9 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
         requestQueue.add(stringRequest);
     }
 
+    /**
+     * Launches the EmployerFragment
+     */
     public void launchRegisterPage() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
 
@@ -195,11 +205,17 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
         ft.commit();
     }
 
+    /**
+     * Launches the MainEmployerActivity
+     */
     public void configureEmployerProfile() {
         Intent intent = new Intent(getActivity(), MainEmployerActivity.class);
         getActivity().startActivity(intent);
     }
 
+    /**
+     * Launches the LoginFragment
+     */
     public void launchUserLogin(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();
 
@@ -209,6 +225,10 @@ public class EmployerPortalFragment extends Fragment implements View.OnClickList
         ft.commit();
     }
 
+    /**
+     *  Handles on click events
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         if (v == login) {

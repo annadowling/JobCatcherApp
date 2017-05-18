@@ -1,96 +1,48 @@
 package fragments;
 
-import android.annotation.SuppressLint;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
-import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.os.Environment;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
-import android.provider.OpenableColumns;;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.net.Uri;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import android.util.Base64;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import app.com.jobcatcherapp.R;
 import requests.VolleyRequest;
 
+
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link UserProfileFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link UserProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Created by annadowling on 11/05/2017.
+ * Create the UserProfileFragment view and attach all event handling to that fragment
  */
 public class UserProfileFragment extends Fragment implements View.OnClickListener {
 
 
     private OnFragmentInteractionListener mListener;
     TextView userName, email, age, profession, bio;
-//    Button uploadFile;
-//    Button selectFile;
     public static String userNameText = "";
     public static String emailText = "";
     public static String ageText = "";
     public static String professionText = "";
     public static String bioText = "";
     ImageView editUser;
-    //TextView file;
-    SharedPreferences pref;
     VolleyRequest request;
-//    int PICKFILE_REQUEST_CODE = 1;
-//    Uri selectedFileURI;
-//    String encodedString;
-//    byte[] fileByteArray;
-//    private static final boolean IS_CHUNKED = true;
 
     public UserProfileFragment() {
         // Required empty public constructor
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment UserProfileFragment.
+     * @param userDetails
+     * @return
      */
-    // TODO: Rename and change types and number of parameters
     public static UserProfileFragment newInstance(Map<String, String> userDetails) {
         UserProfileFragment fragment = new UserProfileFragment();
         userNameText = userDetails.get("firstName") + " " + userDetails.get("lastName");
@@ -104,11 +56,22 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         return fragment;
     }
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Create and populate view data associated with the fragment.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -129,14 +92,6 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         bio = (TextView) view.findViewById(R.id.userBio);
         bio.setText(bioText);
 
-//        selectFile = (Button) view.findViewById(R.id.selectfile);
-//        selectFile.setOnClickListener(this);
-//
-//        file = (TextView) view.findViewById(R.id.file);
-//
-//        uploadFile = (Button) view.findViewById(R.id.uploadcv);
-//        uploadFile.setOnClickListener(this);
-
         editUser = (ImageView) view.findViewById(R.id.editUser);
         editUser.setOnClickListener(this);
 
@@ -144,13 +99,20 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    /**
+     *
+     * @param uri
+     */
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
 
+    /**
+     *
+     * @param context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -168,21 +130,13 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
+    /**
+     * Launch EditUserFragment
+     */
     public void editUser() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
 
@@ -192,177 +146,10 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         ft.commit();
     }
 
-//    public void uploadFile() {
-//        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
-//        progressDialog.setMessage("Uploading, please wait...");
-//        progressDialog.show();
-//
-//
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        FileInputStream fis;
-//        try {
-//            String convertedFilePath = getRealPathFromURI(getActivity().getApplicationContext(), selectedFileURI);
-//            fis = new FileInputStream(new File(convertedFilePath));
-//            byte[] buf = new byte[1024];
-//            int n;
-//            while (-1 != (n = fis.read(buf)))
-//                baos.write(buf, 0, n);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        byte[] bbytes = baos.toByteArray();
-//        encodedString = Base64.encodeToString(bbytes, Base64.DEFAULT);
-//
-//        final String encodedBase64 = encodedString;
-//        String URL = "http://10.0.2.2:8080/upload";
-//
-//        //sending image to server
-//        StringRequest request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String s) {
-//                progressDialog.dismiss();
-//                if (s.equals("true")) {
-//                    Toast.makeText(getActivity().getApplicationContext(), "Upload Successful", Toast.LENGTH_LONG).show();
-//                } else {
-//                    Toast.makeText(getActivity().getApplicationContext(), "Some error occurred!", Toast.LENGTH_LONG).show();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError volleyError) {
-//                if (volleyError != null && volleyError.getMessage() != null) {
-//                    Toast.makeText(getActivity().getApplicationContext(), "Some error occurred -> " + volleyError, Toast.LENGTH_LONG).show();
-//                } else {
-//                    Toast.makeText(getActivity().getApplicationContext(), "Some error occurred -> ", Toast.LENGTH_LONG).show();
-//                }
-//                ;
-//            }
-//        }) {
-//            //adding parameters to send
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                Map<String, String> parameters = new HashMap<String, String>();
-//                parameters.put("file", encodedBase64);
-//                return parameters;
-//            }
-//        };
-//
-//        RequestQueue rQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
-//        rQueue.add(request);
-//    }
-//
-//    public void chooseFile() {
-//        Intent intent = new Intent();
-//        intent.setType("*/*");
-//        intent.setAction(Intent.ACTION_GET_CONTENT);
-//        startActivityForResult(Intent.createChooser(intent, "Select File"), PICKFILE_REQUEST_CODE);
-//    }
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-////        try {
-////            selectedFileURI = data.getData();
-////            file.setText(getFileName(selectedFileURI));
-////        } catch (Exception e) {
-////            e.printStackTrace();
-////        }
-//
-//
-//    }
-
-//    public static String getRealPathFromURI(Context context, Uri contentUri) {
-//        if (isExternalStorageDocument(contentUri)) {
-//            final String docId = contentUri.getPath();
-//            final String[] split = docId.split(":");
-//            final String type = split[0];
-//
-//            if ("primary".equalsIgnoreCase(type)) {
-//                return Environment.getExternalStorageDirectory() + "/" + split[1];
-//            }
-//        }// DownloadsProvider
-//        else if (isDownloadsDocument(contentUri)) {
-//
-//            final String id = contentUri.getPath();
-//            final Uri uri = ContentUris.withAppendedId(
-//                    Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-//
-//            return getDataColumn(context, uri, null, null);
-//        }
-//        return null;
-//    }
-
     /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is ExternalStorageProvider.
+     * Handles click events
+     * @param v
      */
-    public static boolean isExternalStorageDocument(Uri uri) {
-        return "com.android.externalstorage.documents".equals(uri.getAuthority());
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is DownloadsProvider.
-     */
-    public static boolean isDownloadsDocument(Uri uri) {
-        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
-    }
-
-    /**
-     * Get the value of the data column for this Uri. This is useful for
-     * MediaStore Uris, and other file-based ContentProviders.
-     *
-     * @param context       The context.
-     * @param uri           The Uri to query.
-     * @param selection     (Optional) Filter used in the query.
-     * @param selectionArgs (Optional) Selection arguments used in the query.
-     * @return The value of the _data column, which is typically a file path.
-     */
-    public static String getDataColumn(Context context, Uri uri, String selection,
-                                       String[] selectionArgs) {
-
-        Cursor cursor = null;
-        final String column = "_data";
-        final String[] projection = {
-                column
-        };
-
-        try {
-            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
-                    null);
-            if (cursor != null && cursor.moveToFirst()) {
-                final int column_index = cursor.getColumnIndexOrThrow(column);
-                return cursor.getString(column_index);
-            }
-        } finally {
-            if (cursor != null)
-                cursor.close();
-        }
-        return null;
-    }
-
-
-    public String getFileName(Uri uri) {
-        String result = null;
-        if (uri.getScheme().equals("content")) {
-            Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
-            try {
-                if (cursor != null && cursor.moveToFirst()) {
-                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-        if (result == null) {
-            result = uri.getPath();
-            int cut = result.lastIndexOf('/');
-            if (cut != -1) {
-                result = result.substring(cut + 1);
-            }
-        }
-        return result;
-    }
-
     @Override
     public void onClick(View v) {
 

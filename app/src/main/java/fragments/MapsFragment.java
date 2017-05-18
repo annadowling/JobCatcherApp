@@ -1,16 +1,14 @@
 package fragments;
 
 import android.app.FragmentTransaction;
+import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-
-import android.location.Address;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -29,12 +27,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.List;
 
-
 import app.com.jobcatcherapp.R;
 import main.JobCatcherApp;
 import models.Job;
 import requests.VolleyRequest;
 
+/**
+ * Created by annadowling on 11/05/2017.
+ * Create the MapsFragment view and attach all event handling to that fragment
+ */
 public class MapsFragment extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
 
@@ -49,6 +50,10 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
     VolleyRequest request;
     Marker jobMarker;
 
+    /**
+     * Create and populate view data associated with the fragment.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,12 +65,19 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
         mFragment.getMapAsync(this);
     }
 
+    /**
+     * Volley request to GET all jobs for map
+     */
     public void getAllJobDetails() {
         String url = "http://10.0.2.2:8080/getAllJobsList";
         request = new VolleyRequest();
         request.makeVolleyGetRequestForAllJobDetails(app, this, this.getApplicationContext(), url, false);
     }
 
+    /**
+     * Load the jobs on to the map and enable location tracking
+     * @param gMap
+     */
     @Override
     public void onMapReady(GoogleMap gMap) {
         mMap = gMap;
@@ -84,7 +96,9 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-
+    /**
+     * @param list
+     */
     public void addJobs(List<Job> list) {
         for (Job j : list) {
             jobMarker = mMap.addMarker(new MarkerOptions()
@@ -97,16 +111,10 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private final int[] MAP_TYPES = {
-            GoogleMap.MAP_TYPE_SATELLITE,
-            GoogleMap.MAP_TYPE_NORMAL,
-            GoogleMap.MAP_TYPE_HYBRID,
-            GoogleMap.MAP_TYPE_TERRAIN,
-            GoogleMap.MAP_TYPE_NONE
-    };
 
-    private int curMapTypeIndex = 1;
-
+    /**
+     * Build the GoogleApiClient
+     */
     protected synchronized void buildGoogleApiClient() {
         Toast.makeText(this, "buildGoogleApiClient", Toast.LENGTH_SHORT).show();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -116,6 +124,10 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
                 .build();
     }
 
+    /**
+     * Handle marker population based on Volley GET request for jobs
+     * @param bundle
+     */
     @Override
     public void onConnected(Bundle bundle) {
         try {
@@ -131,7 +143,7 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
                 public boolean onMarkerClick(Marker marker) {
 
                     Log.d("Message", "got here into marker click" + marker.getTag());
-                    if(marker.getTag() != null ) {
+                    if (marker.getTag() != null) {
                         String result = marker.getTag().toString();
                         if (result != null) {
                             String jobToken = result.substring(result.indexOf("jobToken ="), result.indexOf(", jobDescription"));
@@ -161,16 +173,28 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    /**
+     *
+     * @param i
+     */
     @Override
     public void onConnectionSuspended(int i) {
         Toast.makeText(this, "onConnectionSuspended", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     *
+     * @param connectionResult
+     */
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Toast.makeText(this, "onConnectionFailed", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Direct marker population on location change
+     * @param location
+     */
     @Override
     public void onLocationChanged(Location location) {
 
@@ -194,6 +218,10 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    /**
+     * Handle maps search and geocode translations
+     * @param view
+     */
     public void onMapSearch(View view) {
         EditText locationSearch = (EditText) findViewById(R.id.editText);
         String location = locationSearch.getText().toString();

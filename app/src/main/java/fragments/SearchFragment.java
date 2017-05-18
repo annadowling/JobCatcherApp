@@ -1,11 +1,5 @@
 package fragments;
 
-/**
- * Created by annadowling on 11/05/2017.
- */
-
-import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,7 +15,10 @@ import android.widget.Spinner;
 import app.com.jobcatcherapp.R;
 import app.com.jobcatcherapp.activities.MainActivity;
 
-
+/**
+ * Created by annadowling on 11/05/2017.
+ * Create the SearchFragment view and attach all event handling to that fragment
+ */
 public class SearchFragment extends JobListFragment implements AdapterView.OnItemSelectedListener, TextWatcher, View.OnClickListener {
 
     ImageView backToProfile;
@@ -39,6 +36,10 @@ public class SearchFragment extends JobListFragment implements AdapterView.OnIte
         super.onAttach(c);
     }
 
+    /**
+     * Creates the search spinner view when loading search results.
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +67,13 @@ public class SearchFragment extends JobListFragment implements AdapterView.OnIte
         super.onStart();
     }
 
+    /**
+     * Sets the filter text
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String selected = parent.getItemAtPosition(position).toString();
@@ -99,6 +107,10 @@ public class SearchFragment extends JobListFragment implements AdapterView.OnIte
 
     }
 
+    /**
+     * Handles on click event
+     * @param v
+     */
     @Override
     public void onClick(View v) {
          if (v == backToProfile) {

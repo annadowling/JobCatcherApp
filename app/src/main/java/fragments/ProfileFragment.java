@@ -38,12 +38,8 @@ import requests.VolleyRequest;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ProfileFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Created by annadowling on 11/05/2017.
+ * Create the ProfileFragment view and attach all event handling to that fragment
  */
 public class ProfileFragment extends Fragment implements View.OnClickListener {
 
@@ -64,23 +60,31 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment ProfileFragment.
+     * @return newInstance
      */
-    // TODO: Rename and change types and number of parameters
     public static ProfileFragment newInstance() {
         ProfileFragment fragment = new ProfileFragment();
         return fragment;
     }
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
 
+    /**
+     * Create and populate view data associated with the fragment.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -120,7 +124,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -144,21 +147,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communianacating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
+    /**
+     * Change password or cancel password change button listeners.
+     */
     private void changePassword() {
         dlg = new Dialog(getActivity());
         dlg.setContentView(R.layout.chgpassword_fragment);
@@ -177,6 +173,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         dlg.show();
     }
 
+    /**
+     * Handle password change thorugh Volley POST request
+     */
     private void handleChangePasswordFragment() {
         oldpass = (EditText) dlg.findViewById(R.id.oldpass);
         newpass = (EditText) dlg.findViewById(R.id.newpass);
@@ -223,6 +222,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         requestQueue.add(stringRequest);
     }
 
+    /**
+     * Volley GET request for get user profile data
+     */
     public void configureUserProfile() {
 
         String url = "http://10.0.2.2:8080/getUserDetails";
@@ -233,6 +235,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         request.makeVolleyGetRequestForUserDetails(getActivity().getApplicationContext(), url, token, ft, R.id.profileFrame);
     }
 
+    /**
+     * Launch intent to share to linked in
+     */
     public void shareTolinkedIn() {
         Intent sharingIntent = new Intent(Intent.ACTION_SEND);
         sharingIntent.setType("text/*");
@@ -240,6 +245,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         startActivity(Intent.createChooser(sharingIntent, "Share to:"));
     }
 
+    /**
+     * Handles on click events
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         if (v == chgpass) {

@@ -18,12 +18,8 @@ import models.Employer;
 import models.Job;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link JobDetailsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link JobDetailsFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Created by annadowling on 11/05/2017.
+ * Create the JobDetailsFragment view and attach all event handling to that fragment
  */
 public class JobDetailsFragment extends Fragment implements View.OnClickListener {
 
@@ -42,12 +38,11 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment JobDetailsFragment.
+     * newInstance
+     * @param job
+     * @param employer
+     * @return
      */
-    // TODO: Rename and change types and number of parameters
     public static JobDetailsFragment newInstance(Job job, Employer employer) {
         JobDetailsFragment fragment = new JobDetailsFragment();
         emailText = employer.employerEmail;
@@ -61,11 +56,22 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
         return fragment;
     }
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Create and populate view data associated with the fragment.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -91,13 +97,20 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    /**
+     *
+     * @param uri
+     */
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
 
+    /**
+     *
+     * @param context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -115,21 +128,13 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
+    /**
+     * Create the email intent and populate
+     */
     protected void sendEmail() {
         Log.i("Send email", "");
         String[] CC = {""};
@@ -149,7 +154,9 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
             Toast.makeText(getActivity().getApplicationContext(), "There is no email client installed.", Toast.LENGTH_SHORT).show();
         }
     }
-
+    /**
+     * Create the call intent and populate
+     */
     protected void makeCall() {
         Intent callIntent = new Intent(Intent.ACTION_DIAL);
         callIntent.putExtra(Intent.EXTRA_PHONE_NUMBER, phone.getText());
@@ -161,7 +168,10 @@ public class JobDetailsFragment extends Fragment implements View.OnClickListener
         }
     }
 
-
+    /**
+     * Handles onClick events
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         if (v == sendEmail) {

@@ -1,11 +1,11 @@
 package fragments;
 
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +22,8 @@ import requests.VolleyRequest;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link EditEmployerFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link EditEmployerFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Created by annadowling on 11/05/2017.
+ * Create the EditEmployerFragment view and attach all event handling to that fragment
  */
 public class EditEmployerFragment extends Fragment implements View.OnClickListener {
 
@@ -45,12 +41,9 @@ public class EditEmployerFragment extends Fragment implements View.OnClickListen
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment EditEmployerFragment.
+     * newInstance of EditEmployerFragment
+     * @return
      */
-    // TODO: Rename and change types and number of parameters
     public static EditEmployerFragment newInstance() {
         EditEmployerFragment fragment = new EditEmployerFragment();
         Bundle args = new Bundle();
@@ -58,11 +51,22 @@ public class EditEmployerFragment extends Fragment implements View.OnClickListen
         return fragment;
     }
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Create and populate view data associated with the fragment.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -86,13 +90,20 @@ public class EditEmployerFragment extends Fragment implements View.OnClickListen
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    /**
+     *
+     * @param uri
+     */
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
 
+    /**
+     *
+      * @param context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -110,21 +121,13 @@ public class EditEmployerFragment extends Fragment implements View.OnClickListen
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
+    /**
+     * Sve edits to the employer profile using Volley POST request
+     */
     public void saveEditsToEmployerProfile() {
         String url = "http://10.0.2.2:8080/updateEmployer";
         String token = pref.getString("token", "default");
@@ -142,6 +145,9 @@ public class EditEmployerFragment extends Fragment implements View.OnClickListen
         request.makeVolleyPostRequest(getActivity().getApplicationContext(), requestParameters, postUrl);
     }
 
+    /**
+     * Repopulates the employer profile data after profile edits using Volley GET request
+     */
     public void backToEmployerProfile() {
         String url = "http://10.0.2.2:8080/getEmployerDetails";
         String token = pref.getString("token", "default");
@@ -151,6 +157,10 @@ public class EditEmployerFragment extends Fragment implements View.OnClickListen
         request.makeVolleyGetRequestForEmployerDetails(getActivity().getApplicationContext(), url, token, ft, R.id.employerEditProfileFrame);
     }
 
+    /**
+     * Handles on click events
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         if (v == saveEdits) {

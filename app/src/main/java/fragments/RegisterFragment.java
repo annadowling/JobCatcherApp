@@ -18,12 +18,8 @@ import app.com.jobcatcherapp.R;
 import requests.VolleyRequest;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link RegisterFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link RegisterFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Created by annadowling on 11/05/2017.
+ * Create the RegisterFragment view and attach all event handling to that fragment
  */
 public class RegisterFragment extends Fragment implements View.OnClickListener {
     public static final String KEY_PASSWORD = "password";
@@ -44,6 +40,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         // Required empty public constructor
     }
 
+    /**
+     *
+     * @return newInstance
+     */
     public static RegisterFragment newInstance() {
         RegisterFragment fragment = new RegisterFragment();
         Bundle args = new Bundle();
@@ -56,6 +56,13 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Create and populate view data associated with the fragment.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -75,13 +82,16 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
 
+    /**
+     *
+     * @param context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -99,21 +109,13 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
+    /**
+     * register user using Volley POST request
+     */
     private void registerUser() {
         emailtxt = email.getText().toString();
         firstNametxt = firstName.getText().toString();
@@ -136,6 +138,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         request.makeVolleyPostRequest(getActivity().getApplicationContext(), params, url);
     }
 
+    /**
+     * Launch LoginFragment
+     */
     private void loginToApp() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
 
@@ -145,7 +150,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         ft.commit();
     }
 
-
+    /**
+     * Handles on click events
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         if (v == register) {
